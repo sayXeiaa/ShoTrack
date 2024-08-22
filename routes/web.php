@@ -4,6 +4,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/tournaments/{id}/edit', [TournamentController::class, 'edit'])->name('tournaments.edit');
     Route::post('/tournaments/{id}', [TournamentController::class, 'update'])->name('tournaments.update');
     Route::delete('/tournaments', [TournamentController::class, 'destroy'])->name('tournaments.destroy');
+
+    //Team routes
+    Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
+    Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
+    Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
+    Route::get('/teams/{id}/edit', [TeamController::class, 'edit'])->name('teams.edit');
+    Route::put('/teams/{id}', [TeamController::class, 'update'])->name('teams.update');
+    Route::delete('/teams', [TeamController::class, 'destroy'])->name('teams.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -90,7 +90,8 @@ class TournamentController extends Controller
         }
         else{
             return redirect()->route('tournaments.edit',$id)->withInput()->withErrors($validator);
-        }    }
+        }    
+    }
 
     /**
      * Remove the specified resource from storage.

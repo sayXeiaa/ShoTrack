@@ -15,20 +15,35 @@
                     <form action="{{ route ('teams.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div>
-                            <label for="" class="text-lg font-medium">Team Name</label>
+                            <label for="tournament_id" class="text-lg font-medium">Tournament</label>
                             <div class="my-3">
-                                <input value="{{ old('name') }}"name="name" placeholder="Enter Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <select name="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    <option value="">Select a Tournament</option>
+                                    @foreach($tournaments as $tournament)
+                                        <option value="{{ $tournament->id }}">{{ $tournament->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('tournament_id')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <label for="name" class="text-lg font-medium">Team Name</label>
+                            <div class="my-3">
+                                <input value="{{ old('name') }}" name="name" placeholder="Enter Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="team_acronym" class="text-lg font-medium">Team Acronym</label>
                             <div class="my-3">
-                                <input value="{{ old('team_acronym') }}"name="team_acronym" placeholder="Enter Shortened Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <input value="{{ old('team_acronym') }}" name="team_acronym" placeholder="Enter Shortened Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('team_acronym')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="coach_name" class="text-lg font-medium">Team Coach</label>
                             <div class="my-3">
                                 <input value="{{ old('coach_name') }}" name="coach_name" placeholder="Enter Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -36,6 +51,7 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="assistant_coach_1" class="text-lg font-medium">Team Assistant Coach</label>
                             <div class="my-3">
                                 <input value="{{ old('assistant_coach_1') }}" name="assistant_coach_1" placeholder="Enter Assistant Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -43,6 +59,7 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="assistant_coach_2" class="text-lg font-medium">Team Assistant Coach</label>
                             <div class="my-3">
                                 <input value="{{ old('assistant_coach_2') }}" name="assistant_coach_2" placeholder="Enter Assistant Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -50,6 +67,7 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="address" class="text-lg font-medium">Address</label>
                             <div class="my-3">
                                 <input value="{{ old('address') }}" name="address" placeholder="Enter Address" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -57,6 +75,7 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+
                             <label for="logo" class="text-lg font-medium">Team Logo</label>
                             <div class="my-3">
                                 <input value="{{ old('logo') }}" type="file" id="logo" name="logo" class="border-gray-300 shadow-sm rounded-lg">
@@ -65,7 +84,7 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3 mt-5">Submit</button>
                         </div>
                     </form>
@@ -73,6 +92,7 @@
             </div>
         </div>
     </div>
+
     <script>
         document.getElementById('logo').addEventListener('change', function(event) {
             var reader = new FileReader();

@@ -12,6 +12,20 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-message></x-message>
 
+            <div class="mb-4">
+                <form method="GET" action="{{ route('teams.index') }}">
+                    <label for="tournament" class="block text-sm font-medium text-gray-700">Select Tournament</label>
+                    <select id="tournament" name="tournament_id" onchange="this.form.submit()" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="">All Tournaments</option>
+                        @foreach($tournaments as $tournament)
+                            <option value="{{ $tournament->id }}" {{ request('tournament_id') == $tournament->id ? 'selected' : '' }}>
+                                {{ $tournament->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr class="border-b">

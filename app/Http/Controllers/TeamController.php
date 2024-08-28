@@ -5,18 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\teams;
+use App\Models\tournaments;
 
 class TeamController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teams = teams::latest()->paginate(25); //order by created_at DESC
-        return view('teams.list', [
-            'teams' => $teams
-        ]);
+    // Get the tournament ID from the request
+    $tournamentId = $request->input('tournament_id');
+
+    // Fetch teams filtered by the selected tournament if one is selected, otherwise fetch all teams
+    $teams = Teams::when($tournamentId, function ($query) use ($tournamentId) {
+        return $query->where('tournament_id', $tournamentId);
+    })->latest()->paginate(25); // Order by created_at DESC
+
+    // Get all tournaments for the dropdown
+    $tournaments = Tournaments::all();
+
+    return view('teams.list', [
+        'teams' => $teams,
+        'tournaments' => $tournaments,
+    ]);
     }
 
     /**
@@ -24,7 +36,11 @@ class TeamController extends Controller
      */
     public function create()
     {
-        return view('teams.create');
+       // Fetch all tournaments from the database
+        $tournaments = Tournaments::all();
+
+        // Pass the tournaments to the view
+        return view('teams.create', compact('tournaments'));
     }
 
     /**
@@ -50,6 +66,7 @@ class TeamController extends Controller
             $team->assistant_coach1_name=$request->assistant_coach_1;
             $team->assistant_coach2_name =$request->assistant_coach_2;
             $team->address = $request->address;
+            $team->tournament_id = $request->tournament_id;
             if ($request->hasFile('logo')) {
                 $logoPath = $request->file('logo')->store('logos', 'public');
                 $team->logo = $logoPath;
@@ -77,11 +94,14 @@ class TeamController extends Controller
      */
     public function edit(string $id)
     {
-        $team = teams::findOrFail($id);
-        return view('teams.edit',[
-            'team' =>$team
+        $team = Teams::findOrFail($id);
+        $tournaments = Tournaments::all(); // Fetch all tournaments
+
+        return view('teams.edit', [
+            'team' => $team,
+            'tournaments' => $tournaments // Pass tournaments to the view
         ]);
-    }
+        }
 
     /**
      * Update the specified resource in storage.
@@ -89,6 +109,7 @@ class TeamController extends Controller
     public function update(Request $request, string $id)
     {
         $team = teams::findOrFail($id);
+        $tournaments = Tournaments::all(); // Fetch all tournaments
 
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:5',
@@ -98,6 +119,7 @@ class TeamController extends Controller
             'assistant_coach_2' => 'nullable|min:5',
             'address' => 'required|min:5',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10240|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000',
+            'tournament_id' => 'nullable|exists:tournaments,id',
         ]);
 
         if ($validator->passes()){
@@ -107,6 +129,7 @@ class TeamController extends Controller
             $team->assistant_coach1_name=$request->assistant_coach1_name;
             $team->assistant_coach2_name =$request->assistant_coach2_name;
             $team->address = $request->address;
+            $team->tournament_id = $request->tournament_id;
             if ($request->hasFile('logo')) {
                 $logoPath = $request->file('logo')->store('logos', 'public');
                 $team->logo = $logoPath;

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('losses')->default(0);
             $table->integer('ranking')->nullable();
             $table->timestamps();
+            $table->foreignId('tournament_id')->constrained('tournaments')->onDelete('cascade'); // Foreign key to tournaments
         });
     }
 

@@ -16,6 +16,21 @@
                         @csrf
                         @method('PUT') <!-- or PATCH, depending on your routes setup -->
                         <div>
+                            <label for="tournament_id" class="text-lg font-medium">Tournament</label>
+                            <div class="my-3">
+                                <select name="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    <option value="">Select a Tournament</option>
+                                    @foreach($tournaments as $tournament)
+                                        <option value="{{ $tournament->id }}" {{ $tournament->id == $team->tournament_id ? 'selected' : '' }}>
+                                            {{ $tournament->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('tournament_id')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <label for="name" class="text-lg font-medium">Team Name</label>
                             <div class="my-3">
                                 <input value="{{ old('name', $team->name) }}" name="name" placeholder="Enter Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">

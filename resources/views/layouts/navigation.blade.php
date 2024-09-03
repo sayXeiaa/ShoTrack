@@ -55,7 +55,7 @@
 
                 @can('view teams')
                 @can('edit teams')
-                @can('edit teams')
+                @can('delete teams')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')">
                         {{ __('Teams') }}
@@ -65,17 +65,22 @@
                 @endcan
                 @endcan
 
-                {{-- @can('view players') --}}
+                
+                @can('view players')
+                {{-- @can('edit players')
+                @can('delete players') --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')">
                         {{ __('Players') }}
                     </x-nav-link>
                 </div>
-                {{-- @endcan --}}
+                @endcan
+                {{-- @endcan
+                @endcan --}}
 
                 @can('view schedule')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    <x-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')">
                         {{ __('Game Schedules') }}
                     </x-nav-link>
                 </div>

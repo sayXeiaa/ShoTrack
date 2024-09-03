@@ -50,7 +50,7 @@ class TeamController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:5',
-            'team_acronym' => 'required|min:2',
+            'team_acronym' => 'required|max:5',
             'coach_name' => 'required|min:5',
             'assistant_coach_1' => 'nullable|min:5',
             'assistant_coach_2' => 'nullable|min:5',
@@ -101,7 +101,7 @@ class TeamController extends Controller
             'team' => $team,
             'tournaments' => $tournaments // Pass tournaments to the view
         ]);
-        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -163,5 +163,18 @@ class TeamController extends Controller
         return response()->json([
             'status' => true
         ]);
+    }
+
+    public function getByTournament(Request $request)
+    {
+        $tournamentId = $request->query('tournament_id');
+
+        if (!$tournamentId) {
+            return response()->json(['error' => 'No tournament ID provided'], 400);
+        }
+
+        $teams = Teams::where('tournament_id', $tournamentId)->get();
+
+        return response()->json(['teams' => $teams]);
     }
 }

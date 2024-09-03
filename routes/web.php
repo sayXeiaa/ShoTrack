@@ -7,6 +7,7 @@ use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -64,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/teams/{id}', [TeamController::class, 'update'])->name('teams.update');
     Route::delete('/teams', [TeamController::class, 'destroy'])->name('teams.destroy');
 
+    Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
+
     //Player routes
     Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/players/create', [PlayerController::class, 'create'])->name('players.create');
@@ -71,6 +74,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/players/{id}/edit', [PlayerController::class, 'edit'])->name('players.edit');
     Route::put('/players/{id}', [PlayerController::class, 'update'])->name('players.update');
     Route::delete('/players/{id}', [PlayerController::class, 'destroy'])->name('players.destroy');
+
+    //Schedule routes
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('schedules.create');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
+    Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
 });
 
 require __DIR__.'/auth.php';

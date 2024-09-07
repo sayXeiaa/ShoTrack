@@ -37,10 +37,12 @@ class TournamentController extends Controller
             'description' => 'nullable|min:5',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'has_categories' => 'required|boolean',
         ]);
 
         if ($validator->passes()){
             $tournament = new tournaments();
+            $tournament->has_categories = $request->input('has_categories', false);
             $tournament->name = $request->name;
             $tournament->description =$request->description;
             $tournament->start_date = $request->start_date;
@@ -77,6 +79,7 @@ class TournamentController extends Controller
             'description' => 'nullable|min:5',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'has_categories' => 'required|boolean',
         ]);
 
         if ($validator->passes()){
@@ -84,6 +87,7 @@ class TournamentController extends Controller
             $tournament->description =$request->description;
             $tournament->start_date = $request->start_date;
             $tournament->end_date = $request->end_date;
+            $tournament->has_categories = $request->input('has_categories', false);
             $tournament->save();
 
             return redirect()->route('tournaments.index')->with('success', 'Tournament updated successfully.');
@@ -113,4 +117,15 @@ class TournamentController extends Controller
             'status' => true
         ]);
     }
+    public function getDetails($id)
+    {
+    $tournament = tournaments::find($id);
+    
+    if ($tournament) {
+        $teams = $tournament->teams;
+        return response()->json(['teams' => $teams]);
+    }
+    
+    return response()->json(['teams' => []], 404);
+}
 }

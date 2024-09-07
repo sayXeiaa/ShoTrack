@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
+            $table->string('category')->nullable(); 
             $table->string('first_name');
             $table->string('last_name');
             $table->integer('number');
+            $table->integer('years_playing_in_bucal');
             $table->string('position');
             $table->date('date_of_birth')->nullable();
-            $table->integer('height')->nullable();
+            $table->integer('age')->nullable();
+            $table->string('height')->nullable();
             $table->integer('weight')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('team_id');

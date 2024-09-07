@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
+            $table->string('category')->nullable(); 
             $table->string('name');
             $table->string('team_acronym');
-            $table->string('coach_name');
-            $table->string('assistant_coach1_name')->nullable();
-            $table->string('assistant_coach2_name')->nullable();
+            $table->string('head_coach_name');
+            $table->string('school_president');
+            $table->string('sports_director');
+            $table->integer('years_playing_in_bucal');
             $table->string('address');
             $table->string('logo')->nullable();
             $table->integer('wins')->default(0);

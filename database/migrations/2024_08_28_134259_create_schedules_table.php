@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('match_date');
+            $table->date('date');
+            $table->time('time');
             $table->string('venue');
             $table->timestamps();
             $table->foreignId('tournament_id')->constrained('tournaments');
             $table->foreignId('team1_id')->constrained('teams');
             $table->foreignId('team2_id')->constrained('teams');
+            $table->string('category')->nullable(); 
+
         });
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Players;
 use App\Models\Teams;
+use App\Models\tournaments;
 use Illuminate\Validation\Rule;
 
 class PlayerController extends Controller
@@ -13,15 +14,41 @@ class PlayerController extends Controller
     /**
      * Display a listing of the resource.
      */
-
     public function index(Request $request)
     {
-        $teams = Teams::all();
-        $players = Players::when($request->team_id, function($query) use ($request) {
-            return $query->where('team_id', $request->team_id);
-        })->paginate(25);
-
-        return view('players.list', compact('teams', 'players'));
+        $tournamentId = $request->query('tournament_id');
+        $category = $request->query('category');
+        $teamId = $request->query('team_id');
+        
+        // Fetch teams based on tournament and category
+        $teamsQuery = Teams::query();
+        if ($tournamentId) {
+            $teamsQuery->where('tournament_id', $tournamentId);
+        }
+        if ($category) {
+            $teamsQuery->where('category', $category);
+        }
+        $teams = $teamsQuery->get();
+        
+        // Fetch players based on selected filters
+        $playersQuery = Players::query();
+        if ($tournamentId) {
+            $playersQuery->whereHas('team', function($query) use ($tournamentId) {
+                $query->where('tournament_id', $tournamentId);
+            });
+        }
+        if ($category) {
+            $playersQuery->where('category', $category);
+        }
+        if ($teamId) {
+            $playersQuery->where('team_id', $teamId);
+        }
+        $players = $playersQuery->paginate(10); // Adjust pagination as needed
+        
+        // Fetch all tournaments for filtering options
+        $tournaments = Tournaments::all();
+    
+        return view('players.list', compact('players', 'tournaments', 'teams'));
     }
 
     /**
@@ -29,11 +56,14 @@ class PlayerController extends Controller
      */
     public function create()
     {
-         // Fetch all teams from the database
-         $teams = Teams::all();
-
-         // Pass the teams to the view
-         return view('players.create', compact('teams'));
+        // Fetch all tournaments from the database
+        $tournaments = Tournaments::all();
+    
+        // Fetch all teams from the database
+        $teams = Teams::all();
+    
+        // Pass the tournaments and teams to the view
+        return view('players.create', compact('tournaments', 'teams'));
     }
 
     /**
@@ -41,36 +71,59 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // Retrieve the tournament ID from the request
+        $tournamentId = $request->input('tournament_id');
+    
+        // Find the tournament to check if it has categories
+        $tournament = Tournaments::findOrFail($tournamentId);
+        $hasCategories = $tournament->has_categories;
+    
+        // Define validation rules
+        $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'number' => 'required|integer|min:0|max:99', 
+            'number' => 'required|integer|min:0|max:99',
+            'years_playing_in_bucal' => 'required|integer|min:0|max:6',
             'position' => 'required|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
-            'date_of_birth' => 'required|date', 
-            'height' => 'required|integer|min:0',
+            'date_of_birth' => 'required|date',
+            'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
             'weight' => 'required|integer|min:0',
             'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
-        ]);
-
-        if ($validator->passes()) {
-            $player = new Players();
-            $player->first_name = $request->first_name;
-            $player->last_name = $request->last_name;
-            $player->number = $request->number;
-            $player->position = $request->position;
-            $player->date_of_birth = $request->date_of_birth;
-            $player->height = $request->height;
-            $player->weight = $request->weight;
-            $player->team_id = $request->team_id;
-
-            $player->save();
-
-            return redirect()->route('players.index')->with('success', 'Player added successfully.');
-        } else {
-            return redirect()->route('players.create')->withInput()->withErrors($validator);
+            'category' => $hasCategories ? 'nullable|string' : 'nullable',
+        ];
+    
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+    
+        if ($validator->fails()) {
+            return redirect()->route('players.create')
+                            ->withInput()
+                            ->withErrors($validator);
         }
+    
+        // Create and save the player
+        $player = new Players(); // Ensure this matches your model name
+        $player->first_name = $request->input('first_name');
+        $player->last_name = $request->input('last_name');
+        $player->number = $request->input('number');
+        $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
+        $player->position = $request->input('position');
+        $player->date_of_birth = $request->input('date_of_birth');
+        $player->height = $request->input('height');
+        $player->weight = $request->input('weight');
+        $player->team_id = $request->input('team_id');
+    
+        // Only set category if tournament has categories
+        if ($hasCategories) {
+            $player->category = $request->input('category');
+        }
+    
+        $player->save();
+    
+        return redirect()->route('players.index')
+                        ->with('success', 'Player added successfully.');
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -84,51 +137,71 @@ class PlayerController extends Controller
      */
     public function edit(string $id)
     {
+
+    // Fetch tournaments
+    $tournaments = Tournaments::all();
+    
     // Fetch the player to edit
     $player = Players::findOrFail($id);
 
     // Fetch all teams for the dropdown
-    $teams = Teams::all();
+    $teams = Teams::where('tournament_id', $player->team->tournament_id)
+                ->where('category', $player->team->category)
+                ->get();
+
+    $categories = ['juniors', 'seniors'];
 
     // Return the view with the player and teams data
-    return view('players.edit', compact('player', 'teams'));
+    return view('players.edit', compact('player', 'tournaments', 'categories', 'teams'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $player = Players::findOrFail($id);
+{
+    // Find the player or fail with a 404 error
+    $player = Players::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'number' => 'required|integer|min:0|max:99', 
-            'position' => 'required|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
-            'date_of_birth' => 'required|date', 
-            'height' => 'required|integer|min:0',
-            'weight' => 'required|integer|min:0',
-            'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
-        ]);
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'number' => 'required|integer|min:0|max:99',
+        'years_playing_in_bucal' => 'required|integer|min:0|max:6',
+        'position' => 'required|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
+        'date_of_birth' => 'required|date',
+        'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
+        'weight' => 'required|integer|min:0',
+        'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
+        'category' => 'nullable|string', 
+    ]);
 
-        if ($validator->passes()) {
-            $player->first_name = $request->first_name;
-            $player->last_name = $request->last_name;
-            $player->number = $request->number;
-            $player->position = $request->position;
-            $player->date_of_birth = $request->date_of_birth;
-            $player->height = $request->height;
-            $player->weight = $request->weight;
-            $player->team_id = $request->team_id;
+    // Check if validation passes
+    if ($validator->passes()) {
+        // Update the player details
+        $player->first_name = $request->input('first_name');
+        $player->last_name = $request->input('last_name');
+        $player->number = $request->input('number');
+        $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
+        $player->position = $request->input('position');
+        $player->date_of_birth = $request->input('date_of_birth');
+        $player->height = $request->input('height');
+        $player->weight = $request->input('weight');
+        $player->team_id = $request->input('team_id');
+        $player->category = $request->input('category');
 
-            $player->save();
+        // Save the updated player
+        $player->save();
 
-            return redirect()->route('players.index')->with('success', 'Player updated successfully.');
-        } else {
-            return redirect()->route('players.edit', $id)->withInput()->withErrors($validator);
-        }
+        // Redirect back with a success message
+        return redirect()->route('players.index')->with('success', 'Player updated successfully.');
+    } else {
+        // Redirect back with input and errors if validation fails
+        return redirect()->route('players.edit', $id)->withInput()->withErrors($validator);
     }
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -156,6 +229,26 @@ class PlayerController extends Controller
             'status' => true,
             'message' => 'Player deleted successfully'
         ]);
+    }
+
+    public function getByTeam(Request $request)
+    {
+        $teamId = $request->query('team_id');
+        $category = $request->query('category');
+    
+        $query = Players::query();
+    
+        if ($teamId) {
+            $query->where('team_id', $teamId);
+        }
+    
+        if ($category) {
+            $query->where('category', $category);
+        }
+    
+        $players = $query->get();
+    
+        return response()->json(['players' => $players]);
     }
     
 }

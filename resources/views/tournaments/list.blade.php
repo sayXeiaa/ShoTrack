@@ -15,11 +15,12 @@
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr class="border-b">
-                        <th class="px-6 py-3 text-left" width="60">#</th>
+                        {{-- <th class="px-6 py-3 text-left" width="60">#</th> --}}
                         <th class="px-6 py-3 text-left">Tournament Name</th>
                         <th class="px-6 py-3 text-left">Description</th>
                         <th class="px-6 py-3 text-left">Start Date</th>
                         <th class="px-6 py-3 text-left">End Date</th>
+                        <th class="px-6 py-3 text-left">Categories</th>
                         <th class="px-6 py-3 text-left" width="180">Created</th>
                         <th class="px-6 py-3 text-center" width="180">Action</th>
                     </tr>
@@ -28,9 +29,9 @@
                     @if ($tournaments->isNotEmpty())
                     @foreach ($tournaments as $tournament)
                     <tr class="border-b">
-                        <td class="px-6 py-3 text-left">
+                        {{-- <td class="px-6 py-3 text-left">
                             {{ $tournament->id }}
-                        </td>
+                        </td> --}}
                         <td class="px-6 py-3 text-left">
                             {{ $tournament->name }}
                         </td>
@@ -42,6 +43,9 @@
                         </td>
                         <td class="px-6 py-3 text-left">
                             {{ $tournament->end_date ? \Carbon\Carbon::parse($tournament->end_date)->format('Y-m-d') : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-3 text-left">
+                            {{ $tournament->has_categories ? 'Yes' : 'No' }}
                         </td>
                         <td class="px-6 py-3 text-left">
                             {{ \Carbon\Carbon::parse($tournament->created_at)->format('d M, Y') }}

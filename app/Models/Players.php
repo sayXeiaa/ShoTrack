@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Players extends Model
 {
@@ -21,5 +22,14 @@ class Players extends Model
     {
         return $this->hasOneThrough(Tournaments::class, Teams::class, 'id', 'id', 'team_id', 'tournament_id');
     }
-    
+
+    protected static function booted()
+    {
+        static::saving(function ($player) {
+            if ($player->date_of_birth) {
+                $dateOfBirth = Carbon::createFromFormat('Y-m-d', $player->date_of_birth);
+                $player->age = $dateOfBirth->age;
+            }
+        });
+    }
 }

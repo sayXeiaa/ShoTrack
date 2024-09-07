@@ -12,15 +12,19 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route ('teams.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('teams.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
+
+                        <!-- Tournament Selection -->
                         <div>
                             <label for="tournament_id" class="text-lg font-medium">Tournament</label>
                             <div class="my-3">
-                                <select name="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <select name="tournament_id" id="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Tournament</option>
                                     @foreach($tournaments as $tournament)
-                                        <option value="{{ $tournament->id }}">{{ $tournament->name }}</option>
+                                        <option value="{{ $tournament->id }}" data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}">
+                                            {{ $tournament->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('tournament_id')
@@ -28,6 +32,22 @@
                                 @enderror
                             </div>
 
+                            <!-- Category Field (Initially Hidden) -->
+                            <div id="category-field" style="display: none;">
+                                <label for="category" class="text-lg font-medium">Category</label>
+                                <div class="my-3">
+                                    <select name="category" id="category" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                        <option value="">Select a Category</option>
+                                        <option value="Juniors">Juniors</option>
+                                        <option value="Seniors">Seniors</option>
+                                    </select>
+                                    @error('category')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Team Details -->
                             <label for="name" class="text-lg font-medium">Team Name</label>
                             <div class="my-3">
                                 <input value="{{ old('name') }}" name="name" placeholder="Enter Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -44,26 +64,34 @@
                                 @enderror
                             </div>
 
-                            <label for="coach_name" class="text-lg font-medium">Team Coach</label>
+                            <label for="head_coach_name" class="text-lg font-medium">Team Head Coach</label>
                             <div class="my-3">
-                                <input value="{{ old('coach_name') }}" name="coach_name" placeholder="Enter Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('coach_name')
+                                <input value="{{ old('head_coach_name') }}" name="head_coach_name" placeholder="Enter Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                @error('head_coach_name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <label for="assistant_coach_1" class="text-lg font-medium">Team Assistant Coach</label>
+                            <label for="school_president" class="text-lg font-medium">School President</label>
                             <div class="my-3">
-                                <input value="{{ old('assistant_coach_1') }}" name="assistant_coach_1" placeholder="Enter Assistant Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('assistant_coach_1')
+                                <input value="{{ old('school_president') }}" name="school_president" placeholder="Enter School President Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                @error('school_president')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <label for="assistant_coach_2" class="text-lg font-medium">Team Assistant Coach</label>
+                            <label for="sports_director" class="text-lg font-medium">Sports Director</label>
                             <div class="my-3">
-                                <input value="{{ old('assistant_coach_2') }}" name="assistant_coach_2" placeholder="Enter Assistant Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('assistant_coach_2')
+                                <input value="{{ old('sports_director') }}" name="sports_director" placeholder="Enter Sports Director Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                @error('sports_director')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <label for="years_playing_in_bucal" class="text-lg font-medium">Years Playing in BUCAL</label>
+                            <div class="my-3">
+                                <input value="{{ old('years_playing_in_bucal') }}" name="years_playing_in_bucal" placeholder="Enter the number of years playing in BUCAL" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                @error('years_playing_in_bucal')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -94,21 +122,38 @@
     </div>
 
     <script>
-        document.getElementById('logo').addEventListener('change', function(event) {
-            var reader = new FileReader();
-            var file = event.target.files[0];
-            var preview = document.getElementById('logo-preview');
+        document.addEventListener('DOMContentLoaded', function() {
+            var tournamentSelect = document.getElementById('tournament_id');
+            var categoryField = document.getElementById('category-field');
 
-            if (file) {
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block'; // Show the image preview
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none'; // Hide the image preview
-            }
+            tournamentSelect.addEventListener('change', function(event) {
+                var selectedOption = event.target.selectedOptions[0];
+                var hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
+
+                if (hasCategories) {
+                    categoryField.style.display = 'block'; // Show category field
+                } else {
+                    categoryField.style.display = 'none'; // Hide category field
+                }
+            });
+
+            // Handle logo preview
+            document.getElementById('logo').addEventListener('change', function(event) {
+                var reader = new FileReader();
+                var file = event.target.files[0];
+                var preview = document.getElementById('logo-preview');
+
+                if (file) {
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block'; // Show the image preview
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = '#';
+                    preview.style.display = 'none'; // Hide the image preview
+                }
+            });
         });
     </script>
 </x-app-layout>

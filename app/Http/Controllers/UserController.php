@@ -10,17 +10,17 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller //implements HasMiddleware
 {
 
-    public static function middleware(): array{
-        return [
-            new Middleware('permission:view users', only: ['index']),
-            new Middleware('permission:edit users', only: ['edit']),
-            new Middleware('permission:create users', only: ['create']),
-            new Middleware('permission:delete users', only: ['destroy']),
-        ];
-    }
+    // public static function middleware(): array{
+    //     return [
+    //         new Middleware('permission:view users', only: ['index']),
+    //         new Middleware('permission:edit users', only: ['edit']),
+    //         new Middleware('permission:create users', only: ['create']),
+    //         new Middleware('permission:delete users', only: ['destroy']),
+    //     ];
+    // }
     /**
      * Display a listing of the resource.
      */

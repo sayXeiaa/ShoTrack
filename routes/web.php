@@ -75,6 +75,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/players/{id}', [PlayerController::class, 'update'])->name('players.update');
     Route::delete('/players/{id}', [PlayerController::class, 'destroy'])->name('players.destroy');
 
+    Route::get('/players-by-team', [PlayerController::class, 'getByTeam'])->name('players.by_team');
+
+
     //Schedule routes
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('schedules.create');

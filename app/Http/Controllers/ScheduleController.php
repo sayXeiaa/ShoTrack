@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Schedule;
 use App\Models\teams;
 use App\Models\tournaments;
+use App\Rules\Time12HourFormat;
 
 class ScheduleController extends Controller
 {
@@ -15,71 +16,103 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
-    // Get the tournament ID from the request
-    $tournamentId = $request->input('tournament_id');
-
-    // Fetch schedules filtered by the selected tournament if one is selected, otherwise fetch all schedules
-    $schedules = Schedule::with(['team1', 'team2']) // Load related teams
-        ->when($tournamentId, function ($query) use ($tournamentId) {
-            return $query->where('tournament_id', $tournamentId);
-        })
-        ->latest()
-        ->paginate(25);
-
-    // Get all tournaments for the dropdown
-    $tournaments = Tournaments::all();
-
-    return view('schedules.list', [
-        'schedules' => $schedules,
-        'tournaments' => $tournaments,
-    ]);
+        // Get the tournament ID and category from the request
+        $tournamentId = $request->input('tournament_id');
+        $category = $request->input('category');
+    
+        // Fetch schedules filtered by the selected tournament and category if provided
+        $schedules = Schedule::with(['team1', 'team2']) // Load related teams
+            ->when($tournamentId, function ($query) use ($tournamentId) {
+                return $query->where('tournament_id', $tournamentId);
+            })
+            ->when($category, function ($query) use ($category, $tournamentId) {
+                return $query->whereHas('team1', function ($q) use ($category, $tournamentId) {
+                    $q->where('category', $category)->where('tournament_id', $tournamentId);
+                })->orWhereHas('team2', function ($q) use ($category, $tournamentId) {
+                    $q->where('category', $category)->where('tournament_id', $tournamentId);
+                });
+            })
+            ->latest()
+            ->paginate(25);
+    
+        // Get all tournaments for the dropdown
+        $tournaments = Tournaments::all();
+    
+        // Fetch categories based on the selected tournament (assuming category is a column in tournaments)
+        $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
+    
+        return view('schedules.list', [
+            'schedules' => $schedules,
+            'tournaments' => $tournaments,
+            'categories' => $categories,
+        ]);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-{
-    $tournamentId = $request->query('tournament_id');
-    $tournaments = Tournaments::all();
-    $teams = []; // Default to an empty array
+    {
+        $tournamentId = $request->query('tournament_id');
+        $tournaments = Tournaments::all();
+        $teams = []; // Default to an empty array
 
-    if ($tournamentId) {
-        $teams = Teams::where('tournament_id', $tournamentId)->get();
+        if ($tournamentId) {
+            $teams = Teams::where('tournament_id', $tournamentId)->get();
+        }
+
+        return view('schedules.create', compact('tournaments', 'teams'));
     }
-
-    return view('schedules.create', compact('tournaments', 'teams'));
-}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // Validation rules
         $validator = Validator::make($request->all(), [
-            'tournament_id' => 'required|exists:tournaments,id', // Ensure tournament_id exists in the tournaments table
-            'match_date' => 'required|date',        // Ensure match_date is a valid date
-            'venue' => 'required|string|max:255',   // Allow up to 255 characters for venue
-            'team1_id' => 'required|exists:teams,id', // Ensure team1_id exists in the teams table
-            'team2_id' => 'required|exists:teams,id', // Ensure team2_id exists in the teams table (nullable)
-        ]);        
-
-        if ($validator->passes()){
-            $schedule = new Schedule();
-            $schedule->tournament_id = $request->tournament_id; 
-            $schedule->match_date = $request->match_date;
-            $schedule->venue =$request->venue;
-            $schedule->team1_id =$request->team1_id;
-            $schedule->team2_id =$request->team2_id;
-
-            $schedule->save();
-
-            return redirect()->route('schedules.index')->with('success', 'Game schedule added successfully.');
-        }
-        else{
+            'tournament_id' => 'required|exists:tournaments,id',
+            'date' => 'required|date',
+            'time' => ['required', new Time12HourFormat],
+            'venue' => 'required|string|max:255',
+            'team1_id' => 'required|exists:teams,id',
+            'team2_id' => 'required|exists:teams,id',
+            'category' => 'nullable|string',
+        ]);
+    
+        if ($validator->fails()) {
             return redirect()->route('schedules.create')->withInput()->withErrors($validator);
         }
+    
+        // Fetch the tournament to check if it has categories
+        $tournamentId = $request->input('tournament_id');
+        $tournament = Tournaments::findOrFail($tournamentId);
+        $hasCategories = $tournament->has_categories;
+    
+        // Convert 12-hour time format to 24-hour format
+        $time12Hour = $request->input('time');
+        $dateTime = \DateTime::createFromFormat('g:i A', $time12Hour);
+        $time24Hour = $dateTime ? $dateTime->format('H:i') : null;
+    
+        // Create a new schedule
+        $schedule = new Schedule();
+        $schedule->tournament_id = $request->tournament_id;
+        $schedule->date = $request->date;
+        $schedule->time = $time24Hour;
+        $schedule->venue = $request->venue;
+        $schedule->team1_id = $request->team1_id;
+        $schedule->team2_id = $request->team2_id;
+    
+        // Only set category if the tournament has categories
+        if ($hasCategories) {
+            $schedule->category = $request->input('category');
+        }
+    
+        $schedule->save();
+    
+        return redirect()->route('schedules.index')->with('success', 'Game schedule added successfully.');
     }
+    
 
     /**
      * Display the specified resource.
@@ -94,21 +127,24 @@ class ScheduleController extends Controller
      */
     public function edit(string $id)
     {
-    // Fetch the schedule by ID
-    $schedule = Schedule::findOrFail($id);
-    
-    // Fetch all tournaments
-    $tournaments = Tournaments::all();
+        // Fetch tournaments
+        $tournaments = Tournaments::all();
+        
+        // Fetch the schedule to edit
+        $schedule = Schedule::findOrFail($id);
 
-    // Fetch all teams for the selected tournament
-    $teams = Teams::where('tournament_id', $schedule->tournament_id)->get();
+        // Fetch all teams for the selected tournament and category
+        $teams = Teams::where('tournament_id', $schedule->tournament_id)
+                    ->where('category', $schedule->category)
+                    ->get();
 
-    return view('schedules.edit', [
-        'schedule' => $schedule,
-        'tournaments' => $tournaments, // Pass tournaments to the view
-        'teams' => $teams, // Pass teams to the view
-    ]);
+        // Categories
+        $categories = ['juniors', 'seniors']; // Adjust this based on your actual categories
+
+        // Return the view with the schedule, tournaments, categories, and teams data
+        return view('schedules.edit', compact('schedule', 'tournaments', 'categories', 'teams'));
     }
+
 
 
     /**
@@ -116,32 +152,54 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $schedule = schedule::findOrFail($id);
-        $tournaments = Tournaments::all(); // Fetch all tournaments
+        // Fetch the schedule instance
+        $schedule = Schedule::findOrFail($id);
 
+        // Find the tournament to check if it has categories
+        $tournamentId = $request->input('tournament_id');
+        $tournament = Tournaments::findOrFail($tournamentId);
+        $hasCategories = $tournament->has_categories;
+
+        // Validation rules
         $validator = Validator::make($request->all(), [
-            'tournament_id' => 'required|exists:tournaments,id', // Ensure tournament_id exists in the tournaments table
-            'match_date' => 'required|date',        // Ensure match_date is a valid date
-            'venue' => 'required|string|max:255',   // Allow up to 255 characters for venue
-            'team1_id' => 'required|exists:teams,id', // Ensure team1_id exists in the teams table
-            'team2_id' => 'required|exists:teams,id', // Ensure team2_id exists in the teams table (nullable)
-        ]);        
+            'tournament_id' => 'required|exists:tournaments,id',
+            'date' => 'required|date',
+            'time' => ['required', new Time12HourFormat],
+            'venue' => 'required|string|max:255',
+            'team1_id' => 'required|exists:teams,id',
+            'team2_id' => 'required|exists:teams,id',
+            'category' => 'nullable|string',
+        ]);
 
-        if ($validator->passes()){
-            $schedule->tournament_id = $request->tournament_id; 
-            $schedule->match_date = $request->match_date;
-            $schedule->venue =$request->venue;
-            $schedule->team1_id =$request->team1_id;
-            $schedule->team2_id =$request->team2_id;
-
-            $schedule->save();
-
-            return redirect()->route('schedules.index')->with('success', 'Game schedule added successfully.');
-        }
-        else{
+        if ($validator->fails()) {
             return redirect()->route('schedules.edit', $id)->withInput()->withErrors($validator);
         }
+
+        // Convert 12-hour format to 24-hour format
+        $time12Hour = $request->input('time');
+        $dateTime = \DateTime::createFromFormat('g:i A', $time12Hour);
+        $time24Hour = $dateTime ? $dateTime->format('H:i') : null;
+
+        // Update the schedule
+        $schedule->tournament_id = $request->tournament_id;
+        $schedule->date = $request->date;
+        $schedule->time = $time24Hour;
+        $schedule->venue = $request->venue;
+        $schedule->team1_id = $request->team1_id;
+        $schedule->team2_id = $request->team2_id;
+
+        // Only set category if the tournament has categories
+        if ($hasCategories) {
+            $schedule->category = $request->input('category');
+        } else {
+            $schedule->category = null; // Clear the category if the tournament doesn't have categories
+        }
+
+        $schedule->save();
+
+        return redirect()->route('schedules.index')->with('success', 'Game schedule updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

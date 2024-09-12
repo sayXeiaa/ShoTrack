@@ -212,36 +212,26 @@ class TeamController extends Controller
             'status' => true
         ]);
     }
-
-    // public function getByTournament(Request $request)
-    // {
-    //     $tournamentId = $request->query('tournament_id');
-
-    //     if (!$tournamentId) {
-    //         return response()->json(['error' => 'No tournament ID provided'], 400);
-    //     }
-
-    //     $teams = Teams::where('tournament_id', $tournamentId)->get();
-
-    //     return response()->json(['teams' => $teams]);
-    // }
+    
     public function getByTournament(Request $request)
     {
         $tournamentId = $request->query('tournament_id');
         $category = $request->query('category');
-    
-        if (!$tournamentId) {
-            return response()->json(['error' => 'No tournament ID provided'], 400);
+        
+        $query = Teams::query(); // Start with a base query
+
+        if ($tournamentId) {
+            // Filter by tournament ID if provided
+            $query->where('tournament_id', $tournamentId);
         }
-    
-        $query = Teams::where('tournament_id', $tournamentId);
-    
+
         if ($category) {
-            $query->where('category', $category); // Filter by category if provided
+            // Filter by category if provided
+            $query->where('category', $category);
         }
-    
+        
         $teams = $query->get();
-    
+        
         return response()->json(['teams' => $teams]);
     }
     

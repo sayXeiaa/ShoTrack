@@ -29,5 +29,9 @@ class Teams extends Model
     {
         return $this->belongsTo(Tournaments::class);
     }
+    public function players()
+    {
+        return $this->hasMany(Players::class, 'team_id'); 
+    }
 
 }

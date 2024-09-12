@@ -43,7 +43,7 @@ class PlayerController extends Controller
         if ($teamId) {
             $playersQuery->where('team_id', $teamId);
         }
-        $players = $playersQuery->paginate(10); // Adjust pagination as needed
+        $players = $playersQuery->paginate(20); // Adjust pagination as needed
         
         // Fetch all tournaments for filtering options
         $tournaments = Tournaments::all();

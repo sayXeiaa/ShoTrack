@@ -221,5 +221,13 @@ class ScheduleController extends Controller
             'status' => true
         ]);
     }
+
+    public function showMatch($schedule_id) {
+        $schedule = Schedule::find($schedule_id); 
+        $teamA = Teams::find($schedule->teamA_id);
+        $teamB = Teams::find($schedule->teamB_id);
+        
+        return view('match', compact('schedule', 'teamA', 'teamB'));
+    }
     
 }

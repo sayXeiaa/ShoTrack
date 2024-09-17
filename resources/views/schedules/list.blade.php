@@ -76,8 +76,11 @@
                             {{ \Carbon\Carbon::parse($schedule->created_at)->format('d M, Y') }}
                         </td>
                         <td class="px-6 py-3 text-center">
+                            <div class="inline-flex flex-wrap space-x-2">
                             <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
                             <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                            <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-sm rounded-md text-white px-3 py-2 hover:bg-blue-500 mt-2">Manage Game</a>                       
+                        </td>
                         </td>
                     </tr>    
                     @endforeach

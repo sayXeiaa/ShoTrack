@@ -8,6 +8,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\PlayerStatsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -85,6 +86,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
     Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+    //Player Stats routes
+    Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
+    Route::get('/playerstats/create/{schedule_id}', [PlayerStatsController::class, 'create'])->name('playerstats.create');
+    Route::post('/playerstats', [PlayerStatsController::class, 'store'])->name('playerstats.store');
+    // Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
+    // Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
+    // Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
 
 });
 

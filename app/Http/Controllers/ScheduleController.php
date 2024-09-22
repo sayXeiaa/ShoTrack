@@ -16,7 +16,6 @@ class ScheduleController extends Controller
      */
     public function index(Request $request)
     {
-        // Get the tournament ID and category from the request
         $tournamentId = $request->input('tournament_id');
         $category = $request->input('category');
     
@@ -35,10 +34,8 @@ class ScheduleController extends Controller
             ->latest()
             ->paginate(25);
     
-        // Get all tournaments for the dropdown
         $tournaments = Tournaments::all();
     
-        // Fetch categories based on the selected tournament (assuming category is a column in tournaments)
         $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
     
         return view('schedules.list', [
@@ -55,7 +52,7 @@ class ScheduleController extends Controller
     {
         $tournamentId = $request->query('tournament_id');
         $tournaments = Tournaments::all();
-        $teams = []; // Default to an empty array
+        $teams = [];
 
         if ($tournamentId) {
             $teams = Teams::where('tournament_id', $tournamentId)->get();
@@ -94,7 +91,6 @@ class ScheduleController extends Controller
         $dateTime = \DateTime::createFromFormat('g:i A', $time12Hour);
         $time24Hour = $dateTime ? $dateTime->format('H:i') : null;
     
-        // Create a new schedule
         $schedule = new Schedule();
         $schedule->tournament_id = $request->tournament_id;
         $schedule->date = $request->date;
@@ -117,9 +113,11 @@ class ScheduleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($scheduleId)
     {
-        //
+        $schedule = Schedule::findOrFail($scheduleId);
+    
+        return view('playerstats.create', compact('schedule'));
     }
 
     /**
@@ -127,10 +125,8 @@ class ScheduleController extends Controller
      */
     public function edit(string $id)
     {
-        // Fetch tournaments
         $tournaments = Tournaments::all();
         
-        // Fetch the schedule to edit
         $schedule = Schedule::findOrFail($id);
 
         // Fetch all teams for the selected tournament and category
@@ -139,20 +135,16 @@ class ScheduleController extends Controller
                     ->get();
 
         // Categories
-        $categories = ['juniors', 'seniors']; // Adjust this based on your actual categories
+        $categories = ['juniors', 'seniors'];
 
-        // Return the view with the schedule, tournaments, categories, and teams data
         return view('schedules.edit', compact('schedule', 'tournaments', 'categories', 'teams'));
     }
-
-
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        // Fetch the schedule instance
         $schedule = Schedule::findOrFail($id);
 
         // Find the tournament to check if it has categories
@@ -160,7 +152,6 @@ class ScheduleController extends Controller
         $tournament = Tournaments::findOrFail($tournamentId);
         $hasCategories = $tournament->has_categories;
 
-        // Validation rules
         $validator = Validator::make($request->all(), [
             'tournament_id' => 'required|exists:tournaments,id',
             'date' => 'required|date',
@@ -188,7 +179,6 @@ class ScheduleController extends Controller
         $schedule->team1_id = $request->team1_id;
         $schedule->team2_id = $request->team2_id;
 
-        // Only set category if the tournament has categories
         if ($hasCategories) {
             $schedule->category = $request->input('category');
         } else {
@@ -199,7 +189,6 @@ class ScheduleController extends Controller
 
         return redirect()->route('schedules.index')->with('success', 'Game schedule updated successfully.');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -229,5 +218,58 @@ class ScheduleController extends Controller
         
         return view('match', compact('schedule', 'teamA', 'teamB'));
     }
-    
+
+    public function storeGameTime(Request $request)
+    {
+        $request->validate([
+            'schedule_id' => 'required|integer|exists:schedules,id',
+            'current_quarter' => 'required|integer',
+            'game_time' => 'required|string',
+            'total_elapsed_time' => 'required|integer',
+            'quarter_elapsed_time' => 'required|integer',
+        ]);
+
+        $schedule = Schedule::findOrFail($request->schedule_id);
+
+        $schedule->current_quarter = $request->current_quarter;
+        $schedule->total_elapsed_time = $request->total_elapsed_time;
+        $schedule->quarter_elapsed_time = $request->quarter_elapsed_time;
+
+        $totalGameTime = 2400; 
+        $remaining_game_time = max(0, $totalGameTime - $schedule->total_elapsed_time);
+        $schedule->remaining_game_time = $remaining_game_time;
+
+        $schedule->save();
+
+        return response()->json(['message' => 'Game time updated successfully']);
+    }
+
+    public function getGameDetails($scheduleId) {
+        $schedule = Schedule::find($scheduleId);
+        
+        if ($schedule) {
+            $quarterLength = 600; 
+
+            // Calculate the remaining time based on the current quarter
+            $currentQuarter = $schedule->current_quarter;
+            $totalElapsedTime = $schedule->total_elapsed_time;
+
+            // Calculate time spent in the current quarter
+            $timeSpentInCurrentQuarter = $totalElapsedTime - (($currentQuarter - 1) * $quarterLength);
+            $timeSpentInCurrentQuarter = max(0, min($timeSpentInCurrentQuarter, $quarterLength));
+
+            // Calculate remaining game time in the current quarter
+            $remaining_game_time = max(0, $quarterLength - $timeSpentInCurrentQuarter);
+
+            return response()->json([
+                'remaining_game_time' => $remaining_game_time,
+                'total_elapsed_time' => $schedule->total_elapsed_time,
+                'current_quarter' => $currentQuarter,
+                'quarter_elapsed_time' => $timeSpentInCurrentQuarter // Return the quarter's elapsed time
+            ]);
+        } else {
+            return response()->json(['error' => 'Schedule not found.'], 404);
+        }
+    }
+
 }

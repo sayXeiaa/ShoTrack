@@ -16,6 +16,10 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('venue');
+            $table->integer('remaining_game_time')->default(0);
+            $table->integer('total_elapsed_time')->default(0);
+            $table->integer('quarter_elapsed_time')->default(0);
+            $table->integer('current_quarter')->default(0);
             $table->timestamps();
             $table->foreignId('tournament_id')->constrained('tournaments');
             $table->foreignId('team1_id')->constrained('teams');

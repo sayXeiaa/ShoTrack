@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Models\Player;
-use App\Models\Team;
+use App\Models\Teams;
 use App\Models\Schedule;
 use App\Models\Players;
 use App\Models\PlayerStat;
+use App\Models\PlayByPlay;
 
 use Illuminate\Http\Request;
 
@@ -34,7 +35,10 @@ class PlayerStatsController extends Controller
         $playersTeamA = Players::where('team_id', $schedule->team1->id)->get();
         $playersTeamB = Players::where('team_id', $schedule->team2->id)->get();
 
-         // Filter for starting and bench players for Team A
+        $remaining_game_time = $schedule->remaining_game_time; 
+        $currentQuarter = $schedule->current_quarter; 
+
+        // Filter for starting and bench players for Team A
         $startingPlayersTeamA = $playersTeamA->where('is_starting', true)->take(5); // Assume 'is_starting' is the flag for starters
         $benchPlayersTeamA = $playersTeamA->where('is_starting', false);
 
@@ -52,264 +56,212 @@ class PlayerStatsController extends Controller
         })->sum('points');
 
         return view('playerstats.create', compact('schedule_id', 'teams', 'players', 'team1Name', 'team2Name', 'playersTeamA', 'playersTeamB', 'startingPlayersTeamA', 
-        'startingPlayersTeamB', 'benchPlayersTeamA', 'benchPlayersTeamB', 'teamAScore', 'teamBScore'));
+        'startingPlayersTeamB', 'benchPlayersTeamA', 'benchPlayersTeamB', 'teamAScore', 'teamBScore', 'remaining_game_time', 'currentQuarter'));
     }
 
-// public function store(Request $request)
-// {
-//     // Validate the request data
-//     $validated = $request->validate([
-//         'player_number' => 'required|integer',
-//         'team' => 'required|integer', // Assume 'team' is the team_id, not the name
-//         'type_of_stat' => 'required|string|in:two_point,three_point,free_throw,offensive_rebound,defensive_rebound,steal,block,assist,turnover,foul',
-//         'result' => 'required|string|in:made,missed',
-//         'schedule_id' => 'required|integer'
-//     ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'player_number' => 'required|integer',
+            'team' => 'required|integer',
+            'type_of_stat' => 'required|string|in:two_point,three_point,free_throw,offensive_rebound,defensive_rebound,steal,block,assist,turnover,foul',
+            'result' => 'required|string|in:made,missed',
+            'schedule_id' => 'required|integer',
+            'game_time' => 'required|string',
+            'quarter' => 'required|string',
+        ]);
 
-//     // Find the player by number and team ID
-//     $player = Players::where('number', $validated['player_number'])
-//                     ->where('team_id', $validated['team'])
-//                     ->first();
+        // Find the player by number and team ID
+        $player = Players::where('number', $validated['player_number'])
+                        ->where('team_id', $validated['team'])
+                        ->first();
 
-//     if (!$player) {
-//         return response()->json(['error' => 'Player not found'], 404);
-//     }
+        if (!$player) {
+            return response()->json(['error' => 'Player not found'], 404);
+        }
 
-//     // Check if a stat record for this player and schedule already exists
-//     $stat = PlayerStat::where('player_id', $player->id)
-//                     ->where('schedule_id', $validated['schedule_id'])
-//                     ->first();
+        // Create or update the stat record
+        $stat = PlayerStat::where('player_id', $player->id)
+                        ->where('schedule_id', $validated['schedule_id'])
+                        ->first();
 
-//     if (!$stat) {
-//         // Create new record if not found
-//         $stat = new PlayerStat();
-//         $stat->player_id = $player->id; 
-//         $stat->schedule_id = $validated['schedule_id'];
-//         $stat->team_id = $validated['team']; 
-//         $stat->points = 0; // Initialize points
-//         $stat->setAttribute('two_pt_fg_attempt', 0);
-//         $stat->setAttribute('two_pt_fg_made', 0); 
-//         $stat->setAttribute('three_pt_fg_attempt', 0);
-//         $stat->setAttribute('three_pt_fg_made', 0); 
-//         $stat->setAttribute('free_throw_attempt', 0);
-//         $stat->setAttribute('free_throw_made', 0);
-//         $stat->setAttribute('rebounds', 0);
-//         $stat->setAttribute('offensive_rebounds', 0);
-//         $stat->setAttribute('defensive_rebounds', 0);
-//         $stat->setAttribute('blocks', 0);
-//         $stat->setAttribute('steals', 0);
-//         $stat->setAttribute('turnovers', 0);
-//         $stat->setAttribute('personal_fouls', 0);
+        // If no stat record exists, create a new one
+        if (!$stat) {
+            $stat = new PlayerStat();
+            $stat->player_id = $player->id;
+            $stat->schedule_id = $validated['schedule_id'];
+            $stat->team_id = $validated['team'];
+            $stat->points = 0;
+            $stat->setAttribute('two_pt_fg_attempt', 0);
+            $stat->setAttribute('two_pt_fg_made', 0);
+            $stat->setAttribute('two_pt_percentage', 0);
+            $stat->setAttribute('three_pt_fg_attempt', 0);
+            $stat->setAttribute('three_pt_fg_made', 0);
+            $stat->setAttribute('three_pt_percentage', 0);
+            $stat->setAttribute('free_throw_attempt', 0);
+            $stat->setAttribute('free_throw_made', 0);
+            $stat->setAttribute('free_throw_percentage', 0);
+            $stat->setAttribute('free_throw_attempt_rate', 0);
+            $stat->setAttribute('rebounds', 0);
+            $stat->setAttribute('offensive_rebounds', 0);
+            $stat->setAttribute('defensive_rebounds', 0);
+            $stat->setAttribute('assists', 0);
+            $stat->setAttribute('blocks', 0);
+            $stat->setAttribute('steals', 0);
+            $stat->setAttribute('turnovers', 0);
+            $stat->setAttribute('personal_fouls', 0);
+            $stat->setAttribute('effective_field_goal_percentage', 0);
+            $stat->setAttribute('minutes', 0);
+        }
         
-//     }
+        // Use helper methods to determine points and action
+        $points = $this->getPoints($validated['type_of_stat'], $validated['result']);
 
-//     // Update the stat
-// if ($validated['type_of_stat'] === 'two_point') {
-//     // Handle 2-point shots
-//     if ($validated['result'] === 'made') {
-//         $stat->setAttribute('two_pt_fg_made', $stat->getAttribute('two_pt_fg_made') + 1); // Increment 2_pt_fg_made column
-//         $stat->setAttribute('two_pt_fg_attempt', $stat->getAttribute('two_pt_fg_attempt') + 1); // Increment 2_pt_fg_attempt
-//         $stat->points += 2; // Add 2 points for a made 2-point shot
-//     } else if ($validated['result'] === 'missed') {
-//         $stat->setAttribute('two_pt_fg_attempt', $stat->getAttribute('two_pt_fg_attempt') + 1); // Increment 2_pt_fg_attempt
-//     }
-// } elseif ($validated['type_of_stat'] === 'three_point') {
-//     // Handle 3-point shots
-//     if ($validated['result'] === 'made') {
-//         $stat->setAttribute('three_pt_fg_made', $stat->getAttribute('three_pt_fg_made') + 1); // Increment 3_pt_fg_made column
-//         $stat->setAttribute('three_pt_fg_attempt', $stat->getAttribute('three_pt_fg_attempt') + 1); // Increment 3_pt_fg_attempt
-//         $stat->points += 3; // Add 3 points for a made 3-point shot
-//     } else if ($validated['result'] === 'missed') {
-//         $stat->setAttribute('three_pt_fg_attempt', $stat->getAttribute('three_pt_fg_attempt') + 1); // Increment 3_pt_fg_attempt
-//     } 
-// } elseif ($validated['type_of_stat'] === 'free_throw') {
-//     // Handle free throws
-//     $stat->setAttribute('free_throw_attempt', $stat->getAttribute('free_throw_attempt') + 1); // Increment free_throw_attempt
+        // Update the stat based on the type of stat
+        switch ($validated['type_of_stat']) {
+            case 'two_point':
+                // Increment the number of attempts
+                $stat->increment('two_pt_fg_attempt');
 
-//     if ($validated['result'] === 'made') {
-//         $stat->setAttribute('free_throw_made', $stat->getAttribute('free_throw_made') + 1); // Increment free_throw_made column
-//         $stat->points += 1; 
-//     }
-// } elseif ($validated['type_of_stat'] === 'offensive_rebound') {
-//     // Handle free throws
-//     $stat->setAttribute('rebounds', $stat->getAttribute('rebounds') + 1);
-//     $stat->setAttribute('offensive_rebounds', $stat->getAttribute('offensive_rebounds') + 1); 
+                if ($validated['result'] === 'made') {
+                    $stat->increment('two_pt_fg_made');
+                    $stat->points += $points; 
+                }
 
-// } elseif ($validated['type_of_stat'] === 'defensive_rebound') {
-//     // Handle free throws
-//     $stat->setAttribute('rebounds', $stat->getAttribute('rebounds') + 1);
-//     $stat->setAttribute('defensive_rebounds', $stat->getAttribute('defensive_rebounds') + 1); 
+                // Calculate the percentage
+                $attempts = $stat->two_pt_fg_attempt;
+                $makes = $stat->two_pt_fg_made;
 
-// } elseif ($validated['type_of_stat'] === 'block') {
-//     // Handle free throws
-//     $stat->setAttribute('blocks', $stat->getAttribute('blocks') + 1);
-// } elseif ($validated['type_of_stat'] === 'steal') {
-//     // Handle free throws
-//     $stat->setAttribute('steals', $stat->getAttribute('steals') + 1);
-// } elseif ($validated['type_of_stat'] === 'turnover') {
-//     // Handle free throws
-//     $stat->setAttribute('turnovers', $stat->getAttribute('turnovers') + 1);
-// } elseif ($validated['type_of_stat'] === 'foul') {
-//     // Handle free throws
-//     $stat->setAttribute('personal_fouls', $stat->getAttribute('personal_fouls') + 1);
-// } 
+                $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
 
+                // Set the percentage
+                $stat->two_pt_percentage = $percentage;
+                $stat->save(); 
 
-//     // Save the updated stat
-//     $stat->save();
+                break;
+            case 'three_point':
+                $stat->increment('three_pt_fg_attempt');
+                if ($validated['result'] === 'made') {
+                    $stat->increment('three_pt_fg_made');
+                    $stat->points += $points;
+                }
 
-//     // Calculate total scores for both teams
-//     $schedule = Schedule::findOrFail($validated['schedule_id']);
-//     // Calculate total scores for both teams
+                $attempts = $stat->three_pt_fg_attempt;
+                $makes = $stat->three_pt_fg_made;
 
-//     $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-//         $query->where('team_id', $schedule->team1->id);
-//     })->sum('points');
+                $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
 
-//     $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-//         $query->where('team_id', $schedule->team2->id);
-//     })->sum('points');
+                $stat->three_pt_percentage = $percentage;
+                $stat->save(); 
 
-//     return response()->json(['message' => 'Shot recorded successfully', 'teamAScore' => $teamAScore,
-//         'teamBScore' => $teamBScore]);
-// }
+                break;
+            case 'free_throw':
+                $stat->increment('free_throw_attempt');
+                if ($validated['result'] === 'made') {
+                    $stat->increment('free_throw_made');
+                    $stat->points += $points;
+                }
 
-public function store(Request $request)
-{
-    // Validate the request data
-    $validated = $request->validate([
-        'player_number' => 'required|integer',
-        'team' => 'required|integer',
-        'type_of_stat' => 'required|string|in:two_point,three_point,free_throw,offensive_rebound,defensive_rebound,steal,block,assist,turnover,foul',
-        'result' => 'required|string|in:made,missed',
-        'schedule_id' => 'required|integer'
-    ]);
+                $attempts = $stat->free_throw_attempt;
+                $makes = $stat->free_throw_made;
 
-    // Find the player by number and team ID
-    $player = Players::where('number', $validated['player_number'])
-                    ->where('team_id', $validated['team'])
-                    ->first();
+                $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
 
-    if (!$player) {
-        return response()->json(['error' => 'Player not found'], 404);
+                $stat->free_throw_percentage = $percentage;
+
+                // Calculate the free throw attempt rate
+                $two_pt_attempts = $stat->two_pt_fg_attempt;
+                $three_pt_attempts = $stat->three_pt_fg_attempt;
+                $free_throw_attempt = $stat->free_throw_attempt;
+
+                // Calculate the free throw attempt rate
+                $total_fg_attempts = $two_pt_attempts + $three_pt_attempts;
+                $fta_rate = ($total_fg_attempts > 0) ? ($free_throw_attempt / $total_fg_attempts) : 0;
+
+                // Set the free throw attempt rate 
+                $stat->free_throw_attempt_rate = $fta_rate * 100;
+                $stat->save(); 
+
+                break;
+            case 'offensive_rebound':
+                $stat->increment('rebounds');
+                $stat->increment('offensive_rebounds');
+                break;
+            case 'defensive_rebound':
+                $stat->increment('rebounds');
+                $stat->increment('defensive_rebounds');
+                break;
+            case 'block':
+                $stat->increment('blocks');
+                break;
+            case 'steal':
+                $stat->increment('steals');
+                break;
+            case 'turnover':
+                $stat->increment('turnovers');
+                break;
+            case 'foul':
+                $stat->increment('personal_fouls');
+                break;
+            case 'assist':
+                $stat->increment('assists');
+                break;
+        }
+
+        $two_pt_made = $stat->two_pt_fg_made;
+        $three_pt_made = $stat->three_pt_fg_made;
+        $two_pt_attempts = $stat->two_pt_fg_attempt;
+        $three_pt_attempts = $stat->three_pt_fg_attempt;
+
+        $total_fg_made = $two_pt_made + $three_pt_made;
+        $total_fg_attempts = $two_pt_attempts + $three_pt_attempts;
+
+        $eFG_percentage = ($total_fg_attempts > 0) ? (($total_fg_made + 0.5 * $three_pt_made) / $total_fg_attempts) * 100 : 0;
+        $stat->effective_field_goal_percentage = $eFG_percentage;
+        
+        $stat->save();
+
+        // Calculate total scores for both teams
+        $schedule = Schedule::findOrFail($validated['schedule_id']);
+        $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team1->id);
+        })->sum('points');
+
+        $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team2->id);
+        })->sum('points');
+
+        PlayByPlay::create([
+            'player_id' => $player->id,
+            'schedule_id' => $validated['schedule_id'],
+            'type_of_stat' => $validated['type_of_stat'],
+            'result' => $validated['result'],
+            'game_time' => $validated['game_time'],
+            'quarter' => $validated['quarter'],
+            'team_A_score' => $teamAScore,
+            'team_B_score' => $teamBScore
+        ]);
+
+        return response()->json([
+            'message' => 'Shot recorded successfully',
+            'teamAScore' => $teamAScore,
+            'teamBScore' => $teamBScore
+        ]);
     }
 
-    // Create or update the stat record
-    $stat = PlayerStat::where('player_id', $player->id)
-                    ->where('schedule_id', $validated['schedule_id'])
-                    ->first();
-
-    // Format player name as "F. Lastname"
-    $formattedName = $player->first_name[0] . '. ' . $player->last_name;
-
-    if (!$stat) {
-        $stat = new PlayerStat();
-        $stat->player_id = $player->id;
-        $stat->schedule_id = $validated['schedule_id'];
-        $stat->team_id = $validated['team'];
-        $stat->points = 0; // Initialize points
-        // Initialize other attributes
-        $stat->setAttribute('two_pt_fg_attempt', 0);
-        $stat->setAttribute('two_pt_fg_made', 0);
-        $stat->setAttribute('three_pt_fg_attempt', 0);
-        $stat->setAttribute('three_pt_fg_made', 0);
-        $stat->setAttribute('free_throw_attempt', 0);
-        $stat->setAttribute('free_throw_made', 0);
-        $stat->setAttribute('rebounds', 0);
-        $stat->setAttribute('offensive_rebounds', 0);
-        $stat->setAttribute('defensive_rebounds', 0);
-        $stat->setAttribute('blocks', 0);
-        $stat->setAttribute('steals', 0);
-        $stat->setAttribute('turnovers', 0);
-        $stat->setAttribute('personal_fouls', 0);
+private function getPoints($type_of_stat, $result) {
+    switch ($type_of_stat) {
+        case 'two_point':
+            return $result === 'made' ? 2 : 0;
+        case 'three_point':
+            return $result === 'made' ? 3 : 0;
+        case 'free_throw':
+            return $result === 'made' ? 1 : 0;
+        default:
+            return 0;
     }
-
-    // Update the stat based on the type of stat
-    $points = 0;
-    $action = '';
-    if ($validated['type_of_stat'] === 'two_point') {
-        if ($validated['result'] === 'made') {
-            $stat->setAttribute('two_pt_fg_made', $stat->getAttribute('two_pt_fg_made') + 1);
-            $stat->setAttribute('two_pt_fg_attempt', $stat->getAttribute('two_pt_fg_attempt') + 1);
-            $points = 2;
-            $action = 'MADE a 2-point field goal';
-        } else {
-            $stat->setAttribute('two_pt_fg_attempt', $stat->getAttribute('two_pt_fg_attempt') + 1);
-            $action = 'MISSED a 2-point field goal';
-        }
-    } elseif ($validated['type_of_stat'] === 'three_point') {
-        if ($validated['result'] === 'made') {
-            $stat->setAttribute('three_pt_fg_made', $stat->getAttribute('three_pt_fg_made') + 1);
-            $stat->setAttribute('three_pt_fg_attempt', $stat->getAttribute('three_pt_fg_attempt') + 1);
-            $points = 3;
-            $action = 'MADE a 3-point field goal';
-        } else {
-            $stat->setAttribute('three_pt_fg_attempt', $stat->getAttribute('three_pt_fg_attempt') + 1);
-            $action = 'MISSED a 3-point field goal';
-        }
-    } elseif ($validated['type_of_stat'] === 'free_throw') {
-        $stat->setAttribute('free_throw_attempt', $stat->getAttribute('free_throw_attempt') + 1);
-        if ($validated['result'] === 'made') {
-            $stat->setAttribute('free_throw_made', $stat->getAttribute('free_throw_made') + 1);
-            $points = 1;
-            $action = 'MADE a free throw';
-        }
-        elseif ($validated['result'] === 'missed') {
-            $action = 'MISSED a free throw';
-        }
-    } elseif ($validated['type_of_stat'] === 'offensive_rebound') {
-        $stat->setAttribute('rebounds', $stat->getAttribute('rebounds') + 1);
-        $stat->setAttribute('offensive_rebounds', $stat->getAttribute('offensive_rebounds') + 1);
-        $action = 'Grabbed an offensive rebound';
-    } elseif ($validated['type_of_stat'] === 'defensive_rebound') {
-        $stat->setAttribute('rebounds', $stat->getAttribute('rebounds') + 1);
-        $stat->setAttribute('defensive_rebounds', $stat->getAttribute('defensive_rebounds') + 1);
-        $action = 'Grabbed a defensive rebound';
-    } elseif ($validated['type_of_stat'] === 'block') {
-        $stat->setAttribute('blocks', $stat->getAttribute('blocks') + 1);
-        $action = 'Blocked a shot';
-    } elseif ($validated['type_of_stat'] === 'steal') {
-        $stat->setAttribute('steals', $stat->getAttribute('steals') + 1);
-        $action = 'Stole the ball';
-    } elseif ($validated['type_of_stat'] === 'turnover') {
-        $stat->setAttribute('turnovers', $stat->getAttribute('turnovers') + 1);
-        $action = 'Committed a turnover';
-    } elseif ($validated['type_of_stat'] === 'foul') {
-        $stat->setAttribute('personal_fouls', $stat->getAttribute('personal_fouls') + 1);
-        $action = 'Committed a foul';
-    }
-
-    // Save the updated stat
-    $stat->points += $points;
-    $stat->save();
-
-    // Calculate total scores for both teams
-    $schedule = Schedule::findOrFail($validated['schedule_id']);
-    // Calculate total scores for both teams
-
-    $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-        $query->where('team_id', $schedule->team1->id);
-    })->sum('points');
-
-    $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-        $query->where('team_id', $schedule->team2->id);
-    })->sum('points');
-
-    return response()->json([
-        'message' => 'Shot recorded successfully',
-        'playerName' => $formattedName, 
-        'action' => $action,
-        'points' => $points,
-        'teamAScore' => $teamAScore,
-        'teamBScore' => $teamBScore
-    ]);
 }
-
-
-
-    /**
-     * Display the specified resource.
-     */
+    
     public function show() 
     {
     

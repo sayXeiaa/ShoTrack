@@ -22,6 +22,9 @@ class Schedule extends Model
         'team1_id',
         'team2_id',
         'tournament_id',
+        'remaining_game_time',
+        'time_elapsed',
+        'total_elapsed_time'
     ];
 
     // Define the relationship with the Tournament model

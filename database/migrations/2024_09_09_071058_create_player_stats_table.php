@@ -34,12 +34,12 @@ return new class extends Migration
             $table->Decimal('free_throw_percentage', 5, 2)->default(0.00);
             $table->Decimal('free_throw_attempt_rate', 5, 2)->default(0.00); 
             $table->integer('plus_minus')->default(0); 
-            $table->Decimal('effective_field_goal_percentage', 5, 2)->default(0.00); 
+            $table->Decimal('effective_field_goal_percentage', 5, 2)->default(0.00);
         
             $table->foreignId('schedule_id')->constrained('schedules')->onDelete('cascade'); 
             $table->foreignId('player_id')->constrained('players')->onDelete('cascade');
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
-        
+
             $table->timestamps();
         });        
     }

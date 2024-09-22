@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="mx-auto p-4">
             <div class="flex space-x-8">
                 <!-- Live Scoring Section -->
                 <div class="bg-gray-100 p-6 rounded-lg border border-gray-400 shadow-md flex-1">
@@ -15,7 +15,6 @@
                                 <h3 class="font-bold text-lg text-black">{{ $team1Name }}</h3>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow text-center">
-                                    {{-- <p id="teamAScore" class="text-4xl font-semibold text-black">{{$teamAScore}}</p> --}}
                                     <p id="team-a-score" class="text-4xl font-semibold text-black">{{$teamAScore}}</p>
                             </div>
                             <div class="flex flex-col items-center space-y-2">
@@ -31,7 +30,6 @@
                                 </div>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow text-center">
-                                    {{-- <p id="teamBScore" class="text-4xl font-semibold text-black">{{$teamBScore}}</p> --}}
                                     <p id="team-b-score" class="text-4xl font-semibold text-black">{{$teamBScore}}</p>
                             </div>
                             <div class="flex-1 bg-white p-2 rounded-lg shadow text-center">
@@ -39,57 +37,27 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="mb-6 flex justify-between items-center">
-                        <!-- Team A Players -->
-                        <div class="flex space-x-2">
-                            @foreach ($playersTeamA as $player)
-                                <div class="player-box bg-gray-500 text-center cursor-pointer text-black" onclick="selectPlayerNumber({{ $player->number }}, '{{ $player->team }}')">
-                                    <p>{{ $player->number }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Middle Controls -->
-                        <div class="flex flex-col items-center space-y-4">
-                            <div class="middle-box bg-gray-100 p-4 rounded-lg shadow text-center">
-                                <button id="quarterButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Q1</button>
-                            </div>
-                            <div class="middle-box bg-gray-100 p-4 rounded-lg shadow text-center">
-                                <button id="nextQuarterButtonSub" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="nextQuarter()">Next Quarter</button>
-                            </div>
-                        </div>
-                        
-
-                        <!-- Team B Players -->
-                        <div class="flex space-x-2">
-                            @foreach ($playersTeamB as $player)
-                                <div class="player-box bg-gray-500 text-center cursor-pointer text-black" onclick="selectPlayerNumber({{ $player->number }}, '{{ $player->team }}')">
-                                    <p>{{ $player->number }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> --}}
 
                     <div class="flex flex-col items-center space-y-4 mb-4">
-                        <div class="flex items-center space-x-8">
-                            <!-- Team A Starting 5 (Blank by default) -->
-                            <div class="flex flex-col items-center space-y-2">
-                                <div class="flex space-x-2" id="startingTeamA">
+                        <div class="flex flex-row space-x-8 w-full">
+                            <!-- Team A Section -->
+                            <div class="flex flex-col items-center w-1/2">
+                                <!-- Starting Players for Team A -->
+                                <div class="flex flex-wrap justify-center gap-2" id="startingTeamA">
                                     @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-12 h-12" 
+                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center" 
                                             data-team="teamA" data-position="starting" data-index="{{ $i }}"
                                             data-player-number="{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}"
                                             onclick="selectPlayer(this)">
-                                            <p></p> <!-- Blank by default -->
+                                            <p>{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}</p>
                                         </div>
                                     @endfor
                                 </div>
-    
                     
-                                <!-- Bench Players for Team A aligned under the starting five -->
-                                <div class="flex flex-wrap gap-2 mt-2" id="benchPlayersTeamA">
+                                <!-- Bench Players for Team A -->
+                                <div class="flex flex-wrap justify-center gap-2 mt-2" id="benchPlayersTeamA">
                                     @foreach ($benchPlayersTeamA as $player)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-12 h-12"
+                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamA" data-position="bench" data-player-number="{{ $player->number }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
@@ -108,22 +76,23 @@
                                 </button>
                             </div>
                     
-                            <!-- Team B Starting 5 (Blank by default) -->
-                            <div class="flex flex-col items-center space-y-2">
-                                <div class="flex space-x-2" id="startingTeamB">
+                            <!-- Team B Section -->
+                            <div class="flex flex-col items-center w-1/2">
+                                <!-- Starting Players for Team B -->
+                                <div class="flex flex-wrap justify-center gap-2" id="startingTeamB">
                                     @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-12 h-12"
+                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamB" data-position="starting" data-index="{{ $i }}"
                                             onclick="selectPlayer(this)">
-                                            <p></p> <!-- Blank by default -->
+                                            <p>{{ isset($startingPlayersTeamB[$i]) ? $startingPlayersTeamB[$i]->number : '' }}</p>
                                         </div>
                                     @endfor
                                 </div>
                     
-                                <!-- Bench Players for Team B aligned under the starting five -->
-                                <div class="flex flex-wrap gap-2 mt-2" id="benchPlayersTeamB">
+                                <!-- Bench Players for Team B -->
+                                <div class="flex flex-wrap justify-center gap-2 mt-2" id="benchPlayersTeamB">
                                     @foreach ($benchPlayersTeamB as $player)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-12 h-12"
+                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamB" data-position="bench" data-player-number="{{ $player->number }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
@@ -142,7 +111,6 @@
                             </button>
                         </div>
                     </div>
-                    
 
                     <div class="mb-6">
                         <x-message></x-message>
@@ -152,33 +120,33 @@
                             <input type="hidden" name="team_name" id="selectedTeamName">
 
                             <!-- Assist -->
-                            <div class="mb-4">
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="setAssist('yes')">Assist</button>
-                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="setAssist('no')">No Assist</button>
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeAssist()">Assist</button>
+                                {{-- <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="()">No Assist</button> --}}
                             </div>
 
                             <!-- Made Points -->
-                            <div class="mb-4 space-y-2">
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPoints()">Made 2 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeThreePoints()">Made 3 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFreeThrow()">Made Free Throw</button>
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPoints()">Made 2 Points</button>
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeThreePoints()">Made 3 Points</button>
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeFreeThrow()">Made Free Throw</button>
                             </div>
 
                             <!-- Missed Points -->
-                            <div class="mb-4 space-y-2">
+                            <div class="mb-4 grid grid-cols-4 gap-4">
                                 <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedTwoPoints()">Missed 2 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="missedThreePoints()">Missed 3 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="missedFreeThrow()">Missed Free Throw</button>
+                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedThreePoints()">Missed 3 Points</button>
+                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedFreeThrow()">Missed Free Throw</button>
                             </div>
 
                             <!-- Rebounds -->
-                            <div class="mb-4 space-y-2">
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeOffensiveRebound()">Offensive Rebound</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeDefensiveRebound()">Defensive Rebound</button>
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeOffensiveRebound()">Offensive Rebound</button>
+                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeDefensiveRebound()">Defensive Rebound</button>
                             </div>
 
                             <!-- Block, Steal, Turnover, Foul -->
-                            <div class="mb-4 grid grid-cols-2 gap-4">
+                            <div class="mb-4 grid grid-cols-4 gap-4">
                                 <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeBlock()">Block</button>
                                 <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeSteal()">Steal</button>
                                 <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeTurnover()">Turnover</button>
@@ -190,17 +158,18 @@
                     </div>
                 </div>
 
-                <!-- Live Player Statistics Section -->
-                <div class="bg-gray-100 p-6 rounded-lg border border-gray-400 shadow-md flex-1">
-                    <div class="mb-6 text-center">
-                        <h2 class="font-semibold text-xl text-black leading-tight">Live Player Statistics</h2>
-                        <hr class="border-gray-300 border-t-2 mt-2">
-                    </div>
-                    <div id="live-statistics" class="mt-4">
-                        <!-- Play-by-play updates will be appended here -->
+                <div class="parent-container" >
+                    <div class="bg-gray-100 p-6 rounded-lg border border-gray-400 shadow-md flex flex-col h-full">
+                        <div class="mb-6 text-center">
+                            <h2 class="font-semibold text-xl text-black leading-tight">Live Player Statistics</h2>
+                            <hr class="border-gray-300 border-t-2 mt-2">
+                        </div>
+                        <div id="live-statistics" class="flex-1 mt-4 overflow-y-auto">
+                                    {{-- Play by play display --}}
+                        </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -227,106 +196,199 @@
             font-size: 18px;
             margin: 4px;
         }
+
+        .parent-container {
+            height: 150vh;
+            width: 60vh;
+        }  
+
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
 
-
     let currentQuarter = 1;
     let timer;
-    let isPaused = false;
     let timeLeft = 600; // 10 minutes in seconds
-    const teamAId = {{ $teams[0]->id }}; 
-    const teamBId = {{ $teams[1]->id }}; 
-
-    function getTeamId(teamPlaceholder) {
-        if (teamPlaceholder === 'teamA') {
-            return teamAId; // Use the actual team ID for teamA
-        } else if (teamPlaceholder === 'teamB') {
-            return teamBId; // Use the actual team ID for teamB
-        }
-        return null; // In case of an unexpected team value
-    }
+    const teamAId = {{ $teams[0]->id }};
+    const teamBId = {{ $teams[1]->id }};
+    let totalElapsedTime = 0; 
+    let quarterElapsedTime = 0;
 
     function getCurrentScheduleId() {
         return document.getElementById('currentScheduleId').value;
     }
 
+    function convertTimeToSeconds(time) {
+        const parts = time.split(':');
+        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    }
+
+    function getCurrentQuarter() {
+        return currentQuarter;
+    }
+
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
-        const secondsLeft = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateDisplay() {
+        document.getElementById('gameTime').textContent = formatTime(timeLeft);
+        document.getElementById('quarterButton').innerText = `Q${currentQuarter}`;
     }
 
     function updateTimer() {
         if (timeLeft <= 0) {
             clearInterval(timer);
-            document.getElementById('gameTime').textContent = '00:00';
+            alert("Game over!");
             return;
         }
-        document.getElementById('gameTime').textContent = formatTime(timeLeft);
+        
         timeLeft--;
+        totalElapsedTime++; // Update total elapsed time
+        updateDisplay();
+        sendElapsedTimeDataToBackend(); // Send elapsed time data to backend
     }
 
     function startTimer() {
         if (!timer) {
-            timer = setInterval(updateTimer, 1000);
+            timer = setInterval(updateTimer, 1000); // Update every second
         }
     }
 
     function stopTimer() {
         if (timer) {
-            clearInterval(timer);
-            timer = null;
-        }
-    }
-
-    function pauseTimer() {
-        if (timer) {
-            clearInterval(timer);
-            timer = null;
+            clearInterval(timer); // Clear the timer interval
+            timer = null; // Reset the timer variable
         }
     }
 
     function resetTimer() {
         timeLeft = 600; // Reset to 10 minutes
-        document.getElementById('gameTime').textContent = formatTime(timeLeft);
+        updateDisplay(); // Update the display
     }
 
     function nextQuarter() {
         if (currentQuarter < 4) {
+            totalElapsedTime += (600 - timeLeft); // Update total elapsed time
             currentQuarter++;
-            resetTimer(); // Reset the timer when moving to the next quarter
-
-            const quarterButton = document.getElementById('quarterButton');
-            switch (currentQuarter) {
-                case 2:
-                    quarterButton.innerText = 'Q2';
-                    break;
-                case 3:
-                    quarterButton.innerText = 'Q3';
-                    break;
-                case 4:
-                    quarterButton.innerText = 'Q4';
-                    break;
-            }
-
-            document.getElementById('nextQuarterButtonSub').innerText = 'Next Quarter';
-            stopTimer();
+            resetTimer(); // Reset the timer to 10 minutes for the next quarter
+            stopTimer(); // Stop the timer
+            updateDisplay(); // Update the display
+            sendElapsedTimeDataToBackend(); // Send data for the previous quarter
         } else {
-            alert('Already in final quarter');
+            alert('Already in the final quarter');
         }
     }
 
+// function sendElapsedTimeDataToBackend() {
+//     const scheduleId = getCurrentScheduleId();
 
+//     if (!scheduleId) {
+//         console.error('No schedule ID found.');
+//         return;
+//     }
 
-    document.getElementById('quarterButton').innerText = 'Q1';
-    document.getElementById('nextQuarterButtonSub').innerText = 'Next Quarter';
+//     const gameTimeElement = document.getElementById('gameTime');
+//     const gameTime = gameTimeElement.textContent || gameTimeElement.innerText; // Fetch game time as string
+//     const gameTimeInSeconds = convertTimeToSeconds(gameTime); // Convert to seconds
 
-    document.getElementById('startButton').addEventListener('click', startTimer);
-    document.getElementById('pauseButton').addEventListener('click', pauseTimer);
-    document.getElementById('quarterButton').addEventListener('click', nextQuarter);
+//     const quarter = currentQuarter; // Use the current quarter variable
 
+//     // Create the data object to be sent
+//     const dataToSend = {
+//         _token: '{{ csrf_token() }}',
+//         schedule_id: scheduleId,
+//         current_quarter: quarter,
+//         game_time: gameTimeInSeconds, // Send as integer
+//         total_elapsed_time: totalElapsedTime
+//     };
+
+//     // Log the data being sent
+//     console.log('Sending elapsed time data to backend:', dataToSend);
+
+//     $.ajax({
+//         url: '{{ route('schedules.storeGameTime') }}',
+//         method: 'POST',
+//         data: dataToSend,
+//         success: function(response) {
+//             console.log('Elapsed time recorded successfully:', response);
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error recording elapsed time:', status, error);
+//         }
+//     });
+// }
+
+    function sendElapsedTimeDataToBackend() {
+        const scheduleId = getCurrentScheduleId();
+
+        if (!scheduleId) {
+            console.error('No schedule ID found.');
+            return;
+        }
+
+        const gameTimeElement = document.getElementById('gameTime');
+        const gameTime = gameTimeElement.textContent || gameTimeElement.innerText; 
+        const gameTimeInSeconds = convertTimeToSeconds(gameTime); 
+
+        const quarter = currentQuarter; 
+        const quarterElapsedTime = 600 - timeLeft; // Calculate based on remaining time
+
+        const dataToSend = {
+            _token: '{{ csrf_token() }}',
+            schedule_id: scheduleId,
+            current_quarter: quarter,
+            game_time: gameTimeInSeconds,
+            total_elapsed_time: totalElapsedTime, // Send accumulated total elapsed time
+            quarter_elapsed_time: quarterElapsedTime // Send calculated quarter elapsed time
+        };
+
+        console.log('Sending elapsed time data to backend:', dataToSend);
+
+        $.ajax({
+            url: '{{ route('schedules.storeGameTime') }}',
+            method: 'POST',
+            data: dataToSend,
+            success: function(response) {
+                console.log('Elapsed time recorded successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error recording elapsed time:', status, error);
+            }
+        });
+    }
+
+    function fetchGameDetails(scheduleId) {
+        $.ajax({
+            url: `/getGameDetails/${scheduleId}`,
+            method: 'GET',
+            success: function(data) {
+                console.log('Fetched game details:', data); // Debug log
+                currentQuarter = data.current_quarter || 1; // Default to Q1 if not provided
+                totalElapsedTime = data.total_elapsed_time || 0; // Set total elapsed time from fetched data
+                timeLeft = Math.max(600 - totalElapsedTime, 0); // Ensure timeLeft doesn't go negative
+                
+                // Update the display immediately
+                updateDisplay();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching game details:', error);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const scheduleId = getCurrentScheduleId();
+        fetchGameDetails(scheduleId);
+
+        // Event listeners
+        document.getElementById('startButton').addEventListener('click', startTimer);
+        document.getElementById('pauseButton').addEventListener('click', stopTimer);
+        document.getElementById('quarterButton').addEventListener('click', nextQuarter);
+    });
 
     let selectedBenchPlayer = null;
     let selectedStartingPosition = null;
@@ -362,6 +424,7 @@
             teamId: selectedPlayer.teamId,
             scheduleId: selectedPlayer.scheduleId
         });
+        console.log(getCurrentQuarter()); 
     }
 
     function updateBox(box, playerNumber) {
@@ -428,63 +491,9 @@
         }
     }
 
-
-    // function recordShot(result, type_of_stat) {
-    //     const selectedPlayer = selectedBenchPlayer || selectedStartingPosition;
-
-    //     if (!selectedPlayer) {
-    //         alert('Please select a player first.');
-    //         return;
-    //     }
-
-    //     const playerNumber = selectedPlayer.playerNumber || selectedPlayer.index;
-    //     const teamPlaceholder = selectedPlayer.team;
-
-    //     // Get the actual team ID using the function
-    //     const teamId = getTeamId(teamPlaceholder); 
-    //     const scheduleId = getCurrentScheduleId();
-
-    //     console.log('Player Number:', playerNumber);
-    //     console.log('Team Placeholder:', teamPlaceholder);
-    //     console.log('Team ID:', teamId);
-    //     console.log('Result:', result); 
-    //     console.log('type_of_stat:', type_of_stat);
-    //     console.log('Current Schedule ID:', scheduleId);
-
-    //     if (!teamId) {
-    //         alert('Invalid team selected.');
-    //         return;
-    //     }
-
-    //     // Send AJAX request to record the shot
-    //     $.ajax({
-    //         url: '{{ route('playerstats.store') }}',
-    //         method: 'POST',
-    //         data: {
-    //             _token: '{{ csrf_token() }}', // Ensure this token is correct
-    //             player_number: playerNumber,
-    //             team: teamId, // Send the actual team ID
-    //             type_of_stat: type_of_stat,
-    //             result: result, // Either 'made' or 'missed'
-    //             schedule_id: scheduleId // Include the schedule ID
-    //         },
-    //         success: function(response) {
-    //             alert('Shot recorded successfully!');
-    //             console.log(response);
-
-    //             $('#team-a-score').text(response.teamAScore);
-    //             $('#team-b-score').text(response.teamBScore);
-
-    //         },
-    //         error: function(error) {
-    //             console.error('Error recording shot:', error);
-    //             alert('Error recording shot.');
-    //         }
-    //     });
-    // }
-
     function recordShot(result, type_of_stat) {
         const selectedPlayer = selectedBenchPlayer || selectedStartingPosition;
+        let currentGameTime = document.getElementById('gameTime').textContent;
 
         if (!selectedPlayer) {
             alert('Please select a player first.');
@@ -493,76 +502,43 @@
 
         const playerNumber = selectedPlayer.playerNumber || selectedPlayer.index;
         const teamPlaceholder = selectedPlayer.team;
-
-        // Get the actual team ID using the function
         const teamId = getTeamId(teamPlaceholder); 
         const scheduleId = getCurrentScheduleId();
-
-        console.log('Player Number:', playerNumber);
-        console.log('Team Placeholder:', teamPlaceholder);
-        console.log('Team ID:', teamId);
-        console.log('Result:', result); 
-        console.log('type_of_stat:', type_of_stat);
-        console.log('Current Schedule ID:', scheduleId);
+        const quarter = getCurrentQuarter();
 
         if (!teamId) {
             alert('Invalid team selected.');
             return;
         }
 
-        // Send AJAX request to record the shot
         $.ajax({
-    url: '{{ route('playerstats.store') }}',
-    method: 'POST',
-    data: {
-        _token: '{{ csrf_token() }}',
-        player_number: playerNumber,
-        team: teamId,
-        type_of_stat: type_of_stat,
-        result: result,
-        schedule_id: scheduleId
-    },
-    success: function(response) {
-        // Get current timestamp
-        const timestamp = new Date().toLocaleTimeString();
-
-         // Check if scores are present in the response
-        if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
-            $('#team-a-score').text(response.teamAScore);
-            $('#team-b-score').text(response.teamBScore);
-        } else {
-            console.warn('Scores not found in response:', response);
-        }
-
-        // Create a new statistic entry
-        const statisticEntry = `
-            <div class="live-statistic-entry flex justify-between items-center p-2 border-b border-gray-300">
-                <div class="live-statistic-left w-1/3 text-left">
-                    ${response.team === 'teamA' ? response.playerName : ''}
-                </div>
-                <div class="live-statistic-center w-1/3 text-center">
-                    <span class="font-semibold">${timestamp}</span><br>
-                    <span class="text-gray-700">
-                        ${response.playerName} ${response.action} (${response.points} points)
-                    </span><br>
-                    <span class="text-gray-500">Score: ${response.teamAScore} - ${response.teamBScore}</span>
-                </div>
-                <div class="live-statistic-right w-1/3 text-right">
-                    ${response.team === 'teamB' ? response.playerName : ''}
-                </div>
-            </div>
-        `;
-
-        // Append the new statistic entry to the live statistics container
-        $('#live-statistics').prepend(statisticEntry);
-    },
-    error: function(error) {
-        console.error('Error recording shot:', error);
+            url: '{{ route('playerstats.store') }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                player_number: playerNumber,
+                team: teamId,
+                type_of_stat: type_of_stat,
+                result: result,
+                schedule_id: scheduleId,
+                quarter: quarter,
+                game_time: currentGameTime
+            },
+            success: function(response) {
+                if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
+                    $('#team-a-score').text(response.teamAScore);
+                    $('#team-b-score').text(response.teamBScore);
+                } else {
+                    console.warn('Score data is missing in the response:', response);
+                }
+                console.log('Shot recorded successfully:', response);
+                loadPlayByPlay(); // Refresh the play-by-play display
+            },
+            error: function(xhr, status, error) {
+                console.error('Error recording event:', status, error);
+            }
+        });
     }
-});
-
-    }
-
 
     // Function for the "Made 2 Points" button
     function madeTwoPoints() {
@@ -599,26 +575,120 @@
         recordShot('made', 'offensive_rebound');
     }
 
-    // Function for the "dEfensive Rebound" button
+     // Function for the "Defensive Rebound button
+    function madeDefensiveRebound() {
+        recordShot('made', 'defensive_rebound');
+    }
+
+    // Function for the "Block" button
     function madeBlock() {
         recordShot('made', 'block');
     }
 
-    // Function for the "dEfensive Rebound" button
+    // Function for the "Steal" button
     function madeSteal() {
         recordShot('made', 'steal');
     }
-
-     // Function for the "dEfensive Rebound" button
+    
+     // Function for the "Turnover" button
     function madeTurnover() {
         recordShot('made', 'turnover');
     }
 
-    // Function for the "dEfensive Rebound" button
+    // Function for the "Foul" button
     function madeFoul() {
         recordShot('made', 'foul');
+        stopTimer();
+    }
+
+     // Function for the "Foul" button
+    function madeAssist() {
+        recordShot('made', 'assist');
         pauseTimer();
     }
+
+    let displayedEntries = [];
+
+/   / Function to load play-by-play data
+    function loadPlayByPlay() {
+        const scheduleId = getCurrentScheduleId(); // Retrieve the schedule ID dynamically
+
+        if (!scheduleId) {
+            console.error('No schedule ID found.');
+            return;
+        }
+
+        // Construct the URL for fetching play-by-play data
+        const url = `{{ route('playbyplay.get', ['scheduleId' => '__SCHEDULE_ID__']) }}`.replace('__SCHEDULE_ID__', scheduleId);
+        console.log('Fetching URL:', url); // Debug the URL
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(response) {
+                console.log('Play-by-play data:', response); // Debug
+
+                // Check data in response
+                if (response && response.play_by_play && Array.isArray(response.play_by_play)) {
+                    // Update scores
+                    const scores = response.scores;
+                    $('#team-a-score').text(scores.team_a || '0');
+                    $('#team-b-score').text(scores.team_b || '0');
+
+                    response.play_by_play.forEach(entry => {
+                        const uniqueKey = `${entry.game_time}_${entry.action}_${entry.player_name}`;
+
+                        // add new entries
+                        if (!displayedEntries.includes(uniqueKey)) {
+                            // Destructure entry data
+                            const { player_name, game_time, action, points } = entry;
+
+                            // Create the HTML for the statistic entry
+                            const statisticEntry = `
+                            <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
+                                <!-- Player Name -->
+                                <div class="live-statistic-left flex-1 text-left truncate">
+                                    <span class="font-semibold text-gray-800 text-base">${player_name}</span>
+                                </div>
+                                <!-- Game Time and Action -->
+                                <div class="live-statistic-center flex-1 text-center">
+                                    <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
+                                    <span class="block text-gray-700 text-sm mt-1">
+                                        ${action} (${points !== null ? `${points} points` : 'No points'})
+                                    </span>
+                                </div>
+                                <!-- Scores -->
+                                <div class="live-statistic-right flex-1 text-right">
+                                    <span class="text-lg font-bold text-gray-900">${scores.team_a || '0'}</span> - 
+                                    <span class="text-lg font-bold text-gray-900">${scores.team_b || '0'}</span>
+                                </div>
+                            </div>
+                            `;
+
+                            // Prepend the new statistic entry to the list
+                            $('#live-statistics').prepend(statisticEntry);
+
+                            // Add the unique key to the displayedEntries list to avoid duplicates
+                            displayedEntries.push(uniqueKey);
+                        }
+                    });
+                } else {
+                    console.error('Response is not in the expected format:', response);
+                }
+            },
+            error: function(error) {
+                console.error('Error loading play-by-play data:', error);
+            }
+        });
+        
+    }
+
+    $(document).ready(function () {
+        loadPlayByPlay(); // Initial load
+
+        // reload data every 5 seconds
+        // setInterval(loadPlayByPlay, 5000); // Reload every 5 seconds
+    });
 
     </script>
 </x-app-layout>

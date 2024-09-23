@@ -219,6 +219,15 @@
         return document.getElementById('currentScheduleId').value;
     }
 
+    function getTeamId(teamPlaceholder) {
+        if (teamPlaceholder === 'teamA') {
+            return teamAId; 
+        } else if (teamPlaceholder === 'teamB') {
+            return teamBId; 
+        }
+        return null; 
+    }
+
     function convertTimeToSeconds(time) {
         const parts = time.split(':');
         return parseInt(parts[0]) * 60 + parseInt(parts[1]);
@@ -282,45 +291,6 @@
             alert('Already in the final quarter');
         }
     }
-
-// function sendElapsedTimeDataToBackend() {
-//     const scheduleId = getCurrentScheduleId();
-
-//     if (!scheduleId) {
-//         console.error('No schedule ID found.');
-//         return;
-//     }
-
-//     const gameTimeElement = document.getElementById('gameTime');
-//     const gameTime = gameTimeElement.textContent || gameTimeElement.innerText; // Fetch game time as string
-//     const gameTimeInSeconds = convertTimeToSeconds(gameTime); // Convert to seconds
-
-//     const quarter = currentQuarter; // Use the current quarter variable
-
-//     // Create the data object to be sent
-//     const dataToSend = {
-//         _token: '{{ csrf_token() }}',
-//         schedule_id: scheduleId,
-//         current_quarter: quarter,
-//         game_time: gameTimeInSeconds, // Send as integer
-//         total_elapsed_time: totalElapsedTime
-//     };
-
-//     // Log the data being sent
-//     console.log('Sending elapsed time data to backend:', dataToSend);
-
-//     $.ajax({
-//         url: '{{ route('schedules.storeGameTime') }}',
-//         method: 'POST',
-//         data: dataToSend,
-//         success: function(response) {
-//             console.log('Elapsed time recorded successfully:', response);
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Error recording elapsed time:', status, error);
-//         }
-//     });
-// }
 
     function sendElapsedTimeDataToBackend() {
         const scheduleId = getCurrentScheduleId();
@@ -609,7 +579,7 @@
 
     let displayedEntries = [];
 
-/   / Function to load play-by-play data
+    //Function to load play-by-play data
     function loadPlayByPlay() {
         const scheduleId = getCurrentScheduleId(); // Retrieve the schedule ID dynamically
 

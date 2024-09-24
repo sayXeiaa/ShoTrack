@@ -19,7 +19,8 @@ class PlayerController extends Controller
         $tournamentId = $request->query('tournament_id');
         $category = $request->query('category');
         $teamId = $request->query('team_id');
-        
+        $search = $request->query('search');
+    
         // Fetch teams based on tournament and category
         $teamsQuery = Teams::query();
         if ($tournamentId) {
@@ -29,8 +30,8 @@ class PlayerController extends Controller
             $teamsQuery->where('category', $category);
         }
         $teams = $teamsQuery->get();
-        
-        // Fetch players based on selected filters
+    
+        // Fetch players based on selected filters and searched player
         $playersQuery = Players::query();
         if ($tournamentId) {
             $playersQuery->whereHas('team', function($query) use ($tournamentId) {
@@ -43,11 +44,18 @@ class PlayerController extends Controller
         if ($teamId) {
             $playersQuery->where('team_id', $teamId);
         }
-        $players = $playersQuery->paginate(20); // Adjust pagination as needed
-        
+        if ($search) {
+            $playersQuery->where(function($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%');
+            });
+        }
+        $players = $playersQuery->paginate(25); 
+    
         // Fetch all tournaments for filtering options
         $tournaments = Tournaments::all();
     
+        // Return the view with players, tournaments, and teams data
         return view('players.list', compact('players', 'tournaments', 'teams'));
     }
 

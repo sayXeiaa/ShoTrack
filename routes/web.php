@@ -20,6 +20,8 @@ Route::get('/tournaments', [TournamentController::class, 'index'])->name('tourna
 Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
 Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
 Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -68,8 +70,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/teams/{id}', [TeamController::class, 'update'])->name('teams.update');
     Route::delete('/teams', [TeamController::class, 'destroy'])->name('teams.destroy');
 
-    Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
-
     //Player routes
     // Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/players/create', [PlayerController::class, 'create'])->name('players.create');
@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () {
 
 
     //Schedule routes
-    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    // Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('schedules.create');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
     Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');

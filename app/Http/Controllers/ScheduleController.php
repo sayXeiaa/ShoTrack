@@ -31,7 +31,7 @@ class ScheduleController extends Controller
                     $q->where('category', $category)->where('tournament_id', $tournamentId);
                 });
             })
-            ->latest()
+            ->orderBy('date', 'asc')
             ->paginate(25);
     
         $tournaments = Tournaments::all();

@@ -13,12 +13,13 @@ use App\Http\Controllers\PlayByPlayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
+
+Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
+Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
+Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
+Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy');
 
     //Tournament routes
-    Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
+    // Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournaments.index');
     Route::get('/tournaments/create', [TournamentController::class, 'create'])->name('tournaments.create');
     Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournament.store');
     Route::get('/tournaments/{id}/edit', [TournamentController::class, 'edit'])->name('tournaments.edit');
@@ -60,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tournaments', [TournamentController::class, 'destroy'])->name('tournaments.destroy');
 
     //Team routes
-    Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
+    // Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
     Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
     Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
     Route::get('/teams/{id}/edit', [TeamController::class, 'edit'])->name('teams.edit');
@@ -70,7 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
 
     //Player routes
-    Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
+    // Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/players/create', [PlayerController::class, 'create'])->name('players.create');
     Route::post('/players', [PlayerController::class, 'store'])->name('players.store');
     Route::get('/players/{id}/edit', [PlayerController::class, 'edit'])->name('players.edit');

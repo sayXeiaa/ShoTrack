@@ -64,7 +64,7 @@ class TeamController extends Controller
         'sports_director' => 'required|string|max:255',
         'years_playing_in_bucal' => 'required|integer',
         'address' => 'required|min:5',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         'tournament_id' => 'required|exists:tournaments,id',
     ];
 
@@ -146,7 +146,7 @@ class TeamController extends Controller
             'sports_director' => 'required|string|max:255',
             'years_playing_in_bucal' => 'required|integer',
             'address' => 'required|min:5',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'tournament_id' => 'nullable|exists:tournaments,id',
         ]);
 

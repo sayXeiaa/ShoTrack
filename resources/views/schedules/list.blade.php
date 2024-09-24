@@ -1,10 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
                 {{ __('Game Schedules') }}
             </h2>
-            <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">Create</a>
+            @can('edit schedules')
+            <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2">Create</a>
+            @endcan
         </div>
     </x-slot>
 
@@ -14,8 +16,7 @@
 
             <div class="mb-4">
                 <form method="GET" action="{{ route('schedules.index') }}">
-                    <label for="tournament" class="block text-sm font-medium text-gray-700">Select Tournament</label>
-                    <select id="tournament" name="tournament_id" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <select id="tournament" name="tournament_id" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-lg border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg rounded-md">
                         <option value="">All Tournaments</option>
                         @foreach($tournaments as $tournament)
                             <option value="{{ $tournament->id }}" {{ request('tournament_id') == $tournament->id ? 'selected' : '' }} data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}">
@@ -25,72 +26,42 @@
                     </select>
 
                     <div class="mb-4" id="category-selection" style="display: {{ request('tournament_id') && $tournaments->where('id', request('tournament_id'))->first()->has_categories ? 'block' : 'none' }};">
-                        <label for="category" class="block text-sm font-medium text-gray-700">Select Category</label>
-                        <select id="category" name="category" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <select id="category" name="category" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-lg border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-lg rounded-md">
                             <option value="">All Categories</option>
                             <option value="juniors" {{ request('category') == 'juniors' ? 'selected' : '' }}>Juniors</option>
                             <option value="seniors" {{ request('category') == 'seniors' ? 'selected' : '' }}>Seniors</option>
                         </select>
                     </div>
-
-                    <!-- No need for a filter button -->
                 </form>
             </div>
 
-            <table class="w-full">
-                <thead class="bg-gray-50">
-                    <tr class="border-b">
-                        <th class="px-6 py-3 text-left" width="60">#</th>
-                        <th class="px-6 py-3 text-left">Match Date</th>
-                        <th class="px-6 py-3 text-left">Time</th>
-                        <th class="px-6 py-3 text-left">Venue</th>
-                        <th class="px-6 py-3 text-left">Team 1</th>
-                        <th class="px-6 py-3 text-left">Team 2</th>
-                        <th class="px-6 py-3 text-left" width="180">Created</th>
-                        <th class="px-6 py-3 text-center" width="180">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @if ($schedules->isNotEmpty())
-                    @foreach ($schedules as $schedule)
-                    <tr class="border-b">
-                        <td class="px-6 py-3 text-left">
-                            {{ $schedule->id }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ \Carbon\Carbon::parse($schedule->date)->format('d M, Y') }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $schedule->venue }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $schedule->team1->name }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $schedule->team2->name }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ \Carbon\Carbon::parse($schedule->created_at)->format('d M, Y') }}
-                        </td>
-                        <td class="px-6 py-3 text-center">
-                            <div class="inline-flex flex-wrap space-x-2">
-                            <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                            <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                            <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-sm rounded-md text-white px-3 py-2 hover:bg-blue-500 mt-2">Manage Game</a>                       
-                        </td>
-                        </td>
-                    </tr>    
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
+            @if ($schedules->isNotEmpty())
+                @foreach ($schedules as $schedule)
+                    <div class="bg-white shadow-md rounded-lg mb-4 p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-xl font-semibold">{{ \Carbon\Carbon::parse($schedule->date)->format('d M, Y') }} at {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
+                                <p class="text-base text-gray-500">{{ $schedule->venue }}</p>
+                                <p class="text-lg mt-2">{{ $schedule->team1->name }} <span class="font-bold">vs</span> {{ $schedule->team2->name }}</p>
+                            </div>
+
+                            @can('edit schedule')
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                                    <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                                    <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">Manage Game</a>
+                                </div>
+                            @endcan
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-lg text-gray-600">No schedules available.</p>
+            @endif
+
             <div class="my-3">
                 {{ $schedules->links() }}
             </div>
-            
         </div>
     </div>
 

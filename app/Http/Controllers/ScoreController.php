@@ -36,31 +36,30 @@ class ScoreController extends Controller
             'quarter' => 'required|integer|min:1|max:4',
             'score' => 'required|integer|min:0',
         ]);
-    
-        // Check if the score for the same schedule, team, and quarter already exists
+
+        // Check if the score already exists
         $existingScore = Score::where('schedule_id', $validated['schedule_id'])
             ->where('team_id', $validated['team_id'])
             ->where('quarter', $validated['quarter'])
             ->first();
-    
+
         if ($existingScore) {
-            // update score
             $existingScore->update(['score' => $existingScore->score + $validated['score']]);
             $message = 'Score updated successfully';
         } else {
             Score::create($validated);
             $message = 'Score created successfully';
         }
-    
-        // Fetch team id based on schedule
-        $teams = Teams::where('schedule_id', $validated['schedule_id'])->pluck('id')->toArray();
-    
-        // check if there ar e 2 teams
+
+        // Fetch team ids based on schedule in the score table
+        $teams = Score::where('schedule_id', $validated['schedule_id'])->pluck('team_id')->toArray();
+
+        // Check if there are 2 teams
         if (count($teams) >= 2) {
             $teamAScore = Score::where('schedule_id', $validated['schedule_id'])
                 ->where('team_id', $teams[0]) 
                 ->sum('score');
-    
+
             $teamBScore = Score::where('schedule_id', $validated['schedule_id'])
                 ->where('team_id', $teams[1]) 
                 ->sum('score');
@@ -68,13 +67,14 @@ class ScoreController extends Controller
             $teamAScore = 0; 
             $teamBScore = 0; 
         }
-    
+
         return response()->json([
             'message' => $message,
             'teamAScore' => $teamAScore,
             'teamBScore' => $teamBScore,
         ]);
     }
+
     
     /**
      * Display the specified resource.

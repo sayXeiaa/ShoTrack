@@ -44,4 +44,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(Teams::class, 'team2_id');
     }
+    
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }

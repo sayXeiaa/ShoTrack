@@ -1,3 +1,11 @@
+@php
+function getInitials($teamName) {
+    return collect(explode(' ', $teamName))
+        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+        ->implode('');
+}
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between">
@@ -5,7 +13,7 @@
                 {{ __('Game Schedules') }}
             </h2>
             @can('edit schedules')
-            <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2">Create</a>
+                <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2">Create</a>
             @endcan
         </div>
     </x-slot>
@@ -39,22 +47,57 @@
                 @foreach ($schedules as $schedule)
                     <div class="bg-white shadow-md rounded-lg mb-4 p-6">
                         <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-xl font-semibold">{{ \Carbon\Carbon::parse($schedule->date)->format('d M, Y') }} at {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
+                            <div class="flex-1">
+                                <p class="text-xl font-semibold">{{ \Carbon\Carbon::parse($schedule->date)->format('M d, Y') }} at {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
                                 <p class="text-base text-gray-500">{{ $schedule->venue }}</p>
                                 <p class="text-lg mt-2">{{ $schedule->team1->name }} <span class="font-bold">vs</span> {{ $schedule->team2->name }}</p>
                             </div>
-
-                            @can('edit schedule')
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                    <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                    <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">Manage Game</a>
-                                </div>
-                            @endcan
                         </div>
+
+                        <!-- Scores Box -->
+                        <div class="mt-[-6rem] flex justify-end"> <!-- Changed from mt-2 to mt-0 to remove top margin -->
+                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2 w-full max-w-sm"> <!-- Adjusted max-width and padding for scores box -->
+                                <div class="text-center">
+                                    <div class="grid grid-cols-6 gap-1"> <!-- Reduced gap between columns -->
+                                        <!-- Team Names Column -->
+                                        <div class="font-bold"></div> <!-- Empty for Quarter Labels Alignment -->
+                                        <div class="font-bold">1</div>
+                                        <div class="font-bold">2</div>
+                                        <div class="font-bold">3</div>
+                                        <div class="font-bold">4</div>
+                                        <div class="font-bold">Final</div> <!-- New Final Score Column -->
+
+                                        <!-- Team 1 Initials -->
+                                        <div class="font-bold">{{ getInitials($schedule->team1->name) }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 4)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('team_id', $schedule->team1->id)->sum('score') }}</div> <!-- Total for Team 1 -->
+
+                                        <!-- Team 2 Initials -->
+                                        <div class="font-bold">{{ getInitials($schedule->team2->name) }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('quarter', 4)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
+                                        <div>{{ $schedule->scores->where('team_id', $schedule->team2->id)->sum('score') }}</div> <!-- Total for Team 2 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @can('edit schedule')
+                            <div class="flex space-x-2 mt-4">
+                                <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                                <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                                <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">Manage Game</a>
+                            </div>
+                        @endcan
+
                     </div>
                 @endforeach
+
             @else
                 <p class="text-lg text-gray-600">No schedules available.</p>
             @endif

@@ -529,53 +529,17 @@
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                team_id: teamId,
-                score: points,
                 schedule_id: scheduleId,
+                team_id: teamId,
                 quarter: quarter,
-                game_time: gameTime
+                score: points,
             },
             success: function(response) {
-                if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
-                    $('#team-a-score').text(response.teamAScore);
-                    $('#team-b-score').text(response.teamBScore);
-                } else {
-                    console.warn('Score data is missing in the response:', response);
-                }
                 console.log('Score recorded successfully:', response);
             },
-            error: function(xhr, status, error) {
-                console.error('Error recording score:', status, error);
-            }
-        });
-    }
-
-    function recordScore(teamPlaceholder, points, scheduleId, quarter, gameTime) {
-        const teamId = getTeamId(teamPlaceholder);
-
-        $.ajax({
-            url: '{{ route('scores.store') }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                team_id: teamId,
-                score: points,
-                schedule_id: scheduleId,
-                quarter: quarter,
-                game_time: gameTime
-            },
-            success: function(response) {
-                if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
-                    $('#team-a-score').text(response.teamAScore);
-                    $('#team-b-score').text(response.teamBScore);
-                } else {
-                    console.warn('Score data is missing in the response:', response);
-                }
-                console.log('Score recorded successfully:', response);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error recording score:', status, error);
-            }
+            // error: function(xhr, status, error) {
+            //     console.error('Error recording score:', status, error);
+            // }
         });
     }
 
@@ -643,7 +607,6 @@
      // Function for the "Foul" button
     function madeAssist() {
         recordShot('made', 'assist');
-        pauseTimer();
     }
 
     let displayedEntries = [];

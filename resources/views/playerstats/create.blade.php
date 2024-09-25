@@ -536,6 +536,8 @@
             },
             success: function(response) {
                 console.log('Score recorded successfully:', response);
+                document.getElementById('team-a-score').textContent = response.teamAScore;
+                document.getElementById('team-b-score').textContent = response.teamBScore;
             },
             // error: function(xhr, status, error) {
             //     console.error('Error recording score:', status, error);
@@ -611,7 +613,6 @@
 
     let displayedEntries = [];
 
-    //Function to load play-by-play data
     function loadPlayByPlay() {
         const scheduleId = getCurrentScheduleId(); // Retrieve the schedule ID dynamically
 
@@ -632,47 +633,38 @@
 
                 // Check data in response
                 if (response && response.play_by_play && Array.isArray(response.play_by_play)) {
-                    // Update scores
-                    const scores = response.scores;
-                    $('#team-a-score').text(scores.team_a || '0');
-                    $('#team-b-score').text(scores.team_b || '0');
+                    // Clear the existing entries before adding new ones
+                    $('#live-statistics').empty();
+                    displayedEntries = []; // Reset displayed entries for the new load
 
                     response.play_by_play.forEach(entry => {
-                        const uniqueKey = `${entry.game_time}_${entry.action}_${entry.player_name}`;
+                        // Destructure entry data
+                        const { player_name, game_time, action, points, team_A_score, team_B_score } = entry;
 
-                        // add new entries
-                        if (!displayedEntries.includes(uniqueKey)) {
-                            // Destructure entry data
-                            const { player_name, game_time, action, points } = entry;
-
-                            // Create the HTML for the statistic entry
-                            const statisticEntry = `
-                            <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
-                                <!-- Player Name -->
-                                <div class="live-statistic-left flex-1 text-left truncate">
-                                    <span class="font-semibold text-gray-800 text-base">${player_name}</span>
-                                </div>
-                                <!-- Game Time and Action -->
-                                <div class="live-statistic-center flex-1 text-center">
-                                    <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
-                                    <span class="block text-gray-700 text-sm mt-1">
-                                        ${action} (${points !== null ? `${points} points` : 'No points'})
-                                    </span>
-                                </div>
-                                <!-- Scores -->
-                                <div class="live-statistic-right flex-1 text-right">
-                                    <span class="text-lg font-bold text-gray-900">${scores.team_a || '0'}</span> - 
-                                    <span class="text-lg font-bold text-gray-900">${scores.team_b || '0'}</span>
-                                </div>
+                        // Create the HTML for the statistic entry
+                        const statisticEntry = `
+                        <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
+                            <!-- Player Name -->
+                            <div class="live-statistic-left flex-1 text-left truncate">
+                                <span class="font-semibold text-gray-800 text-base">${player_name}</span>
                             </div>
-                            `;
+                            <!-- Game Time and Action -->
+                            <div class="live-statistic-center flex-1 text-center">
+                                <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
+                                <span class="block text-gray-700 text-sm mt-1">
+                                    ${action} (${points !== null ? `${points} points` : 'No points'})
+                                </span>
+                            </div>
+                            <!-- Individual Scores -->
+                            <div class="live-statistic-right flex-1 text-right">
+                                <span class="text-lg font-bold text-gray-900">${team_A_score || '0'}</span> - 
+                                <span class="text-lg font-bold text-gray-900">${team_B_score || '0'}</span>
+                            </div>
+                        </div>
+                        `;
 
-                            // Prepend the new statistic entry to the list
-                            $('#live-statistics').prepend(statisticEntry);
-
-                            // Add the unique key to the displayedEntries list to avoid duplicates
-                            displayedEntries.push(uniqueKey);
-                        }
+                        // Prepend the new statistic entry to the list
+                        $('#live-statistics').prepend(statisticEntry);
                     });
                 } else {
                     console.error('Response is not in the expected format:', response);
@@ -682,7 +674,6 @@
                 console.error('Error loading play-by-play data:', error);
             }
         });
-        
     }
 
     $(document).ready(function () {

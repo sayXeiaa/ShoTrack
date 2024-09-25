@@ -10,6 +10,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\PlayerStatsController;
 use App\Http\Controllers\PlayByPlayController;
+use App\Http\Controllers\ScoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -101,6 +102,9 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
 
     Route::get('/playbyplay/{scheduleId}', [PlayByPlayController::class, 'getPlayByPlay'])->name('playbyplay.get');
+
+    Route::post('/scores', [ScoreController::class, 'store'])->name('scores.store');
+    Route::put('/scores/{score}', [ScoreController::class, 'update'])->name('scores.update');
 
 });
 

@@ -49,4 +49,9 @@ class Schedule extends Model
     {
         return $this->hasMany(Score::class);
     }
+    
+    public function playerStats()
+    {
+        return $this->hasMany(PlayerStat::class);
+    }
 }

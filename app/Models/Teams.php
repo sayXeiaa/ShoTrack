@@ -34,4 +34,8 @@ class Teams extends Model
         return $this->hasMany(Players::class, 'team_id'); 
     }
 
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }

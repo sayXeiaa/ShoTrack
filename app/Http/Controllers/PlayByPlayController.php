@@ -63,49 +63,35 @@ class PlayByPlayController extends Controller
     }
 
     public function getPlayByPlay($scheduleId)
-{
-    // Fetch the play-by-play data from the play_by_play table
-    $entries = PlayByPlay::where('schedule_id', $scheduleId)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+    {
+        // Fetch the play-by-play data from the play_by_play table
+        $entries = PlayByPlay::where('schedule_id', $scheduleId)
+                            ->orderBy('created_at', 'asc') // Order by ascending to reflect the game flow
+                            ->get();
 
-    // Debug the retrieved entries
-    Log::info('Retrieved play-by-play data:', $entries->toArray());
+        // Debug the retrieved entries
+        Log::info('Retrieved play-by-play data:', $entries->toArray());
 
-    // Initialize scores
-    $teamAScore = 0;
-    $teamBScore = 0;
+        // Format the data
+        $formattedEntries = $entries->map(function ($stat) {
+            $formattedName = $this->formatPlayerName($stat->player); 
+            $action = $this->getActionText($stat->type_of_stat, $stat->result);
+            $points = $this->getPoints($stat->type_of_stat, $stat->result); // Get points for the stat
+            return [
+                'game_time' => $stat->game_time,
+                'player_name' => $formattedName,
+                'type_of_stat' => $stat->type_of_stat, 
+                'action' => $action,
+                'points' => $points,
+                'team_A_score' => $stat->team_A_score, // Individual score for Team A
+                'team_B_score' => $stat->team_B_score, // Individual score for Team B
+            ];
+        });
 
-    // Find the latest entry for each team to get the scores
-    $latestEntry = $entries->first(); // Assuming entries are ordered by 'created_at' in descending order
-
-    if ($latestEntry) {
-        $teamAScore = $latestEntry->team_A_score;
-        $teamBScore = $latestEntry->team_B_score;
+        // Return the play-by-play data
+        return response()->json([
+            'play_by_play' => $formattedEntries,
+        ]);
     }
-
-    // Format the data
-    $formattedEntries = $entries->map(function ($stat) {
-        $formattedName = $this->formatPlayerName($stat->player); 
-        $action = $this->getActionText($stat->type_of_stat, $stat->result);
-        $points = $this->getPoints($stat->type_of_stat, $stat->result); // Get points for the stat
-        return [
-            'game_time' => $stat->game_time,
-            'player_name' => $formattedName,
-            'type_of_stat' => $stat->type_of_stat, 
-            'action' => $action,
-            'points' => $points,
-        ];
-    });
-
-    // Return the scores and play-by-play data
-    return response()->json([
-        'scores' => [
-            'team_a' => $teamAScore,
-            'team_b' => $teamBScore,
-        ],
-        'play_by_play' => $formattedEntries,
-    ]);
-}
 
 }

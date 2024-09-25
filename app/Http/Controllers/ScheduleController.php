@@ -15,35 +15,34 @@ class ScheduleController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $tournamentId = $request->input('tournament_id');
-        $category = $request->input('category');
-    
-        // Fetch schedules filtered by the selected tournament and category if provided
-        $schedules = Schedule::with(['team1', 'team2']) // Load related teams
-            ->when($tournamentId, function ($query) use ($tournamentId) {
-                return $query->where('tournament_id', $tournamentId);
-            })
-            ->when($category, function ($query) use ($category, $tournamentId) {
-                return $query->whereHas('team1', function ($q) use ($category, $tournamentId) {
-                    $q->where('category', $category)->where('tournament_id', $tournamentId);
-                })->orWhereHas('team2', function ($q) use ($category, $tournamentId) {
-                    $q->where('category', $category)->where('tournament_id', $tournamentId);
-                });
-            })
-            ->orderBy('date', 'asc')
-            ->paginate(25);
-    
-        $tournaments = Tournaments::all();
-    
-        $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
-    
-        return view('schedules.list', [
-            'schedules' => $schedules,
-            'tournaments' => $tournaments,
-            'categories' => $categories,
-        ]);
-    }
+{
+    $tournamentId = $request->input('tournament_id');
+    $category = $request->input('category');
+
+    // Fetch schedules filtered by the selected tournament and category if provided
+    $schedules = Schedule::with(['team1', 'team2', 'scores.team']) // Load related teams and scores
+        ->when($tournamentId, function ($query) use ($tournamentId) {
+            return $query->where('tournament_id', $tournamentId);
+        })
+        ->when($category, function ($query) use ($category, $tournamentId) {
+            return $query->whereHas('team1', function ($q) use ($category, $tournamentId) {
+                $q->where('category', $category)->where('tournament_id', $tournamentId);
+            })->orWhereHas('team2', function ($q) use ($category, $tournamentId) {
+                $q->where('category', $category)->where('tournament_id', $tournamentId);
+            });
+        })
+        ->orderBy('date', 'asc')
+        ->paginate(25);
+
+    $tournaments = Tournaments::all(); 
+    $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
+
+    return view('schedules.list', [
+        'schedules' => $schedules,
+        'tournaments' => $tournaments,
+        'categories' => $categories,
+    ]);
+}
     
     /**
      * Show the form for creating a new resource.

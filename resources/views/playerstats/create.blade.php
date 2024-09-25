@@ -214,6 +214,8 @@
     const teamBId = {{ $teams[1]->id }};
     let totalElapsedTime = 0; 
     let quarterElapsedTime = 0;
+    let teamAScore = 0;
+    let teamBScore = 0;
 
     function getCurrentScheduleId() {
         return document.getElementById('currentScheduleId').value;
@@ -472,7 +474,7 @@
 
         const playerNumber = selectedPlayer.playerNumber || selectedPlayer.index;
         const teamPlaceholder = selectedPlayer.team;
-        const teamId = getTeamId(teamPlaceholder); 
+        const teamId = getTeamId(teamPlaceholder);
         const scheduleId = getCurrentScheduleId();
         const quarter = getCurrentQuarter();
 
@@ -481,6 +483,21 @@
             return;
         }
 
+        let points = 0;
+
+        // Check points,result, and type of shot
+        if (result === 'made') {
+            if (type_of_stat === 'two_point') points = 2;
+            else if (type_of_stat === 'three_point') points = 3;
+            else if (type_of_stat === 'free_throw') points = 1;
+        }
+
+        if (points > 0) {
+            // Update the score based on points
+            recordScore(teamPlaceholder, points, scheduleId, quarter, currentGameTime);
+        }
+
+        // Send player stats via AJAX
         $.ajax({
             url: '{{ route('playerstats.store') }}',
             method: 'POST',
@@ -495,17 +512,69 @@
                 game_time: currentGameTime
             },
             success: function(response) {
+                console.log('Shot recorded successfully:', response);
+                loadPlayByPlay(); // Refresh the play-by-play display
+            },
+            error: function(xhr, status, error) {
+                console.error('Error recording event:', status, error);
+            }
+        });
+    }
+
+    function recordScore(teamPlaceholder, points, scheduleId, quarter, gameTime) {
+        const teamId = getTeamId(teamPlaceholder);
+
+        $.ajax({
+            url: '{{ route('scores.store') }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                team_id: teamId,
+                score: points,
+                schedule_id: scheduleId,
+                quarter: quarter,
+                game_time: gameTime
+            },
+            success: function(response) {
                 if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
                     $('#team-a-score').text(response.teamAScore);
                     $('#team-b-score').text(response.teamBScore);
                 } else {
                     console.warn('Score data is missing in the response:', response);
                 }
-                console.log('Shot recorded successfully:', response);
-                loadPlayByPlay(); // Refresh the play-by-play display
+                console.log('Score recorded successfully:', response);
             },
             error: function(xhr, status, error) {
-                console.error('Error recording event:', status, error);
+                console.error('Error recording score:', status, error);
+            }
+        });
+    }
+
+    function recordScore(teamPlaceholder, points, scheduleId, quarter, gameTime) {
+        const teamId = getTeamId(teamPlaceholder);
+
+        $.ajax({
+            url: '{{ route('scores.store') }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                team_id: teamId,
+                score: points,
+                schedule_id: scheduleId,
+                quarter: quarter,
+                game_time: gameTime
+            },
+            success: function(response) {
+                if (response.teamAScore !== undefined && response.teamBScore !== undefined) {
+                    $('#team-a-score').text(response.teamAScore);
+                    $('#team-b-score').text(response.teamBScore);
+                } else {
+                    console.warn('Score data is missing in the response:', response);
+                }
+                console.log('Score recorded successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error recording score:', status, error);
             }
         });
     }

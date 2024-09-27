@@ -16,7 +16,7 @@ class PlayerStat extends Model
 
     public function player()
     {
-        return $this->belongsTo(Players::class);
+        return $this->belongsTo(Players::class, 'player_id');
     }
 
     // Relationship with Game

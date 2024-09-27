@@ -6,19 +6,80 @@ use App\Models\Teams;
 use App\Models\Schedule;
 use App\Models\Players;
 use App\Models\PlayerStat;
+use App\Models\Tournaments;
 use App\Models\PlayByPlay;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Models\Score;
 
 class PlayerStatsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+//     public function index(Request $request)
+// {
+//     // Retrieve the schedule_id from query parameters
+//     $scheduleId = $request->query('schedule_id');
+
+//     // Find the schedule with teams
+//     $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+
+//     // Ensure the schedule exists
+//     if (!$schedule) {
+//         return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
+//     }
+
+//     // Retrieve player statistics for both teams in the specified schedule
+//     $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
+//         ->where('schedule_id', $scheduleId)
+//         ->where('team_id', $schedule->team1_id)
+//         ->get();
+
+//     $playerStatsTeam2 = PlayerStat::with('player') //  load player data
+//         ->where('schedule_id', $scheduleId)
+//         ->where('team_id', $schedule->team2_id)
+//         ->get();
+
+//     // Pass data to the view
+//     return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2'));
+// }
+
+// public function index(Request $request)
+// {
+//     // Retrieve the schedule_id from query parameters
+//     $scheduleId = $request->query('schedule_id');
+
+//     // Find the schedule with its teams and ensure it exists
+//     $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+//     if (!$schedule) {
+//         return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
+//     }
+
+//     // Retrieve player statistics for both teams in the specified schedule
+//     $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
+//         ->where('schedule_id', $scheduleId)
+//         ->where('team_id', $schedule->team1_id)
+//         ->get();
+
+//     $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
+//         ->where('schedule_id', $scheduleId)
+//         ->where('team_id', $schedule->team2_id)
+//         ->get();
+
+//     // Retrieve remaining players not in the player statistics
+//     $remainingPlayersTeam1 = Players::where('team_id', $schedule->team1_id)
+//         ->whereNotIn('id', $playerStatsTeam1->pluck('player_id')) // Exclude players with stats
+//         ->get();
+
+//     $remainingPlayersTeam2 = Players::where('team_id', $schedule->team2_id)
+//         ->whereNotIn('id', $playerStatsTeam2->pluck('player_id')) // Exclude players with stats
+//         ->get();
+
+//     // Pass data to the view
+//     return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2'));
+// }
+
 
     /**
      * Show the form for creating a new resource.
@@ -61,6 +122,7 @@ class PlayerStatsController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Received data:', $request->all());
         $validated = $request->validate([
             'player_number' => 'required|integer',
             'team' => 'required|integer',
@@ -70,6 +132,7 @@ class PlayerStatsController extends Controller
             'game_time' => 'required|string',
             'quarter' => 'required|string',
         ]);
+        Log::info('Shot result:', ['result' => $validated['result']]);
 
         // Find the player by number and team ID
         $player = Players::where('number', $validated['player_number'])
@@ -140,7 +203,9 @@ class PlayerStatsController extends Controller
 
                 break;
             case 'three_point':
+                Log::info('Before Increment: ', ['three_pt_fg_attempt' => $stat->three_pt_fg_attempt]);
                 $stat->increment('three_pt_fg_attempt');
+                Log::info('After Increment: ', ['three_pt_fg_attempt' => $stat->three_pt_fg_attempt]);
                 if ($validated['result'] === 'made') {
                     $stat->increment('three_pt_fg_made');
                     $stat->points += $points;
@@ -249,22 +314,22 @@ class PlayerStatsController extends Controller
         ]);
     }
 
-private function getPoints($type_of_stat, $result) {
-    switch ($type_of_stat) {
-        case 'two_point':
-            return $result === 'made' ? 2 : 0;
-        case 'three_point':
-            return $result === 'made' ? 3 : 0;
-        case 'free_throw':
-            return $result === 'made' ? 1 : 0;
-        default:
-            return 0;
+    private function getPoints($type_of_stat, $result) {
+        switch ($type_of_stat) {
+            case 'two_point':
+                return $result === 'made' ? 2 : 0;
+            case 'three_point':
+                return $result === 'made' ? 3 : 0;
+            case 'free_throw':
+                return $result === 'made' ? 1 : 0;
+            default:
+                return 0;
+        }
     }
-}
     
     public function show() 
     {
-    
+        //
     }
     
 

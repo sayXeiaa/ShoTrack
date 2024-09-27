@@ -8,6 +8,7 @@ use App\Models\Schedule;
 use App\Models\teams;
 use App\Models\tournaments;
 use App\Rules\Time12HourFormat;
+use App\Models\Score;
 
 class ScheduleController extends Controller
 {
@@ -269,6 +270,31 @@ class ScheduleController extends Controller
         } else {
             return response()->json(['error' => 'Schedule not found.'], 404);
         }
+    }
+
+    public function getScores($scheduleId)
+    {
+        // Fetch the latest scores for the given schedule ID from the scores table
+        $scoreEntry = Score::where('schedule_id', $scheduleId)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+        if ($scoreEntry) {
+            return response()->json([
+                'scores' => [
+                    'team_a' => $scoreEntry->team_a_score,
+                    'team_b' => $scoreEntry->team_b_score,
+                ],
+            ]);
+        }
+
+        // Default response if no entries are found
+        return response()->json([
+            'scores' => [
+                'team_a' => 0,
+                'team_b' => 0,
+            ],
+        ]);
     }
 
 }

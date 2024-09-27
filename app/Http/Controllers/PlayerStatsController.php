@@ -17,69 +17,49 @@ class PlayerStatsController extends Controller
     /**
      * Display a listing of the resource.
      */
-//     public function index(Request $request)
-// {
-//     // Retrieve the schedule_id from query parameters
-//     $scheduleId = $request->query('schedule_id');
+public function index(Request $request)
+{
+    // Retrieve the schedule_id from query parameters
+    $scheduleId = $request->query('schedule_id');
 
-//     // Find the schedule with teams
-//     $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+    // Find the schedule with its teams and ensure it exists
+    $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+    if (!$schedule) {
+        return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
+    }
 
-//     // Ensure the schedule exists
-//     if (!$schedule) {
-//         return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
-//     }
+    // Retrieve player statistics for both teams in the specified schedule
+    $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
+        ->where('schedule_id', $scheduleId)
+        ->where('team_id', $schedule->team1_id)
+        ->get();
 
-//     // Retrieve player statistics for both teams in the specified schedule
-//     $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
-//         ->where('schedule_id', $scheduleId)
-//         ->where('team_id', $schedule->team1_id)
-//         ->get();
+    $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
+        ->where('schedule_id', $scheduleId)
+        ->where('team_id', $schedule->team2_id)
+        ->get();
 
-//     $playerStatsTeam2 = PlayerStat::with('player') //  load player data
-//         ->where('schedule_id', $scheduleId)
-//         ->where('team_id', $schedule->team2_id)
-//         ->get();
+    // Retrieve remaining players not in the player statistics
+    $remainingPlayersTeam1 = Players::where('team_id', $schedule->team1_id)
+        ->whereNotIn('id', $playerStatsTeam1->pluck('player_id')) // Exclude players with stats
+        ->get();
 
-//     // Pass data to the view
-//     return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2'));
-// }
+    $remainingPlayersTeam2 = Players::where('team_id', $schedule->team2_id)
+        ->whereNotIn('id', $playerStatsTeam2->pluck('player_id')) // Exclude players with stats
+        ->get();
 
-// public function index(Request $request)
-// {
-//     // Retrieve the schedule_id from query parameters
-//     $scheduleId = $request->query('schedule_id');
+     // Fetch total points for both teams
+    $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+        $query->where('team_id', $schedule->team1->id);
+    })->sum('points');
 
-//     // Find the schedule with its teams and ensure it exists
-//     $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
-//     if (!$schedule) {
-//         return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
-//     }
+    $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+        $query->where('team_id', $schedule->team2->id);
+    })->sum('points');
 
-//     // Retrieve player statistics for both teams in the specified schedule
-//     $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
-//         ->where('schedule_id', $scheduleId)
-//         ->where('team_id', $schedule->team1_id)
-//         ->get();
-
-//     $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
-//         ->where('schedule_id', $scheduleId)
-//         ->where('team_id', $schedule->team2_id)
-//         ->get();
-
-//     // Retrieve remaining players not in the player statistics
-//     $remainingPlayersTeam1 = Players::where('team_id', $schedule->team1_id)
-//         ->whereNotIn('id', $playerStatsTeam1->pluck('player_id')) // Exclude players with stats
-//         ->get();
-
-//     $remainingPlayersTeam2 = Players::where('team_id', $schedule->team2_id)
-//         ->whereNotIn('id', $playerStatsTeam2->pluck('player_id')) // Exclude players with stats
-//         ->get();
-
-//     // Pass data to the view
-//     return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2'));
-// }
-
+    // Pass data to the view
+    return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore'));
+}
 
     /**
      * Show the form for creating a new resource.

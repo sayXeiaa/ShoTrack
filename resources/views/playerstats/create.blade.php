@@ -513,6 +513,8 @@
             },
             success: function(response) {
                 console.log('Shot recorded successfully:', response);
+                document.getElementById('team-a-score').textContent = response.teamAScore;
+                document.getElementById('team-b-score').textContent = response.teamBScore;
                 loadPlayByPlay(); // Refresh the play-by-play display
             },
             error: function(xhr, status, error) {
@@ -536,8 +538,6 @@
             },
             success: function(response) {
                 console.log('Score recorded successfully:', response);
-                document.getElementById('team-a-score').textContent = response.teamAScore;
-                document.getElementById('team-b-score').textContent = response.teamBScore;
             },
             // error: function(xhr, status, error) {
             //     console.error('Error recording score:', status, error);

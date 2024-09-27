@@ -22,6 +22,7 @@ Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
 Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
 Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
 Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
 
 Route::middleware('auth')->group(function () {
@@ -92,9 +93,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/schedules/store-game-time', [ScheduleController::class, 'storeGameTime'])->name('schedules.storeGameTime');
     Route::get('/getGameDetails/{scheduleId}', [ScheduleController::class, 'getGameDetails']);
+    Route::get('/scores/{scheduleId}', [ScoreController::class, 'getScores'])->name('scores.get');
 
     //Player Stats routes
-    Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
+    // Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
     Route::get('/playerstats/create/{schedule_id}', [PlayerStatsController::class, 'create'])->name('playerstats.create');
     Route::post('/playerstats', [PlayerStatsController::class, 'store'])->name('playerstats.store');
     // Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');

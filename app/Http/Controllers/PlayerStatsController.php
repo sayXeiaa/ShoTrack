@@ -164,10 +164,10 @@ public function index(Request $request)
         switch ($validated['type_of_stat']) {
             case 'two_point':
                 // Increment the number of attempts
-                $stat->increment('two_pt_fg_attempt');
+                $stat->two_pt_fg_attempt++;
 
                 if ($validated['result'] === 'made') {
-                    $stat->increment('two_pt_fg_made');
+                    $stat->two_pt_fg_made++;
                     $stat->points += $points; 
                 }
 
@@ -182,28 +182,30 @@ public function index(Request $request)
                 $stat->save(); 
 
                 break;
+
             case 'three_point':
                 Log::info('Before Increment: ', ['three_pt_fg_attempt' => $stat->three_pt_fg_attempt]);
-                $stat->increment('three_pt_fg_attempt');
+                $stat->three_pt_fg_attempt++;
                 Log::info('After Increment: ', ['three_pt_fg_attempt' => $stat->three_pt_fg_attempt]);
                 if ($validated['result'] === 'made') {
-                    $stat->increment('three_pt_fg_made');
+                    $stat->three_pt_fg_made++;
                     $stat->points += $points;
                 }
-
+    
                 $attempts = $stat->three_pt_fg_attempt;
                 $makes = $stat->three_pt_fg_made;
-
-                $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
-
+    
+                 $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
+    
                 $stat->three_pt_percentage = $percentage;
                 $stat->save(); 
-
+    
                 break;
+            
             case 'free_throw':
-                $stat->increment('free_throw_attempt');
+                $stat->free_throw_attempt++;
                 if ($validated['result'] === 'made') {
-                    $stat->increment('free_throw_made');
+                    $stat->free_throw_made++;
                     $stat->points += $points;
                 }
 

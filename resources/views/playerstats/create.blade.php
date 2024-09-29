@@ -55,7 +55,7 @@
                                 </div>
                     
                                 <!-- Bench Players for Team A -->
-                                <div class="flex flex-wrap justify-center gap-2 mt-2" id="benchPlayersTeamA">
+                                <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamA">
                                     @foreach ($benchPlayersTeamA as $player)
                                         <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamA" data-position="bench" data-player-number="{{ $player->number }}"
@@ -74,6 +74,11 @@
                                 <button id="nextQuarterButtonSub" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50" onclick="nextQuarter()">
                                     Next Quarter
                                 </button>
+                                <button id="subButton"
+                                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                                    onclick="performSubstitution()">
+                                Sub
+                            </button>
                             </div>
                     
                             <!-- Team B Section -->
@@ -90,7 +95,7 @@
                                 </div>
                     
                                 <!-- Bench Players for Team B -->
-                                <div class="flex flex-wrap justify-center gap-2 mt-2" id="benchPlayersTeamB">
+                                <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamB">
                                     @foreach ($benchPlayersTeamB as $player)
                                         <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamB" data-position="bench" data-player-number="{{ $player->number }}"
@@ -101,18 +106,9 @@
                                 </div>
                             </div>
                         </div>
-                    
-                        <!-- Substitution Button -->
-                        <div class="flex flex-col items-center space-y-4 mt-4">
-                            <button id="subButton"
-                                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
-                                    onclick="performSubstitution()">
-                                Sub
-                            </button>
-                        </div>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mb-6 mt-12">
                         <x-message></x-message>
                         <form method="POST" action="{{ route('playerstats.store') }}" id="playerStatsForm">
                             @csrf

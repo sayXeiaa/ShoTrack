@@ -16,7 +16,7 @@ class PlayerStat extends Model
     protected $fillable = [
         'player_id',
         'schedule_id',
-        'team_id', // Ensure this column exists in your migration
+        'team_id',
         'points',
         'two_pt_fg_attempt',
         'two_pt_fg_made',

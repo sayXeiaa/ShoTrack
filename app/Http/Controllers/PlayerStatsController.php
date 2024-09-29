@@ -57,8 +57,18 @@ public function index(Request $request)
         $query->where('team_id', $schedule->team2->id);
     })->sum('points');
 
+    $playByPlayData = PlayByPlay::with('player') // Eager load player data
+            ->where('schedule_id', $scheduleId)
+            ->get();
+
+        // Format the play data with action text
+        foreach ($playByPlayData as $play) {
+            $play->action_text = $this->getActionText($play->type_of_stat, $play->result);
+        }
+
+
     // Pass data to the view
-    return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore'));
+    return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore', 'playByPlayData'));
 }
 
     /**
@@ -337,6 +347,34 @@ public function index(Request $request)
     public function destroy(string $id)
     {
         //
+    }
+
+    private function getActionText($type_of_stat, $result)
+    {
+        switch ($type_of_stat) {
+            case 'two_point':
+                return $result === 'made' ? 'MADE a 2-point field goal' : 'MISSED a 2-point field goal';
+            case 'three_point':
+                return $result === 'made' ? 'MADE a 3-point field goal' : 'MISSED a 3-point field goal';
+            case 'free_throw':
+                return $result === 'made' ? 'MADE a free throw' : 'MISSED a free throw';
+            case 'offensive_rebound':
+                return 'Grabbed an offensive rebound';
+            case 'defensive_rebound':
+                return 'Grabbed a defensive rebound';
+            case 'block':
+                return 'Blocked a shot';
+            case 'steal':
+                return 'Stole the ball';
+            case 'turnover':
+                return 'Committed a turnover';
+            case 'foul':
+                return 'Committed a foul';
+            case 'assist':
+                return 'MADE an assist';
+            default:
+                return 'Unknown action';
+        }
     }
 
 }

@@ -497,6 +497,16 @@
             recordScore(teamPlaceholder, points, scheduleId, quarter, currentGameTime);
         }
 
+        console.log('Data being sent:', {
+            playerNumber: playerNumber,
+            teamId: teamId,
+            scheduleId: scheduleId,
+            quarter: quarter,
+            type_of_stat: type_of_stat,
+            result: result,
+            points: points
+        });
+
         // Send player stats via AJAX
         $.ajax({
             url: '{{ route('playerstats.store') }}',

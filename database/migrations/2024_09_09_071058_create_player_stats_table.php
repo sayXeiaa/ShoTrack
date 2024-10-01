@@ -32,6 +32,7 @@ return new class extends Migration
             $table->unsignedInteger('free_throw_attempt')->default(0);
             $table->unsignedInteger('free_throw_made')->default(0);
             $table->Decimal('free_throw_percentage', 5, 2)->default(0.00);
+            $table->Decimal('turnover_ratio')->default(0.00);
             $table->Decimal('free_throw_attempt_rate', 5, 2)->default(0.00); 
             $table->integer('plus_minus')->default(0); 
             $table->Decimal('effective_field_goal_percentage', 5, 2)->default(0.00);

@@ -10,6 +10,7 @@ use App\Models\Tournaments;
 use App\Models\PlayByPlay;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Models\TeamStat;
 use App\Models\Score;
 
 class PlayerStatsController extends Controller
@@ -17,59 +18,59 @@ class PlayerStatsController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index(Request $request)
-{
-    // Retrieve the schedule_id from query parameters
-    $scheduleId = $request->query('schedule_id');
+    public function index(Request $request)
+    {
+        // Retrieve the schedule_id from query parameters
+        $scheduleId = $request->query('schedule_id');
 
-    // Find the schedule with its teams and ensure it exists
-    $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
-    if (!$schedule) {
-        return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
-    }
-
-    // Retrieve player statistics for both teams in the specified schedule
-    $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
-        ->where('schedule_id', $scheduleId)
-        ->where('team_id', $schedule->team1_id)
-        ->get();
-
-    $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
-        ->where('schedule_id', $scheduleId)
-        ->where('team_id', $schedule->team2_id)
-        ->get();
-
-    // Retrieve remaining players not in the player statistics
-    $remainingPlayersTeam1 = Players::where('team_id', $schedule->team1_id)
-        ->whereNotIn('id', $playerStatsTeam1->pluck('player_id')) // Exclude players with stats
-        ->get();
-
-    $remainingPlayersTeam2 = Players::where('team_id', $schedule->team2_id)
-        ->whereNotIn('id', $playerStatsTeam2->pluck('player_id')) // Exclude players with stats
-        ->get();
-
-     // Fetch total points for both teams
-    $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-        $query->where('team_id', $schedule->team1->id);
-    })->sum('points');
-
-    $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-        $query->where('team_id', $schedule->team2->id);
-    })->sum('points');
-
-    $playByPlayData = PlayByPlay::with('player') // Eager load player data
-            ->where('schedule_id', $scheduleId)
-            ->get();
-
-        // Format the play data with action text
-        foreach ($playByPlayData as $play) {
-            $play->action_text = $this->getActionText($play->type_of_stat, $play->result);
+        // Find the schedule with its teams and ensure it exists
+        $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+        if (!$schedule) {
+            return redirect()->route('playerstats.index')->with('error', 'Schedule not found.');
         }
 
+        // Retrieve player statistics for both teams in the specified schedule
+        $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
+            ->where('schedule_id', $scheduleId)
+            ->where('team_id', $schedule->team1_id)
+            ->get();
 
-    // Pass data to the view
-    return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore', 'playByPlayData'));
-}
+        $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
+            ->where('schedule_id', $scheduleId)
+            ->where('team_id', $schedule->team2_id)
+            ->get();
+
+        // Retrieve remaining players not in the player statistics
+        $remainingPlayersTeam1 = Players::where('team_id', $schedule->team1_id)
+            ->whereNotIn('id', $playerStatsTeam1->pluck('player_id')) // Exclude players with stats
+            ->get();
+
+        $remainingPlayersTeam2 = Players::where('team_id', $schedule->team2_id)
+            ->whereNotIn('id', $playerStatsTeam2->pluck('player_id')) // Exclude players with stats
+            ->get();
+
+        // Fetch total points for both teams
+        $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team1->id);
+        })->sum('points');
+
+        $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team2->id);
+        })->sum('points');
+
+        $playByPlayData = PlayByPlay::with('player') // Eager load player data
+                ->where('schedule_id', $scheduleId)
+                ->get();
+
+            // Format the play data with action text
+            foreach ($playByPlayData as $play) {
+                $play->action_text = $this->getActionText($play->type_of_stat, $play->result);
+            }
+
+
+        // Pass data to the view
+        return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore', 'playByPlayData'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -100,11 +101,16 @@ public function index(Request $request)
         // Fetch total points for both teams
         $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
             $query->where('team_id', $schedule->team1->id);
-        })->sum('points');
-
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
+        
+        // Fetch total points for Team B for this specific schedule
         $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
             $query->where('team_id', $schedule->team2->id);
-        })->sum('points');
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
 
         return view('playerstats.create', compact('schedule_id', 'teams', 'players', 'team1Name', 'team2Name', 'playersTeamA', 'playersTeamB', 'startingPlayersTeamA', 
         'startingPlayersTeamB', 'benchPlayersTeamA', 'benchPlayersTeamB', 'teamAScore', 'teamBScore', 'remaining_game_time', 'currentQuarter'));
@@ -164,6 +170,7 @@ public function index(Request $request)
             $stat->setAttribute('turnovers', 0);
             $stat->setAttribute('personal_fouls', 0);
             $stat->setAttribute('effective_field_goal_percentage', 0);
+            $stat->setAttribute('turnover_ratio', 0);
             $stat->setAttribute('minutes', 0);
         }
         
@@ -241,27 +248,27 @@ public function index(Request $request)
 
                 break;
             case 'offensive_rebound':
-                $stat->increment('rebounds');
-                $stat->increment('offensive_rebounds');
+                $stat->rebounds++;
+                $stat->offensive_rebounds++;
                 break;
             case 'defensive_rebound':
-                $stat->increment('rebounds');
-                $stat->increment('defensive_rebounds');
+                $stat->rebounds++;
+                $stat->defensive_rebounds++;
                 break;
             case 'block':
-                $stat->increment('blocks');
+                $stat->blocks++;
                 break;
             case 'steal':
-                $stat->increment('steals');
+                $stat->steals++;
                 break;
             case 'turnover':
-                $stat->increment('turnovers');
+                $stat->turnovers++;
                 break;
             case 'foul':
-                $stat->increment('personal_fouls');
+                $stat->personal_fouls++;
                 break;
             case 'assist':
-                $stat->increment('assists');
+                $stat->assists++;
                 break;
         }
 
@@ -269,12 +276,21 @@ public function index(Request $request)
         $three_pt_made = $stat->three_pt_fg_made;
         $two_pt_attempts = $stat->two_pt_fg_attempt;
         $three_pt_attempts = $stat->three_pt_fg_attempt;
+        $assists = $stat->assists;
+        $turnovers = $stat->turnovers;
+        $free_throw_attempt = $stat->free_throw_attempt;
 
         $total_fg_made = $two_pt_made + $three_pt_made;
         $total_fg_attempts = $two_pt_attempts + $three_pt_attempts;
 
         $eFG_percentage = ($total_fg_attempts > 0) ? (($total_fg_made + 0.5 * $three_pt_made) / $total_fg_attempts) * 100 : 0;
         $stat->effective_field_goal_percentage = $eFG_percentage;
+
+        $turnover_ratio = ($total_fg_attempts + ($free_throw_attempt * 0.44) + $assists + $turnovers) > 0
+        ? ($turnovers * 100) / ($total_fg_attempts + ($free_throw_attempt * 0.44) + $assists + $turnovers)
+        : 0;
+
+        $stat->turnover_ratio = $turnover_ratio; 
         
         $stat->save();
 
@@ -282,11 +298,16 @@ public function index(Request $request)
         $schedule = Schedule::findOrFail($validated['schedule_id']);
         $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
             $query->where('team_id', $schedule->team1->id);
-        })->sum('points');
-
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
+        
+        // Fetch total points for Team B for this specific schedule
         $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
             $query->where('team_id', $schedule->team2->id);
-        })->sum('points');
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
 
         PlayByPlay::create([
             'player_id' => $player->id,
@@ -298,6 +319,8 @@ public function index(Request $request)
             'team_A_score' => $teamAScore,
             'team_B_score' => $teamBScore
         ]);
+
+        TeamStat::updateStatsForTeam($player->team_id, $schedule->id);
 
         return response()->json([
             'message' => 'Shot recorded successfully',

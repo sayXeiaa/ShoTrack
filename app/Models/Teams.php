@@ -38,4 +38,9 @@ class Teams extends Model
     {
         return $this->hasMany(Score::class);
     }
+
+    public function teamStats()
+    {
+        return $this->hasMany(TeamStat::class, 'team_id'); 
+    }
 }

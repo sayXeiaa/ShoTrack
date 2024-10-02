@@ -50,6 +50,10 @@
                     <x-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-white hover:text-blue-300">
                         {{ __('Game Schedules') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('leaderboards.index')" :active="request()->routeIs('leaderboards.index')" class="text-white hover:text-blue-300">
+                        {{ __('Leaderboards') }}
+                    </x-nav-link>                    
                 </div>
             </div>
 

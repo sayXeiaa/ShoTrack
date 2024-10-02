@@ -11,6 +11,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\PlayerStatsController;
 use App\Http\Controllers\PlayByPlayController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\TeamStatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,7 @@ Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.
 Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
 Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
+Route::get('/team-stats', [TeamStatController::class, 'index'])->name('leaderboards.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

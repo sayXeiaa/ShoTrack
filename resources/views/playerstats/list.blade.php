@@ -15,23 +15,23 @@
             <x-message></x-message>
 
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold">Box Score</h1>
+                {{-- <h1 class="text-3xl font-bold">Box Score</h1> --}}
                 <h2 class="text-xl mt-2 flex items-center justify-center">
                     <!-- Team 1 Section -->
                     <div class="flex flex-col items-center mr-4">
                         <img src="{{ asset('storage/' . $schedule->team1->logo) }}" alt="Logo of {{ $schedule->team1->name }}" style="max-width: 100px;" />
-                        <span class="font-semibold">{{ $schedule->team1->name }}</span>
+                        <span class="font-semibold justify-center">{{ $schedule->team1->name }}</span>
                     </div>
             
                     <!-- Scores Section -->
-                    <span class="text-lg font-bold">{{ $teamAScore }}</span>
+                    <span class="text-lg font-bold justify-center">{{ $teamAScore }}</span>
                     <span class="mx-8">vs.</span>
-                    <span class="text-lg font-bold">{{ $teamBScore }}</span>
+                    <span class="text-lg font-bold justify-center">{{ $teamBScore }}</span>
             
                     <!-- Team 2 Section -->
                     <div class="flex flex-col items-center ml-4">
                         <img src="{{ asset('storage/' . $schedule->team2->logo) }}" alt="Logo of {{ $schedule->team2->name }}" style="max-width: 100px;" />
-                        <span class="font-semibold">{{ $schedule->team2->name }}</span>
+                        <span class="font-semibold justify-center">{{ $schedule->team2->name }}</span>
                     </div>
                 </h2>
             </div>

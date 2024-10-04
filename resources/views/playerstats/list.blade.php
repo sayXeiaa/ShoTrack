@@ -52,13 +52,13 @@
             <div id="boxScore" class="content-section">
                 <h2 class="text-xl font-semibold mt-6 ml-2 mb-4">Player Statistics for {{ $schedule->team1->name }}</h2>
                 @if ($playerStatsTeam1->isNotEmpty() || $remainingPlayersTeam1->isNotEmpty())
-                    <div class="bg-white shadow-md rounded-lg mb-4 mx-auto p-6 container">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md my-6">
                         {{-- <h3 class="text-lg font-semibold mb-6">Player Statistics</h3> --}}
                         <div class="table-wrapper">
                             <table class="min-w-full stats-table border-collapse border border-gray-300">
                                 <thead class="bg-[#314795]">
                                     <tr class="text-white">
-                                        <th class="border px-4 py-2 w-24">PLAYER</th>
+                                        <th class="border px-4 py-2 w-32">PLAYER</th>
                                         <th class="border px-4 py-2">MIN</th>
                                         <th class="border px-4 py-2">FGM</th>
                                         <th class="border px-4 py-2">FGA</th> 
@@ -72,7 +72,7 @@
                                         <th class="border px-4 py-2">FTM</th>
                                         <th class="border px-4 py-2">FTA</th>
                                         <th class="border px-4 py-2">FT%</th>
-                                        <th class="border px-4 py-2">OREB</th>
+                                        <th class="border px-4 py-2 w-12">OREB</th>
                                         <th class="border px-4 py-2">DREB</th>
                                         <th class="border px-4 py-2">REB</th>
                                         <th class="border px-4 py-2">AST</th>
@@ -82,6 +82,7 @@
                                         <th class="border px-4 py-2">PF</th>
                                         <th class="border px-4 py-2">PTS</th>
                                         <th class="border px-4 py-2">+/–</th>
+                                        <th class="px-6 py-3 text-center" width="180">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -131,6 +132,12 @@
                                         <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                         <td class="border px-4 py-2">{{ $stat->points }}</td>
                                         <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
+                                        <td class="px-6 py-3 text-center">
+                                            <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
+                                            <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
+                                        </td>
+                                        
+                                        
                                     </tr>
                                     @endforeach
                                 
@@ -144,29 +151,32 @@
                                             @endphp
                                             {{ $initial }}. {{ $lastName }}
                                         </td>
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for MIN -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FGM -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FGA -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FG% -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 2PM -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 2PA -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 2P% -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 3PM -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 3PA -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for 3P% -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FTM -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FTA -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for FT% -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for OREB -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for DREB -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for REB -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for AST -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for STL -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for BLK -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for TO -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for PF -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for PTS -->
-                                        <td class="border px-4 py-2">0</td> <!-- Placeholder for +/- -->
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="border px-4 py-2">0</td>
+                                        <td class="border px-4 py-2">0</td> 
+                                        <td class="px-6 py-3 text-center">
+                                            <a href="{{ route('playerstats.edit', ['id' => $player->id]) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600">Edit</a>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -178,13 +188,13 @@
                     <!-- Team 2 Player Statistics -->
                     <h2 class="text-xl font-semibold mt-6 ml-2 mb-4">Player Statistics for {{ $schedule->team2->name }}</h2>
                     @if ($playerStatsTeam2->isNotEmpty() || $remainingPlayersTeam2->isNotEmpty())
-                        <div class="bg-white shadow-md rounded-lg mb-4 mx-auto p-6 container">
+                        <div class="bg-gray-50 p-6 rounded-lg shadow-md my-6">
                             {{-- <h3 class="text-lg font-semibold mb-6">Player Statistics</h3> --}}
                             <div class="table-wrapper">
                                 <table class="min-w-full stats-table border-collapse border border-gray-300">
                                     <thead class="bg-[#314795]">
                                         <tr class="text-white">
-                                            <th class="border px-4 py-2 w-24">PLAYER</th>
+                                            <th class="border px-4 py-2 w-32">PLAYER</th>
                                             <th class="border px-4 py-2">MIN</th>
                                             <th class="border px-4 py-2">FGM</th>
                                             <th class="border px-4 py-2">FGA</th> 
@@ -198,7 +208,7 @@
                                             <th class="border px-4 py-2">FTM</th>
                                             <th class="border px-4 py-2">FTA</th>
                                             <th class="border px-4 py-2">FT%</th>
-                                            <th class="border px-4 py-2">OREB</th>
+                                            <th class="border px-4 py-2 w-12">OREB</th>
                                             <th class="border px-4 py-2">DREB</th>
                                             <th class="border px-4 py-2">REB</th>
                                             <th class="border px-4 py-2">AST</th>
@@ -208,6 +218,7 @@
                                             <th class="border px-4 py-2">PF</th>
                                             <th class="border px-4 py-2">PTS</th>
                                             <th class="border px-4 py-2">+/–</th>
+                                            <th class="px-6 py-3 text-center" width="180">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -257,42 +268,49 @@
                                             <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                             <td class="border px-4 py-2">{{ $stat->points }}</td>
                                             <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
+                                            <td class="px-6 py-3 text-center">
+                                                <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
+                                                <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     
                                         {{-- Display Remaining Players --}}
                                         @foreach ($remainingPlayersTeam2 as $player)
                                         <tr class="hover:bg-gray-400">
-                                            <td class="border px-4 py-2">
+                                            <td class="border px-8 py-2">
                                                 @php
                                                     $initial = strtoupper(substr($player->first_name, 0, 1)); // Get initial of first name
                                                     $lastName = $player->last_name; // Get last name
                                                 @endphp
                                                 {{ $initial }}. {{ $lastName }}
                                             </td>
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for MIN -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FGM -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FGA -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FG% -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 2PM -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 2PA -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 2P% -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 3PM -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 3PA -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for 3P% -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FTM -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FTA -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for FT% -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for OREB -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for DREB -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for REB -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for AST -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for STL -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for BLK -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for TO -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for PF -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for PTS -->
-                                            <td class="border px-4 py-2">0</td> <!-- Placeholder for +/- -->
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td> 
+                                            <td class="border px-4 py-2">0</td>
+                                            <td class="px-6 py-3 text-center">
+                                                <a href="{{ route('playerstats.edit', ['id' => $player->id]) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600">Edit</a>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -622,5 +640,27 @@
         });
     }
 
+    function deletePlayerStat(id) {
+        if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+                url: '{{ route("playerstats.destroy", ":id") }}'.replace(':id', id),
+                type: 'DELETE',
+                data: { id: id },
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.success);
+                        window.location.href = '{{ route("schedules.index") }}';
+                    }
+                },
+                error: function(xhr) {
+                    alert("An error occurred while deleting the player stat.");
+                }
+            });
+        }
+    }
 </script>
 </x-app-layout>

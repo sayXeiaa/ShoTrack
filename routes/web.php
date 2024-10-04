@@ -101,9 +101,9 @@ Route::middleware('auth')->group(function () {
     // Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
     Route::get('/playerstats/create/{schedule_id}', [PlayerStatsController::class, 'create'])->name('playerstats.create');
     Route::post('/playerstats', [PlayerStatsController::class, 'store'])->name('playerstats.store');
-    // Route::get('/schedules/{id}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
-    // Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
-    // Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+    Route::get('/playerstats/{id}/edit', [PlayerStatsController::class, 'edit'])->name('playerstats.edit');
+    Route::put('/playerstats/{id}', [PlayerStatsController::class, 'update'])->name('playerstats.update');
+    Route::delete('/playerstats/{id}', [PlayerStatsController::class, 'destroy'])->name('playerstats.destroy');
 
     Route::get('/playbyplay/{scheduleId}', [PlayByPlayController::class, 'getPlayByPlay'])->name('playbyplay.get');
 

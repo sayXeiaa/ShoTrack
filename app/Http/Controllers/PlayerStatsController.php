@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\TeamStat;
 use App\Models\Score;
+use Illuminate\Support\Facades\Validator;
 
 class PlayerStatsController extends Controller
 {
@@ -22,6 +23,8 @@ class PlayerStatsController extends Controller
     {
         // Retrieve the schedule_id from query parameters
         $scheduleId = $request->query('schedule_id');
+        $team1Id = $request->query('team1_id');
+        $team2Id = $request->query('team2_id');
 
         // Find the schedule with its teams and ensure it exists
         $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
@@ -51,11 +54,15 @@ class PlayerStatsController extends Controller
 
         // Fetch total points for both teams
         $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-            $query->where('team_id', $schedule->team1->id);
+            //Player stats for players on team a and the specific schedule
+            $query->where('team_id', $schedule->team1->id)
+                ->where('schedule_id', $schedule->id); 
         })->sum('points');
-
+        
         $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
-            $query->where('team_id', $schedule->team2->id);
+            //Player stats for players on Team b and the specific schedule
+            $query->where('team_id', $schedule->team2->id)
+                ->where('schedule_id', $schedule->id); 
         })->sum('points');
 
         $playByPlayData = PlayByPlay::with('player') // Eager load player data
@@ -351,25 +358,110 @@ class PlayerStatsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $player_stats = PlayerStat::findOrFail($id);
+        
+        // If the stats do not exist, create a new instance
+        if (!$player_stats) {
+            $player_stats = new PlayerStat();
+            // Set the player_id and schedule_id here if needed, but you may want to pass them from the request or route parameters
+            $player_stats->player_id = request()->get('player_id'); 
+            $player_stats->schedule_id = request()->get('schedule_id');
+        } else {
+            // If the stats exist, find the associated player
+            $player = Players::findOrFail($player_stats->player_id);
+        }
+        return view('playerstats.edit', compact('player_stats', 'player'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+{
+    Log::info('Update method called with ID: ' . $id);
+    Log::info('Request data: ', $request->all());
+
+    $scheduleId = $request->input('schedule_id');
+    $team1Id = $request->input('team1_id');
+    $team2Id = $request->input('team2_id');
+
+    $validator = Validator::make($request->all(), [
+        'f2ptfgm' => 'nullable|integer|min:0', 
+        'f2ptfga' => 'nullable|integer|min:0', 
+        'f3ptfgm' => 'nullable|integer|min:0', 
+        'f3ptfga' => 'nullable|integer|min:0', 
+        'defensive_rebounds' => 'nullable|integer|min:0', 
+        'offensive_rebounds' => 'nullable|integer|min:0', 
+        'free_throw_made' => 'nullable|integer|min:0', 
+        'free_throw_attempt' => 'nullable|integer|min:0', 
+        'steals' => 'nullable|integer|min:0', 
+        'blocks' => 'nullable|integer|min:0', 
+        'turnovers' => 'nullable|integer|min:0', 
+        'personal_fouls' => 'nullable|integer|min:0', 
+        'assists' => 'nullable|integer|min:0', 
+    ]);
+
+    // Fetch the player stats to update
+    $player_stats = PlayerStat::findOrFail($id); // This will throw a 404 if not found
+
+    // Update the player stats with validated data
+    if ($validator->passes()) {
+        // Use a loop to avoid redundancy
+        $fieldsToUpdate = [
+            'f2ptfgm' => 'two_pt_fg_made',
+            'f2ptfga' => 'two_pt_fg_attempt',
+            'f3ptfgm' => 'three_pt_fg_made',
+            'f3ptfga' => 'three_pt_fg_attempt',
+            'defensive_rebounds' => 'defensive_rebounds',
+            'offensive_rebounds' => 'offensive_rebounds',
+            'free_throw_made' => 'free_throw_made',
+            'free_throw_attempt' => 'free_throw_attempt',
+            'steals' => 'steals',
+            'blocks' => 'blocks',
+            'turnovers' => 'turnovers',
+            'personal_fouls' => 'personal_fouls',
+            'assists' => 'assists',
+        ];
+
+        foreach ($fieldsToUpdate as $requestField => $modelField) {
+            if ($request->filled($requestField)) {
+                $player_stats->$modelField = $request->$requestField;
+            }
+        }
+
+        $points = 0;
+        $points += ($request->input('f2ptfgm') ?? $player_stats->two_pt_fg_made) * 2; 
+        $points += ($request->input('f3ptfgm') ?? $player_stats->three_pt_fg_made) * 3; 
+        $points += ($request->input('free_throw_made') ?? $player_stats->free_throw_made) * 1; 
+
+        // Update the player's points
+        $player_stats->points = $points;
+
+
+        // Save changes
+        $player_stats->save();
+
+        return redirect()->route('schedules.index')->with('success', 'Player Stat updated successfully.');
     }
+
+    return redirect()->route('playerstats.edit', $id)->withInput()->withErrors($validator);
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+    // Find the player stat by ID
+    $playerStat = PlayerStat::findOrFail($id); 
+
+    // Delete the player stat
+    $playerStat->delete();
+
+    // Redirect to the player stats list page with a success message
+    return response()->json(['success' => 'Player Stat deleted successfully.']);
     }
 
     private function getActionText($type_of_stat, $result)

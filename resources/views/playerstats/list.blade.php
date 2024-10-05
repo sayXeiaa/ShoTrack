@@ -99,7 +99,9 @@
                                                 N/A
                                             @endif
                                         </td>
-                                        <td class="border px-4 py-2">{{ $stat->minutes }}</td>
+                                        <td class="border px-4 py-2">
+                                            {{ floor($stat->minutes / 60) }}:{{ str_pad($stat->minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                        </td>                                        
                                         <td class="border px-4 py-2">{{ $stat->two_pt_fg_made + $stat->three_pt_fg_made }}</td>
                                         <td class="border px-4 py-2">{{ $stat->two_pt_fg_attempt + $stat->three_pt_fg_attempt }}</td>
                                         <td class="border px-4 py-2">
@@ -235,7 +237,9 @@
                                                     N/A
                                                 @endif
                                             </td>
-                                            <td class="border px-4 py-2">{{ $stat->minutes }}</td>
+                                            <td class="border px-4 py-2">
+                                                {{ floor($stat->minutes / 60) }}:{{ str_pad($stat->minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                            </td>                                            
                                             <td class="border px-4 py-2">{{ $stat->two_pt_fg_made + $stat->three_pt_fg_made }}</td>
                                             <td class="border px-4 py-2">{{ $stat->two_pt_fg_attempt + $stat->three_pt_fg_attempt }}</td>
                                             <td class="border px-4 py-2">

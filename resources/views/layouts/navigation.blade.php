@@ -31,7 +31,15 @@
 
                     @can('view users')
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:text-blue-300">
-                        {{ __('Users') }}
+                        {{ __('USERS') }}
+                    </x-nav-link>
+                </div>
+                 {{-- @endcan --}}
+
+                {{-- @can('view users') --}}
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')">
+                        {{ __('ANALYTICS') }}
                     </x-nav-link>
                     @endcan
 

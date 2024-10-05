@@ -212,6 +212,11 @@
     let quarterElapsedTime = 0;
     let teamAScore = 0;
     let teamBScore = 0;
+    let playerTimes= {
+    teamA: {},
+    teamB: {}
+    }; 
+    let gameTime = 0;
 
     function getCurrentScheduleId() {
         return document.getElementById('currentScheduleId').value;
@@ -263,6 +268,7 @@
         if (!timer) {
             timer = setInterval(updateTimer, 1000); // Update every second
         }
+        startGameTimeTracking();
     }
 
     function stopTimer() {
@@ -270,6 +276,7 @@
             clearInterval(timer); // Clear the timer interval
             timer = null; // Reset the timer variable
         }
+        stopGameTimeTracking() 
     }
 
     function resetTimer() {
@@ -290,6 +297,36 @@
         }
     }
 
+    function startGameTimeTracking() {
+        gameTimeInterval = setInterval(() => {
+            // Iterate over each starting position player and increase their minutes
+            const playerBoxes = document.querySelectorAll('#startingTeamA .player-box, #startingTeamB .player-box');
+
+            // Log the number of player boxes found
+            console.log(`Found ${playerBoxes.length} player boxes.`);
+
+            playerBoxes.forEach(box => {
+                const playerNumber = box.dataset.playerNumber;
+                const team = box.dataset.team;
+
+                if (playerNumber) {
+                    if (!playerTimes[team][playerNumber]) {
+                        playerTimes[team][playerNumber] = 0; // Initialize if not present
+                    }
+                    playerTimes[team][playerNumber] += 1; 
+                    console.log(`Updated ${team} player ${playerNumber}: ${playerTimes[team][playerNumber]} seconds`); // Log updated time
+                }
+            });
+
+            // Log current player times after updating
+            console.log('Current player times:', playerTimes); 
+        }, 1000); 
+    }
+
+    function stopGameTimeTracking() {
+        clearInterval(gameTimeInterval); // Stop the game time tracking when needed
+    }
+
     function sendElapsedTimeDataToBackend() {
         const scheduleId = getCurrentScheduleId();
 
@@ -299,22 +336,35 @@
         }
 
         const gameTimeElement = document.getElementById('gameTime');
-        const gameTime = gameTimeElement.textContent || gameTimeElement.innerText; 
-        const gameTimeInSeconds = convertTimeToSeconds(gameTime); 
+        const gameTime = gameTimeElement.textContent || gameTimeElement.innerText;
+        const gameTimeInSeconds = convertTimeToSeconds(gameTime);
 
-        const quarter = currentQuarter; 
+        const quarter = currentQuarter;
         const quarterElapsedTime = 600 - timeLeft; // Calculate based on remaining time
 
+        const transformedPlayerTimes = {
+            teamA: {},
+            teamB: {}
+        };
+
+        for (const team in playerTimes) {
+            for (const player in playerTimes[team]) {
+                transformedPlayerTimes[team][player] = playerTimes[team][player];
+            }
+        }
+
+        // Add the recorded player times to the data
         const dataToSend = {
             _token: '{{ csrf_token() }}',
             schedule_id: scheduleId,
             current_quarter: quarter,
             game_time: gameTimeInSeconds,
-            total_elapsed_time: totalElapsedTime, // Send accumulated total elapsed time
-            quarter_elapsed_time: quarterElapsedTime // Send calculated quarter elapsed time
+            total_elapsed_time: totalElapsedTime,
+            quarter_elapsed_time: quarterElapsedTime,
+            player_minutes: transformedPlayerTimes 
         };
 
-        console.log('Sending elapsed time data to backend:', dataToSend);
+        console.log('Sending elapsed time and player minutes data to backend:', dataToSend);
 
         $.ajax({
             url: '{{ route('schedules.storeGameTime') }}',

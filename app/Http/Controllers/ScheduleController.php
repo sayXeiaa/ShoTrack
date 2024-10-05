@@ -9,6 +9,9 @@ use App\Models\teams;
 use App\Models\tournaments;
 use App\Rules\Time12HourFormat;
 use App\Models\Score;
+use App\Models\PlayerStat;
+use App\models\Players;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
@@ -227,9 +230,52 @@ class ScheduleController extends Controller
             'game_time' => 'required|string',
             'total_elapsed_time' => 'required|integer',
             'quarter_elapsed_time' => 'required|integer',
+            'player_minutes' => 'sometimes|array',
         ]);
 
-        $schedule = Schedule::findOrFail($request->schedule_id);
+        $schedule = Schedule::with(['team1', 'team2'])->findOrFail($request->schedule_id);
+
+        $team1Id = $schedule->team1->id; 
+        $team2Id = $schedule->team2->id; 
+
+        $teamIds = [
+            'teamA' => $team1Id,
+            'teamB' => $team2Id,
+        ];
+
+        if ($request->has('player_minutes')) {
+            foreach ($request->player_minutes as $team => $players) {
+                if (array_key_exists($team, $teamIds)) {
+                    foreach ($players as $playerNumber => $minutes) {
+                        // Find the player based on team ID and player number
+                        $player = Players::where('team_id', $teamIds[$team])
+                            ->where('number', $playerNumber)
+                            ->first();
+
+                        if ($player) {
+                            Log::info("Updating PlayerStat for player_id: {$player->id}, schedule_id: {$schedule->id}, minutes: $minutes, team_id: {$teamIds[$team]}");
+
+                            // Find existing PlayerStat or create new instance
+                            $playerStat = PlayerStat::where('player_id', $player->id)
+                                ->where('schedule_id', $schedule->id)
+                                ->first();
+
+                            if ($playerStat) {
+                                // Update minutes if record exists
+                                $playerStat->minutes++; 
+                                $playerStat->save();
+                            } else {
+                                Log::warning("PlayerStat for player_id: {$player->id} not found for schedule_id: {$schedule->id}. No updates were made.");
+                            }
+                        } else {
+                            Log::warning("Player with number $playerNumber not found for team {$teamIds[$team]}.");
+                        }
+                    }
+                } else {
+                    Log::warning("Team {$team} not found in team IDs.");
+                }
+            }
+        }
 
         $schedule->current_quarter = $request->current_quarter;
         $schedule->total_elapsed_time = $request->total_elapsed_time;

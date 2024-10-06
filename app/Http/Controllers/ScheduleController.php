@@ -19,57 +19,56 @@ class ScheduleController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $tournamentId = $request->input('tournament_id');
-    $category = $request->input('category');
+    {
+        $tournamentId = $request->input('tournament_id');
+        $category = $request->input('category');
 
-    // Fetch schedules filtered by the selected tournament and category if provided
-    $schedules = Schedule::with(['team1', 'team2', 'scores.team']) // Load related teams and scores
-        ->when($tournamentId, function ($query) use ($tournamentId) {
-            return $query->where('tournament_id', $tournamentId);
-        })
-        ->when($category, function ($query) use ($category, $tournamentId) {
-            return $query->whereHas('team1', function ($q) use ($category, $tournamentId) {
-                $q->where('category', $category)->where('tournament_id', $tournamentId);
-            })->orWhereHas('team2', function ($q) use ($category, $tournamentId) {
-                $q->where('category', $category)->where('tournament_id', $tournamentId);
-            });
-        })
-        ->orderBy('date', 'asc')
-        ->paginate(25);
+        // Fetch schedules filtered by the selected tournament and category if provided
+        $schedules = Schedule::with(['team1', 'team2', 'scores.team']) // Load related teams and scores
+            ->when($tournamentId, function ($query) use ($tournamentId) {
+                return $query->where('tournament_id', $tournamentId);
+            })
+            ->when($category, function ($query) use ($category, $tournamentId) {
+                return $query->whereHas('team1', function ($q) use ($category, $tournamentId) {
+                    $q->where('category', $category)->where('tournament_id', $tournamentId);
+                })->orWhereHas('team2', function ($q) use ($category, $tournamentId) {
+                    $q->where('category', $category)->where('tournament_id', $tournamentId);
+                });
+            })
+            ->orderBy('date', 'asc')
+            ->paginate(25);
 
-    $tournaments = Tournaments::all(); 
-    $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
+        $tournaments = Tournaments::all(); 
+        $categories = $tournamentId ? $tournaments->where('id', $tournamentId)->pluck('category')->unique() : collect();
 
-    return view('schedules.list', [
-        'schedules' => $schedules,
-        'tournaments' => $tournaments,
-        'categories' => $categories,
-    ]);
-}
-    // In ScheduleController.php
-public function getSchedulesByTournament($tournamentId)
-{
-    // Get the category from the request
-    $category = request()->get('category');
-
-    // Fetch schedules based on tournament and optionally category
-    $query = Schedule::where('tournament_id', $tournamentId)
-                     ->with(['team1', 'team2']);
-
-    // Filter by category if specified
-    if ($category) {
-        $query->where('category', $category); // Adjust this line based on your database structure
+        return view('schedules.list', [
+            'schedules' => $schedules,
+            'tournaments' => $tournaments,
+            'categories' => $categories,
+        ]);
     }
 
-    $schedules = $query->get();
+    public function getSchedulesByTournament($tournamentId)
+    {
+        // Get the category from the request
+        $category = request()->get('category');
 
-    return response()->json([
-        'schedules' => $schedules,
-    ]);
-}
+        // Fetch schedules based on tournament and optionally category
+        $query = Schedule::where('tournament_id', $tournamentId)
+                        ->with(['team1', 'team2']);
 
-    
+        // Filter by category if specified
+        if ($category) {
+            $query->where('category', $category); // Adjust this line based on your database structure
+        }
+
+        $schedules = $query->get();
+
+        return response()->json([
+            'schedules' => $schedules,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

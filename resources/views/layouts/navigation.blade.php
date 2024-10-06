@@ -29,19 +29,11 @@
                     </x-nav-link>
                     @endcan
 
-                    @can('view users')
+                    {{-- @can('view users') --}}
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:text-blue-300">
-                        {{ __('USERS') }}
+                        {{ __('Users') }}
                     </x-nav-link>
-                </div>
-                 {{-- @endcan --}}
-
-                {{-- @can('view users') --}}
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')">
-                        {{ __('ANALYTICS') }}
-                    </x-nav-link>
-                    @endcan
+                    {{-- @endcan --}}
 
                     <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-white hover:text-blue-300">
                         {{ __('Tournaments') }}
@@ -61,7 +53,11 @@
 
                     <x-nav-link :href="route('leaderboards.index')" :active="request()->routeIs('leaderboards.index')" class="text-white hover:text-blue-300">
                         {{ __('Leaderboards') }}
-                    </x-nav-link>                    
+                    </x-nav-link>     
+                    
+                    <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white hover:text-blue-300">
+                        {{ __('Analytics') }}
+                    </x-nav-link>     
                 </div>
             </div>
 

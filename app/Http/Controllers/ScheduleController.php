@@ -47,6 +47,28 @@ class ScheduleController extends Controller
         'categories' => $categories,
     ]);
 }
+    // In ScheduleController.php
+public function getSchedulesByTournament($tournamentId)
+{
+    // Get the category from the request
+    $category = request()->get('category');
+
+    // Fetch schedules based on tournament and optionally category
+    $query = Schedule::where('tournament_id', $tournamentId)
+                     ->with(['team1', 'team2']);
+
+    // Filter by category if specified
+    if ($category) {
+        $query->where('category', $category); // Adjust this line based on your database structure
+    }
+
+    $schedules = $query->get();
+
+    return response()->json([
+        'schedules' => $schedules,
+    ]);
+}
+
     
     /**
      * Show the form for creating a new resource.

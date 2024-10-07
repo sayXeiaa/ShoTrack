@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="text-white text-lg font-bold hover:text-gray-500">
-                        ShoTrack
+                        Shot Track
                     </a>
                 </div>
                 
@@ -129,6 +129,12 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
                 {{ __('Game Schedules') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
+                {{ __('Leaderboards') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
+                {{ __('Analytics') }}
             </x-responsive-nav-link>
         </div>
 

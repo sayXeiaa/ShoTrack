@@ -134,6 +134,7 @@ class PlayerStatsController extends Controller
             'schedule_id' => 'required|integer',
             'game_time' => 'required|string',
             'quarter' => 'required|string',
+            'starting_players' => 'required|array'
         ]);
         Log::info('Shot result:', ['result' => $validated['result']]);
 
@@ -328,6 +329,91 @@ class PlayerStatsController extends Controller
         ]);
 
         TeamStat::updateStatsForTeam($player->team_id, $schedule->id);
+
+        $startingPlayersA = $validated['starting_players']['teamA'] ?? []; // Player IDs for Team A
+        $startingPlayersB = $validated['starting_players']['teamB'] ?? []; // Player IDs for Team B
+        
+        // Calculate plus-minus for Team A
+        $plusMinusA = $teamAScore - $teamBScore;
+        Log::info('Calculating plus-minus for Team A', [
+            'scoreA' => $teamAScore,
+            'scoreB' => $teamBScore,
+            'plusMinusA' => $plusMinusA,
+            'startingPlayersA' => $startingPlayersA,
+        ]);
+
+        foreach ($startingPlayersA as $playerNumber) {
+            // Find the player id by their number
+            $playerId = Players::where('number', $playerNumber)->pluck('id')->first(); // Fetch only the player ID
+
+            if ($playerId) { // Check if player id is found
+                Log::info('Found player for Team A', ['playerId' => $playerId, 'playerNumber' => $playerNumber]);
+                
+                // Get the current player stat using player id and schedule id
+                $currentPlayerStat = PlayerStat::where('player_id', $playerId)
+                                                ->where('schedule_id', $validated['schedule_id'])
+                                                ->first();
+                
+                if ($currentPlayerStat) {
+                    Log::info('Updating player stat for Team A', [
+                        'playerStatId' => $currentPlayerStat->id,
+                        'oldPlusMinus' => $currentPlayerStat->plus_minus,
+                        'newPlusMinus' => $plusMinusA,
+                    ]);
+
+                    $currentPlayerStat->plus_minus = $plusMinusA;
+                    $currentPlayerStat->save();
+                } else {
+                    Log::warning('No player stat found for Team A', [
+                        'playerId' => $playerId,
+                        'scheduleId' => $validated['schedule_id'],
+                    ]);
+                }
+            } else {
+                Log::warning('Player not found for Team A', ['playerNumber' => $playerNumber]);
+            }
+        }
+
+        // Calculate plus-minus for Team B
+        $plusMinusB = $teamBScore - $teamAScore;
+        Log::info('Calculating plus-minus for Team B', [
+            'scoreB' => $teamBScore,
+            'scoreA' => $teamAScore,
+            'plusMinusB' => $plusMinusB,
+            'startingPlayersB' => $startingPlayersB,
+        ]);
+
+        foreach ($startingPlayersB as $playerNumber) {
+            // Find the player ID by their number
+            $playerId = Players::where('number', $playerNumber)->pluck('id')->first(); // Fetch only the player ID
+
+            if ($playerId) { // Check if playerId is found
+                Log::info('Found player for Team B', ['playerId' => $playerId, 'playerNumber' => $playerNumber]);
+                
+                // Get the current player stat using player ID and schedule ID
+                $currentPlayerStat = PlayerStat::where('player_id', $playerId)
+                                                ->where('schedule_id', $validated['schedule_id'])
+                                                ->first();
+                
+                if ($currentPlayerStat) {
+                    Log::info('Updating player stat for Team B', [
+                        'playerStatId' => $currentPlayerStat->id,
+                        'oldPlusMinus' => $currentPlayerStat->plus_minus,
+                        'newPlusMinus' => $plusMinusB,
+                    ]);
+
+                    $currentPlayerStat->plus_minus = $plusMinusB;
+                    $currentPlayerStat->save();
+                } else {
+                    Log::warning('No player stat found for Team B', [
+                        'playerId' => $playerId,
+                        'scheduleId' => $validated['schedule_id'],
+                    ]);
+                }
+            } else {
+                Log::warning('Player not found for Team B', ['playerNumber' => $playerNumber]);
+            }
+        }
 
         return response()->json([
             'message' => 'Shot recorded successfully',

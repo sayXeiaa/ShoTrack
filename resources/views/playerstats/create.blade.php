@@ -509,6 +509,33 @@
         }
     }
 
+    function getStartingPlayers() {
+        const startingPlayers = {
+            teamA: [],
+            teamB: []
+        };
+
+        // Select the starting player boxes for Team A
+        const startingBoxesTeamA = document.querySelectorAll('#startingTeamA .player-box');
+        startingBoxesTeamA.forEach(box => {
+            const playerNumber = box.dataset.playerNumber;
+            if (playerNumber) {
+                startingPlayers.teamA.push(playerNumber);
+            }
+        });
+
+        // Select the starting player boxes for Team B
+        const startingBoxesTeamB = document.querySelectorAll('#startingTeamB .player-box');
+        startingBoxesTeamB.forEach(box => {
+            const playerNumber = box.dataset.playerNumber; 
+            if (playerNumber) {
+                startingPlayers.teamB.push(playerNumber);
+            }
+        });
+
+        return startingPlayers;
+    }
+
     function recordShot(result, type_of_stat) {
         const selectedPlayer = selectedBenchPlayer || selectedStartingPosition;
         let currentGameTime = document.getElementById('gameTime').textContent;
@@ -542,6 +569,7 @@
             // Update the score based on points
             recordScore(teamPlaceholder, points, scheduleId, quarter, currentGameTime);
         }
+        const startingPlayers = getStartingPlayers();
 
         console.log('Data being sent:', {
             playerNumber: playerNumber,
@@ -550,7 +578,8 @@
             quarter: quarter,
             type_of_stat: type_of_stat,
             result: result,
-            points: points
+            points: points,
+            startingPlayers: startingPlayers 
         });
 
         // Send player stats via AJAX
@@ -565,7 +594,8 @@
                 result: result,
                 schedule_id: scheduleId,
                 quarter: quarter,
-                game_time: currentGameTime
+                game_time: currentGameTime,
+                starting_players: startingPlayers
             },
             success: function(response) {
                 console.log('Shot recorded successfully:', response);

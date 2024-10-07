@@ -129,6 +129,7 @@ class ScheduleController extends Controller
         }
     
         $schedule->save();
+        $this->initializePlayerStats($schedule);
     
         return redirect()->route('schedules.index')->with('success', 'Game schedule added successfully.');
     }
@@ -364,4 +365,48 @@ class ScheduleController extends Controller
         ]);
     }
 
+    private function initializePlayerStats(Schedule $schedule)
+    {
+        // Get all players for Team 1
+        $team1Players = Players::where('team_id', $schedule->team1_id)->get();
+
+        // Get all players for Team 2
+        $team2Players = Players::where('team_id', $schedule->team2_id)->get();
+
+        // Initialize stats for Team 1 players
+        foreach ($team1Players as $player) {
+            PlayerStat::create([
+                'player_id' => $player->id,
+                'schedule_id' => $schedule->id,
+                'team_id' => $player->team_id,
+                'minutes' => 0,
+                'points' => 0,
+                'assists' => 0,
+                'rebounds' => 0,
+                'steals' => 0,
+                'blocks' => 0,
+                'turnovers' => 0,
+                'fouls' => 0,
+                'plus_minus' => 0,
+            ]);
+        }
+
+        // Initialize stats for Team 2 players
+        foreach ($team2Players as $player) {
+            PlayerStat::create([
+                'player_id' => $player->id,
+                'schedule_id' => $schedule->id,
+                'team_id' => $player->team_id,
+                'points' => 0,
+                'minutes' => 0,
+                'assists' => 0,
+                'rebounds' => 0,
+                'steals' => 0,
+                'blocks' => 0,
+                'turnovers' => 0,
+                'fouls' => 0,
+                'plus_minus' => 0,
+            ]);
+        }
+    }
 }

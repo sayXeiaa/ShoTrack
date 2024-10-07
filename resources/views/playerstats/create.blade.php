@@ -24,8 +24,8 @@
                                 <div class="bg-white p-4 rounded-lg shadow text-center">
                                     <h3 class="font-bold text-lg text-black">Pause/Start Time</h3>
                                     <div class="flex justify-center space-x-4 mt-2">
-                                        <button id="startButton" class="bg-blue-500 text-white p-2 rounded">Start</button>
-                                        <button id="pauseButton" class="bg-red-500 text-white p-2 rounded">Pause</button>
+                                        <button id="startButton" class="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded transition-transform transform hover:scale-105 focus:outline-none">Start</button>
+                                        <button id="pauseButton" class="bg-red-500 hover:bg-red-700 text-white p-2 rounded transition-transform transform hover:scale-105 focus:outline-none">Pause</button>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                 <!-- Starting Players for Team A -->
                                 <div class="flex flex-wrap justify-center gap-2" id="startingTeamA">
                                     @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center" 
+                                        <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center" 
                                             data-team="teamA" data-position="starting" data-index="{{ $i }}"
                                             data-player-number="{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}"
                                             onclick="selectPlayer(this)">
@@ -57,7 +57,7 @@
                                 <!-- Bench Players for Team A -->
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamA">
                                     @foreach ($benchPlayersTeamA as $player)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
+                                        <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamA" data-position="bench" data-player-number="{{ $player->number }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
@@ -86,7 +86,7 @@
                                 <!-- Starting Players for Team B -->
                                 <div class="flex flex-wrap justify-center gap-2" id="startingTeamB">
                                     @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
+                                        <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamB" data-position="starting" data-index="{{ $i }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ isset($startingPlayersTeamB[$i]) ? $startingPlayersTeamB[$i]->number : '' }}</p>
@@ -97,7 +97,7 @@
                                 <!-- Bench Players for Team B -->
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamB">
                                     @foreach ($benchPlayersTeamB as $player)
-                                        <div class="player-box bg-gray-500 text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
+                                        <div class="player-box bg-gray-500  hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
                                             data-team="teamB" data-position="bench" data-player-number="{{ $player->number }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
@@ -149,7 +149,12 @@
                                 <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Foul</button>
                             </div>
 
-                            <button type="submit" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Stats</button>
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <div class="col-span-3"></div> 
+                                <button type="submit" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-1 mt-20">
+                                    Save Stats
+                                </button>
+                            </div>                            
                         </form>
                     </div>
                 </div>

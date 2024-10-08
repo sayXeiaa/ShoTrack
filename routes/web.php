@@ -28,6 +28,7 @@ Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.
 Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
 Route::get('/teams-by-tournament', [TeamController::class, 'getByTournament'])->name('teams.by_tournament');
 Route::get('/team-stats', [TeamStatController::class, 'index'])->name('leaderboards.index');
+Route::get('/leaderboards/players', [PlayerStatsController::class, 'playerLeaderboard'])->name('leaderboards.players');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

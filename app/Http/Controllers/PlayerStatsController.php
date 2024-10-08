@@ -435,9 +435,12 @@ class PlayerStatsController extends Controller
         }
     }
     
-    public function show() 
+    public function show($id) 
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+    
+        // Pass the schedule to the view
+        return view('playerstats.create', compact('schedule'));
     }
     
 

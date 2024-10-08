@@ -97,7 +97,11 @@ function getInitials($teamName) {
                             <div class="flex space-x-2 -mt-8">
                                 <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
                                 <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">Manage Game</a>
+                                @if (!$schedule->is_completed)
+                                    <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
+                                        Manage Game
+                                    </a>
+                                @endif                            
                             </div>
                         @endcan
 

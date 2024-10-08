@@ -12,6 +12,7 @@ use App\Models\Score;
 use App\Models\PlayerStat;
 use App\models\Players;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
@@ -408,5 +409,63 @@ class ScheduleController extends Controller
                 'plus_minus' => 0,
             ]);
         }
+    }
+
+    public function updateTeamStats($scheduleId)
+    {
+        $schedule = Schedule::find($scheduleId);
+        
+        if ($schedule->is_completed) {
+            // Retrieve the total scores for each team in the schedule
+            $teamScores = Score::where('schedule_id', $scheduleId)
+                                ->select('team_id', DB::raw('SUM(score) as total_score'))
+                                ->groupBy('team_id')
+                                ->get();
+
+            if ($teamScores->count() !== 2) {
+                return "Invalid score data or teams missing"; // Handle edge cases (e.g., incomplete scores)
+            }
+
+            // Compare the scores between the two teams
+            $team1 = $teamScores->first();
+            $team2 = $teamScores->last(); 
+
+            // Find the corresponding teams from the teams table
+            $team1Model = Teams::find($team1->team_id);
+            $team2Model = Teams::find($team2->team_id);
+
+            // Determine the winner and update wins/losses
+            if ($team1->total_score > $team2->total_score) {
+                // Team 1 wins
+                $team1Model->wins += 1;
+                $team2Model->losses += 1;
+            } elseif ($team1->total_score < $team2->total_score) {
+                // Team 2 wins
+                $team2Model->wins += 1;
+                $team1Model->losses += 1;
+            } 
+
+            // Increment games played for both teams
+            $team1Model->games_played += 1;
+            $team2Model->games_played += 1;
+
+            // Save the updates to both teams
+            $team1Model->save();
+            $team2Model->save();
+        }
+    }
+
+    public function markAsCompleted(Request $request, $id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        $schedule->is_completed = $request->input('is_completed');
+        $schedule->save();
+
+        // Call updateTeamStats after marking the schedule as completed
+        if ($schedule->is_completed) {
+            $this->updateTeamStats($id);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

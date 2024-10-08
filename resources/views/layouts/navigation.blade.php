@@ -48,12 +48,31 @@
                     </x-nav-link>
                     
                     <x-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-white hover:text-blue-300">
-                        {{ __('Game Schedules') }}
+                        {{ __('Schedules') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('leaderboards.index')" :active="request()->routeIs('leaderboards.index')" class="text-white hover:text-blue-300">
-                        {{ __('Leaderboards') }}
-                    </x-nav-link>     
+                    {{-- Leaderboards Link with Hover Dropdown --}}
+                    <div x-data="{ open: false }" class="relative inline-block" @mouseover="open = true" @mouseleave="open = false">
+                        <x-nav-link class="text-white hover:text-blue-300 mt-5" @mouseover="open = true" @mouseleave="open = false">
+                            {{ __('Leaderboards') }}
+                        </x-nav-link>
+
+                        {{-- Dropdown Menu (appears on hover) --}}
+                        <div x-show="open" x-transition 
+                            class="absolute bg-white shadow-lg rounded-lg mt-2 py-2 w-48 z-10" 
+                            @mouseover="open = true" @mouseleave="open = false">
+                            {{-- <!-- Player Leaderboards  --}}
+                            <a href="{{ route('leaderboards.players') }}"
+                            class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
+                                {{ __('Player Leaderboards') }}
+                            </a>
+                            {{-- Team Leaderboards --}}
+                            <a href="{{ route('leaderboards.index') }}"
+                            class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
+                                {{ __('Team Leaderboards') }}
+                            </a>
+                        </div>
+                    </div>
                     
                     <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white hover:text-blue-300">
                         {{ __('Analytics') }}

@@ -104,6 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/schedules/store-game-time', [ScheduleController::class, 'storeGameTime'])->name('schedules.storeGameTime');
     Route::get('/getGameDetails/{scheduleId}', [ScheduleController::class, 'getGameDetails']);
     Route::get('/scores/{scheduleId}', [ScoreController::class, 'getScores'])->name('scores.get');
+    Route::post('/schedules/{id}/complete', [ScheduleController::class, 'markAsCompleted']);
 
     //Player Stats routes
     // Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');

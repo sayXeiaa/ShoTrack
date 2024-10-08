@@ -578,4 +578,71 @@ class PlayerStatsController extends Controller
         }
     }
 
+    public function playerLeaderboard(Request $request)
+    {
+        // Retrieve the selected tournament ID and category from the request
+        $tournamentId = $request->query('tournament_id');
+        $category = $request->query('category');
+    
+        // Fetch all tournaments to display in the filter
+        $tournaments = Tournaments::all();
+    
+        // Define the stats 
+        $stats = [
+            'points', 'assists', 'rebounds', 'blocks', 'steals', 
+            'personal_fouls', 'turnovers', 'free_throw_percentage', 
+            'turnover_ratio', 'free_throw_attempt_rate', 
+            'effective_field_goal_percentage', 'plus_minus', 
+            'two_pt_fg_attempt', 'two_pt_fg_made', 
+            'three_pt_fg_attempt', 'three_pt_fg_made'
+        ];
+    
+        // Initialize array to hold top players by stats
+        $topPlayersByStats = [];
+    
+        foreach ($stats as $stat) {
+            // Build the base query for fetching players with their average stats
+            $query = Players::select(
+                    'players.id', 
+                    'players.first_name', 
+                    'players.last_name', 
+                    'players.category', 
+                    'players.team_id', 
+                    'teams.team_acronym'
+                )
+                ->join('player_stats', 'players.id', '=', 'player_stats.player_id')
+                ->join('schedules', 'player_stats.schedule_id', '=', 'schedules.id')
+                ->join('teams', 'players.team_id', '=', 'teams.id')
+                ->groupBy(
+                    'players.id', 
+                    'players.first_name', 
+                    'players.last_name', 
+                    'players.category', 
+                    'players.team_id', 
+                    'teams.team_acronym'
+                )
+                ->selectRaw("AVG(player_stats.$stat) as average_$stat")
+                ->havingRaw("COUNT(DISTINCT player_stats.schedule_id) > 0");
+    
+            // Apply optional filters for tournament and category
+            if ($tournamentId) {
+                $query->where('schedules.tournament_id', $tournamentId);
+            }
+    
+            if ($category) {
+                $query->where('players.category', $category);
+            }
+    
+            // Fetch top 5 players for each stat
+            $topPlayersByStats[$stat] = $query
+                ->orderBy("average_$stat", 'desc')
+                ->take(5)
+                ->get();
+        }
+    
+        return view('leaderboards.players', compact('tournaments', 'topPlayersByStats'));
+    }
+    
+
+
 }

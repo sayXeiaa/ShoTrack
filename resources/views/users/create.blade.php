@@ -17,7 +17,7 @@
                         <div>
                             <label for="" class="text-lg font-medium">Name</label>
                             <div class="my-3">
-                                <input value="{{ old('name') }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('name') }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -25,7 +25,7 @@
 
                             <label for="" class="text-lg font-medium">Email</label>
                             <div class="my-3">
-                                <input value="{{ old('email') }}"name="email" placeholder="Enter Email" type="text" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('email') }}"name="email" placeholder="Enter Email" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('email')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -33,7 +33,7 @@
 
                             <label for="" class="text-lg font-medium">Password</label>
                             <div class="my-3">
-                                <input value="{{ old('password') }}"name="password" placeholder="Enter Password" type="password" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('password') }}"name="password" placeholder="Enter Password" type="password" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('password')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -41,7 +41,7 @@
 
                             <label for="" class="text-lg font-medium">Confirm Password</label>
                             <div class="my-3">
-                                <input value="{{ old('confirm_password') }}"name="confirm_password" placeholder="Confirm Your Password" type="password" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('confirm_password') }}"name="confirm_password" placeholder="Confirm Your Password" type="password" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('confirm_password')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -57,7 +57,7 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <button class="bg-slate-700  hover:bg-slate-500 text-sm rounded-md text-white px-5 py-3">Create</button>
+                            <button class="bg-slate-700  hover:bg-slate-500 text-sm rounded-md text-white px-5 py-3 mt-5">Create</button>
                         </div>
                     </form>
                 </div>

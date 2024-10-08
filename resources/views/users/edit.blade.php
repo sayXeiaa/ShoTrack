@@ -17,7 +17,7 @@
                         <div>
                             <label for="" class="text-lg font-medium">Name</label>
                             <div class="my-3">
-                                <input value="{{ old('name', $user->name) }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('name', $user->name) }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -25,7 +25,7 @@
 
                             <label for="" class="text-lg font-medium">Email</label>
                             <div class="my-3">
-                                <input value="{{ old('email', $user->email) }}"name="email" placeholder="Enter Email" type="text" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('email', $user->email) }}"name="email" placeholder="Enter Email" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 @error('email')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -41,7 +41,7 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <button class="bg-slate-700  hover:bg-slate-500 text-sm rounded-md text-white px-5 py-3">Update</button>
+                            <button class="bg-slate-700  hover:bg-slate-500 text-sm rounded-md text-white px-5 py-3 mt-5">Update</button>
                         </div>
                     </form>
                 </div>

@@ -17,7 +17,7 @@
                         <div>
                             <label for="" class="text-lg font-medium">Name</label>
                             <div class="my-3">
-                                <input value="{{ old('name') }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm w-1/>2 rounded-lg">
+                                <input value="{{ old('name') }}"name="name" placeholder="Enter Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 30ch;">
                                 @error('name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror

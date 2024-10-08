@@ -151,7 +151,7 @@
 
                             <div class="mb-4 grid grid-cols-4 gap-4">
                                 <div class="col-span-3"></div> 
-                                <button type="submit" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-1 mt-20">
+                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-1 mt-20" onclick="markGameAsCompleted()">
                                     Save Stats
                                 </button>
                             </div>                            
@@ -203,8 +203,19 @@
             width: 60vh;
         }  
 
+        .okButton {
+            background-color: #314795; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+        }
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
 
@@ -774,5 +785,38 @@
         // setInterval(loadPlayByPlay, 5000); // Reload every 5 seconds
     });
 
+    function markGameAsCompleted() {
+        const scheduleId = getCurrentScheduleId(); 
+
+        fetch(`/schedules/${scheduleId}/complete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ is_completed: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "Game marked as finished!",
+                    icon: "success",
+                    confirmButtonText: "OK", 
+                    customClass: {
+                        confirmButton: 'okButton'
+                    }
+                }).then(() => {
+                    // Redirect after the alert is closed
+                    window.location.href = '{{ route("schedules.index") }}';
+                });
+            } else {
+                alert('Failed to mark game as finished.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
     </script>
 </x-app-layout>

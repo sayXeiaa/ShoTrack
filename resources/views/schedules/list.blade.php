@@ -55,17 +55,17 @@ function getInitials($teamName) {
                         </div>
 
                         <!-- Scores Box -->
-                        <div class="mt-[-6rem] flex justify-end"> <!-- Changed from mt-2 to mt-0 to remove top margin -->
-                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2 w-full max-w-sm"> <!-- Adjusted max-width and padding for scores box -->
+                        <div class="mt-[-6rem] flex justify-end"> 
+                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2 w-full max-w-sm"> 
                                 <div class="text-center">
-                                    <div class="grid grid-cols-6 gap-1"> <!-- Reduced gap between columns -->
+                                    <div class="grid grid-cols-6 gap-1">
                                         <!-- Team Names Column -->
                                         <div class="font-bold"></div> <!-- Empty for Quarter Labels Alignment -->
                                         <div class="font-bold">1</div>
                                         <div class="font-bold">2</div>
                                         <div class="font-bold">3</div>
                                         <div class="font-bold">4</div>
-                                        <div class="font-bold">Final</div> <!-- New Final Score Column -->
+                                        <div class="font-bold">Final</div> 
 
                                         <!-- Team 1 Initials -->
                                         <div class="font-bold">{{ getInitials($schedule->team1->name) }}</div>
@@ -93,17 +93,19 @@ function getInitials($teamName) {
                             </a>
                         </div>
 
-                        @can('edit schedule')
                             <div class="flex space-x-2 -mt-8">
+                                @can ('edit schedules')
                                 <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
                                 <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                                @endcan
+                                @can ('manage statistics')
                                 @if (!$schedule->is_completed)
                                     <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
                                         Manage Game
                                     </a>
-                                @endif                            
+                                @endif       
+                                @endcan 
                             </div>
-                        @endcan
 
                     </div>
                 @endforeach

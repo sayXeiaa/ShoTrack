@@ -29,11 +29,11 @@
                     </x-nav-link>
                     @endcan
 
-                    {{-- @can('view users') --}}
+                    @can('view users')
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:text-blue-300">
                         {{ __('Users') }}
                     </x-nav-link>
-                    {{-- @endcan --}}
+                    @endcan
 
                     <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-white hover:text-blue-300">
                         {{ __('Tournaments') }}
@@ -74,9 +74,11 @@
                         </div>
                     </div>
                     
+                    @can ('view analytics')
                     <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white hover:text-blue-300">
                         {{ __('Analytics') }}
                     </x-nav-link>     
+                    @endcan
                 </div>
             </div>
 

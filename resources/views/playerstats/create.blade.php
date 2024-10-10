@@ -162,7 +162,7 @@
                 <div class="parent-container" >
                     <div class="bg-gray-100 p-6 rounded-lg border border-gray-400 shadow-md flex flex-col h-full">
                         <div class="mb-6 text-center">
-                            <h2 class="font-semibold text-xl text-black leading-tight">Live Player Statistics</h2>
+                            <h2 class="font-semibold text-xl text-black leading-tight">Live Play-By-Play Statistics</h2>
                             <hr class="border-gray-300 border-t-2 mt-2">
                         </div>
                         <div id="live-statistics" class="flex-1 mt-4 overflow-y-auto">

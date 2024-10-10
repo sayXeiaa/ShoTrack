@@ -89,7 +89,6 @@ Route::middleware('auth')->group(function () {
 
     
     //player stats routes
-    Route::get('/playerstats', [PlayerStatsController::class,'index'])->name('playerstats.index');
     Route::get('/playerstats/create', [PlayerStatsController::class, 'create'])->name('playerstats.create');
     Route::post('/playerstats', [PlayerStatsController::class, 'store'])->name('playerstats.store');
 

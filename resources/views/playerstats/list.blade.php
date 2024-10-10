@@ -82,7 +82,9 @@
                                         <th class="border px-4 py-2">PF</th>
                                         <th class="border px-4 py-2">PTS</th>
                                         <th class="border px-4 py-2">+/–</th>
+                                        @can('edit statistics')
                                         <th class="px-6 py-3 text-center" width="180">Action</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -134,11 +136,12 @@
                                         <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                         <td class="border px-4 py-2">{{ $stat->points }}</td>
                                         <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
+                                        @can ('edit statistics')
                                         <td class="px-6 py-3 text-center">
                                             <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
                                             <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
                                         </td>
-                                        
+                                        @endcan
                                         
                                     </tr>
                                     @endforeach
@@ -176,9 +179,11 @@
                                         <td class="border px-4 py-2">0</td> 
                                         <td class="border px-4 py-2">0</td>
                                         <td class="border px-4 py-2">0</td> 
+                                        @can ('edit statistics')
                                         <td class="px-6 py-3 text-center">
                                             <a href="{{ route('playerstats.edit', ['id' => $player->id]) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600">Edit</a>
                                         </td>
+                                        @endcan
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -220,7 +225,9 @@
                                             <th class="border px-4 py-2">PF</th>
                                             <th class="border px-4 py-2">PTS</th>
                                             <th class="border px-4 py-2">+/–</th>
+                                            @can ('edit statistics')
                                             <th class="px-6 py-3 text-center" width="180">Action</th>
+                                            @endcan
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -272,10 +279,12 @@
                                             <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                             <td class="border px-4 py-2">{{ $stat->points }}</td>
                                             <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
+                                            @can ('edit statistics')
                                             <td class="px-6 py-3 text-center">
                                                 <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
                                                 <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
                                             </td>
+                                            @endcan
                                         </tr>
                                         @endforeach
                                     
@@ -312,9 +321,11 @@
                                             <td class="border px-4 py-2">0</td> 
                                             <td class="border px-4 py-2">0</td> 
                                             <td class="border px-4 py-2">0</td>
+                                            @can ('edit statistics')
                                             <td class="px-6 py-3 text-center">
                                                 <a href="{{ route('playerstats.edit', ['id' => $player->id]) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600">Edit</a>
                                             </td>
+                                            @endcan
                                         </tr>
                                         @endforeach
                                     </tbody>

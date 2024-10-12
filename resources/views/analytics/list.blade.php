@@ -3275,8 +3275,6 @@
     basicStatsButton.click();
 });
 
-
-
             document.querySelectorAll('.nav-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     // Remove active class from all buttons (resets them to default state)

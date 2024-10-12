@@ -330,88 +330,59 @@ class PlayerStatsController extends Controller
 
         TeamStat::updateStatsForTeam($player->team_id, $schedule->id);
 
-        $startingPlayersA = $validated['starting_players']['teamA'] ?? []; // Player IDs for Team A
-        $startingPlayersB = $validated['starting_players']['teamB'] ?? []; // Player IDs for Team B
+        $teamAId = $schedule->team1_id; 
+        $teamBId = $schedule->team2_id;
+
+        $shootingTeamId = $validated['team'];
+
+        // Determine the actual shooting team ID
+        $actualShootingTeamId = ($shootingTeamId == "1") ? $teamAId : (($shootingTeamId == "2") ? $teamBId : null);
         
-        // Calculate plus-minus for Team A
-        $plusMinusA = $teamAScore - $teamBScore;
-        Log::info('Calculating plus-minus for Team A', [
-            'scoreA' => $teamAScore,
-            'scoreB' => $teamBScore,
-            'plusMinusA' => $plusMinusA,
-            'startingPlayersA' => $startingPlayersA,
-        ]);
-
-        foreach ($startingPlayersA as $playerNumber) {
-            // Find the player id by their number
-            $playerId = Players::where('number', $playerNumber)->pluck('id')->first(); // Fetch only the player ID
-
-            if ($playerId) { // Check if player id is found
-                Log::info('Found player for Team A', ['playerId' => $playerId, 'playerNumber' => $playerNumber]);
-                
-                // Get the current player stat using player id and schedule id
-                $currentPlayerStat = PlayerStat::where('player_id', $playerId)
-                                                ->where('schedule_id', $validated['schedule_id'])
-                                                ->first();
-                
-                if ($currentPlayerStat) {
-                    Log::info('Updating player stat for Team A', [
-                        'playerStatId' => $currentPlayerStat->id,
-                        'oldPlusMinus' => $currentPlayerStat->plus_minus,
-                        'newPlusMinus' => $plusMinusA,
-                    ]);
-
-                    $currentPlayerStat->plus_minus = $plusMinusA;
-                    $currentPlayerStat->save();
-                } else {
-                    Log::warning('No player stat found for Team A', [
-                        'playerId' => $playerId,
-                        'scheduleId' => $validated['schedule_id'],
-                    ]);
-                }
-            } else {
-                Log::warning('Player not found for Team A', ['playerNumber' => $playerNumber]);
-            }
+        if ($actualShootingTeamId === null) {
+            return response()->json(['error' => 'Invalid team ID provided.'], 400);
         }
-
-        // Calculate plus-minus for Team B
-        $plusMinusB = $teamBScore - $teamAScore;
-        Log::info('Calculating plus-minus for Team B', [
-            'scoreB' => $teamBScore,
-            'scoreA' => $teamAScore,
-            'plusMinusB' => $plusMinusB,
-            'startingPlayersB' => $startingPlayersB,
-        ]);
-
-        foreach ($startingPlayersB as $playerNumber) {
-            // Find the player ID by their number
-            $playerId = Players::where('number', $playerNumber)->pluck('id')->first(); // Fetch only the player ID
-
-            if ($playerId) { // Check if playerId is found
-                Log::info('Found player for Team B', ['playerId' => $playerId, 'playerNumber' => $playerNumber]);
-                
-                // Get the current player stat using player ID and schedule ID
-                $currentPlayerStat = PlayerStat::where('player_id', $playerId)
-                                                ->where('schedule_id', $validated['schedule_id'])
-                                                ->first();
-                
-                if ($currentPlayerStat) {
-                    Log::info('Updating player stat for Team B', [
-                        'playerStatId' => $currentPlayerStat->id,
-                        'oldPlusMinus' => $currentPlayerStat->plus_minus,
-                        'newPlusMinus' => $plusMinusB,
-                    ]);
-
-                    $currentPlayerStat->plus_minus = $plusMinusB;
-                    $currentPlayerStat->save();
-                } else {
-                    Log::warning('No player stat found for Team B', [
-                        'playerId' => $playerId,
-                        'scheduleId' => $validated['schedule_id'],
-                    ]);
+        
+        // Determine opposing team ID
+        $opposingTeamId = ($actualShootingTeamId == $teamAId) ? $teamBId : $teamAId;
+        
+        $pointsScored = 0;
+        
+        // Determine points scored based on the type of stat
+        if ($validated['result'] === 'made') {
+            if ($validated['type_of_stat'] === 'two_point') {
+                $pointsScored = 2; 
+            } elseif ($validated['type_of_stat'] === 'three_point') {
+                $pointsScored = 3; 
+            } elseif ($validated['type_of_stat'] === 'free_throw') {
+                $pointsScored = 1; 
+            }
+        
+            // Update plus-minus for the offensive team
+            $startingPlayersOffensive = $validated['starting_players'][$shootingTeamId == "1" ? 'teamA' : 'teamB'] ?? [];
+            
+            foreach ($startingPlayersOffensive as $playerNumber) {
+                $playerId = Players::where('number', $playerNumber)->where('team_id', $actualShootingTeamId)->pluck('id')->first();
+                if ($playerId) {
+                    $currentPlayerStat = PlayerStat::where('player_id', $playerId)->where('schedule_id', $validated['schedule_id'])->first();
+                    if ($currentPlayerStat) {
+                        $currentPlayerStat->plus_minus += $pointsScored; // Add points to plus-minus for scoring team
+                        $currentPlayerStat->save();
+                    }
                 }
-            } else {
-                Log::warning('Player not found for Team B', ['playerNumber' => $playerNumber]);
+            }
+        
+            // Update plus-minus for the defensive team
+            $startingPlayersDefensive = $validated['starting_players'][$opposingTeamId == $teamAId ? 'teamA' : 'teamB'] ?? [];
+            
+            foreach ($startingPlayersDefensive as $playerNumber) {
+                $playerId = Players::where('number', $playerNumber)->where('team_id', $opposingTeamId)->pluck('id')->first();
+                if ($playerId) {
+                    $currentPlayerStat = PlayerStat::where('player_id', $playerId)->where('schedule_id', $validated['schedule_id'])->first();
+                    if ($currentPlayerStat) {
+                        $currentPlayerStat->plus_minus -= $pointsScored; // Subtract points from plus-minus for defending team
+                        $currentPlayerStat->save();
+                    }
+                }
             }
         }
 

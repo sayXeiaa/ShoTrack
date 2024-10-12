@@ -55,8 +55,8 @@
 
         <div class="space-y-4">
             <div id="basicstatsA"
-                class="content-section space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
-                <div id="team1NameDisplayA" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No team
+                class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+                <div id="team1NameDisplayA" class="text-gray-900 text-2xl leading-none font-bold">No team
                     selected</div>
                 <!-- Add overflow-x-auto here for horizontal scrolling -->
                 <div class="overflow-x-auto mt-4">
@@ -318,9 +318,9 @@
             </div>
 
             <div id="advstatsA"
-                class="content-section space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+                class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
 
-                <div id="team1NameDisplayB" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No
+                <div id="team1NameDisplayB" class="text-gray-900 text-2xl leading-none font-bold">No
                     team
                     selected</div>
 
@@ -395,8 +395,8 @@
 
 
             <div id="basicstatsB"
-                class="content-section space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
-                <div id="team2NameDisplayA" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No
+                class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+                <div id="team2NameDisplayA" class="text-gray-900 text-2xl leading-none font-bold">No
                     team
                     selected</div>
 
@@ -690,8 +690,8 @@
             </div>
 
             <div id="advstatsB"
-                class="content-section space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
-                <div id="team2NameDisplayB" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No
+                class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+                <div id="team2NameDisplayB" class="text-gray-900 text-2xl leading-none font-bold">No
                     team
                     selected</div>
 

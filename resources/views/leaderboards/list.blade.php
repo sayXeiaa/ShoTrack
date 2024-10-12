@@ -93,7 +93,9 @@
                                             <td>{{ $latestStats->games_played ?? 0 }}</td>
                                             <td>{{ $latestStats->wins ?? 0 }}</td>
                                             <td>{{ $latestStats->losses ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->minutes ?? 0 }}</td>
+                                            <td class="border px-4 py-2">
+                                                {{ floor($latestStats->minutes / 60) }}:{{ str_pad($latestStats->minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                            </td>                                            
                                             <td class="border px-4 py-2">{{ $totalFGM }}</td>
                                             <td class="border px-4 py-2">{{ $totalFGA }}</td>
                                             <td class="border px-4 py-2">{{ number_format($totalFGP, 1) }}%</td>

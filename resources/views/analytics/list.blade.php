@@ -42,9 +42,9 @@
 
         
 <div class="space-y-4">
-    <div class="space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+    <div class="space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
 
-            <div id="team1NameDisplay" class="text-blacktext-2xl leading-none font-bold">No team
+            <div id="team1NameDisplay" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No team
                 selected</div>
 
 
@@ -54,11 +54,11 @@
             <div class="overflow-x-auto mt-4">
                 <div class="flex space-x-4 w-max mb-4">
                     <!-- Points Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Points</p>
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Points</p>
                                 </div>
                             </div>
                         </div>
@@ -66,11 +66,11 @@
                     </div>
 
                     <!-- Assists Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Assists</p>
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Assists</p>
                                 </div>
                             </div>
                         </div>
@@ -78,11 +78,11 @@
                     </div>
 
                     <!-- Rebounds Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Rebounds
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Rebounds
                                     </p>
                                 </div>
                             </div>
@@ -91,11 +91,11 @@
                     </div>
 
                     <!-- Steals Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Steals</p>
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Steals</p>
                                 </div>
                             </div>
                         </div>
@@ -103,11 +103,11 @@
                     </div>
 
                     <!-- Blocks Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Blocks</p>
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Blocks</p>
                                 </div>
                             </div>
                         </div>
@@ -115,11 +115,11 @@
                     </div>
 
                     <!-- Personal Fouls Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Personal
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Personal
                                         Fouls
                                     </p>
                                 </div>
@@ -129,11 +129,11 @@
                     </div>
 
                     <!-- Turnovers Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadowp-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Turnovers
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Turnovers
                                     </p>
                                 </div>
                             </div>
@@ -142,11 +142,11 @@
                     </div>
 
                     <!-- Offensive Rebounds Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Offensive
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Offensive
                                         Rebounds</p>
                                 </div>
                             </div>
@@ -155,11 +155,11 @@
                     </div>
 
                     <!-- Defensive Rebounds Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Defensive
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Defensive
                                         Rebounds</p>
                                 </div>
                             </div>
@@ -168,11 +168,11 @@
                     </div>
 
                     <!-- Two Point FG Attempt Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Two Point
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two Point
                                         FG
                                         Attempt</p>
                                 </div>
@@ -182,11 +182,11 @@
                     </div>
 
                     <!-- Two Point FG Made Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Two Point
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two Point
                                         FG
                                         Made</p>
                                 </div>
@@ -196,11 +196,11 @@
                     </div>
 
                     <!-- Three Point FG Attempt Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Three Point
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three Point
                                         FG
                                         Attempt</p>
                                 </div>
@@ -210,11 +210,11 @@
                     </div>
 
                     <!-- Three Point FG Made Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Three Point
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three Point
                                         FG
                                         Made</p>
                                 </div>
@@ -224,11 +224,11 @@
                     </div>
 
                     <!-- Two Point Percentage Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Two Point
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two Point
                                         Percentage</p>
                                 </div>
                             </div>
@@ -237,11 +237,11 @@
                     </div>
 
                     <!-- Three Point Percentage Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Three
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three
                                         Point
                                         Percentage</p>
                                 </div>
@@ -251,11 +251,11 @@
                     </div>
 
                     <!-- Free Throw Attempt Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Free Throw
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free Throw
                                         Attempt</p>
                                 </div>
                             </div>
@@ -264,11 +264,11 @@
                     </div>
 
                     <!-- Free Throw Made Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Free Throw
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free Throw
                                         Made</p>
                                 </div>
                             </div>
@@ -277,11 +277,11 @@
                     </div>
 
                     <!-- Free Throw Percentage Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Free Throw
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free Throw
                                         Percentage</p>
                                 </div>
                             </div>
@@ -290,11 +290,11 @@
                     </div>
 
                     <!-- Free Throw Attempt Rate Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Free Throw
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free Throw
                                         Attempt Rate</p>
                                 </div>
                             </div>
@@ -303,11 +303,11 @@
                     </div>
 
                     <!-- Plus-Minus Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Plus-Minus
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Plus-Minus
                                     </p>
                                 </div>
                             </div>
@@ -316,11 +316,11 @@
                     </div>
 
                     <!-- Effective FG Percentage Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Effective
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Effective
                                         FG
                                         Percentage</p>
                                 </div>
@@ -330,11 +330,11 @@
                     </div>
 
                     <!-- Turnover Ratio Box -->
-                    <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                    <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                         <div class="flex justify-between mb-5">
                             <div class="grid gap-4 grid-cols-2">
                                 <div>
-                                    <p class=" dark:text-white text-2xl leading-none font-bold">Turnover
+                                    <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Turnover
                                         Ratio
                                     </p>
                                 </div>
@@ -347,8 +347,8 @@
         </div>
 
 
-        <div class="space-y-4 bg-white-400  border-2 border-gray-300 rounded-lg shadow-xl p-4">
-            <div id="team2NameDisplay" class="text-blacktext-2xl leading-none font-bold">No team
+        <div class="space-y-4 bg-white-400 dark:bg-gray-900 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+            <div id="team2NameDisplay" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">No team
                 selected</div>
 
 
@@ -362,11 +362,11 @@
                     <div class="overflow-x-auto">
                         <div class="flex space-x-4 w-max">
                             <!-- Points Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Points</p>
                                         </div>
                                     </div>
@@ -375,11 +375,11 @@
                             </div>
 
                             <!-- Assists Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadowp-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Assists
                                             </p>
                                         </div>
@@ -389,11 +389,11 @@
                             </div>
 
                             <!-- Rebounds Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Rebounds
                                             </p>
                                         </div>
@@ -403,11 +403,11 @@
                             </div>
 
                             <!-- Steals Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Steals</p>
                                         </div>
                                     </div>
@@ -416,11 +416,11 @@
                             </div>
 
                             <!-- Blocks Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Blocks</p>
                                         </div>
                                     </div>
@@ -429,11 +429,11 @@
                             </div>
 
                             <!-- Personal Fouls Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Personal
                                                 Fouls
                                             </p>
@@ -444,11 +444,11 @@
                             </div>
 
                             <!-- Turnovers Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Turnovers
                                             </p>
                                         </div>
@@ -458,11 +458,11 @@
                             </div>
 
                             <!-- Offensive Rebounds Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Offensive
                                                 Rebounds</p>
                                         </div>
@@ -472,11 +472,11 @@
                             </div>
 
                             <!-- Defensive Rebounds Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Defensive
                                                 Rebounds</p>
                                         </div>
@@ -486,11 +486,11 @@
                             </div>
 
                             <!-- Two Point FG Attempt Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Two Point
                                                 FG
                                                 Attempt</p>
@@ -501,11 +501,11 @@
                             </div>
 
                             <!-- Two Point FG Made Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Two Point
                                                 FG
                                                 Made</p>
@@ -516,11 +516,11 @@
                             </div>
 
                             <!-- Three Point FG Attempt Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Three
                                                 Point FG
                                                 Attempt</p>
@@ -531,11 +531,11 @@
                             </div>
 
                             <!-- Three Point FG Made Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Three
                                                 Point FG
                                                 Made</p>
@@ -546,11 +546,11 @@
                             </div>
 
                             <!-- Two Point Percentage Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Two Point
                                                 Percentage</p>
                                         </div>
@@ -560,11 +560,11 @@
                             </div>
 
                             <!-- Three Point Percentage Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Three
                                                 Point
                                                 Percentage</p>
@@ -575,11 +575,11 @@
                             </div>
 
                             <!-- Free Throw Attempt Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Free Throw
                                                 Attempt</p>
                                         </div>
@@ -589,11 +589,11 @@
                             </div>
 
                             <!-- Free Throw Made Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Free Throw
                                                 Made</p>
                                         </div>
@@ -603,11 +603,11 @@
                             </div>
 
                             <!-- Free Throw Percentage Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Free Throw
                                                 Percentage</p>
                                         </div>
@@ -617,11 +617,11 @@
                             </div>
 
                             <!-- Free Throw Attempt Rate Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadowp-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Free Throw
                                                 Attempt Rate</p>
                                         </div>
@@ -631,11 +631,11 @@
                             </div>
 
                             <!-- Plus-Minus Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Plus-Minus
                                             </p>
                                         </div>
@@ -645,11 +645,11 @@
                             </div>
 
                             <!-- Effective FG Percentage Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Effective
                                                 FG
                                                 Percentage</p>
@@ -660,11 +660,11 @@
                             </div>
 
                             <!-- Turnover Ratio Box -->
-                            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+                            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                                 <div class="flex justify-between mb-5">
                                     <div class="grid gap-4 grid-cols-2">
                                         <div>
-                                            <p class=" dark:text-white text-2xl leading-none font-bold">
+                                            <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
                                                 Turnover
                                                 Ratio
                                             </p>
@@ -743,9 +743,9 @@
 
                                     // Update the divs with team names
                                     $('#team1NameDisplay').text(teamAName ? teamAName :
-                                        ''); 
+                                        ''); // Assuming the div has an ID of team1NameDisplay
                                     $('#team2NameDisplay').text(teamBName ? teamBName :
-                                        ''); 
+                                        ''); // Assuming the div has an ID of team2NameDisplay
                                 });
 
 
@@ -765,12 +765,12 @@
                                         .then(data => {
                                             const points = data.points;
                                             const playerNames = data
-                                                .playerNames; 
+                                                .playerNames; // Use playerNames instead of playerIds
 
                                             const options = {
                                                 chart: {
                                                     height: 300, // Set a fixed height in pixels
-                                                    width: "100%", 
+                                                    width: "100%", // You can use percentage for width if the container is responsive
                                                     type: "line",
                                                     fontFamily: "Inter, sans-serif",
                                                     dropShadow: {
@@ -797,7 +797,7 @@
                                                     },
                                                 },
                                                 responsive: [{
-                                                    breakpoint: 1000, 
+                                                    breakpoint: 1000, // Add responsive behavior for smaller screens
                                                     options: {
                                                         chart: {
                                                             height: 250, // Adjust height for smaller devices

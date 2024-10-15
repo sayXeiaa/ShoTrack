@@ -197,7 +197,6 @@ class TeamStat extends Model
 
     public static function getOpponentDefensiveRebounds($teamId, $scheduleId)
     {
-        // Assuming you have a Schedule model with a relation to teams
         $schedule = Schedule::find($scheduleId);
         if (!$schedule) {
             return 0; // Return 0 if schedule is not found
@@ -214,7 +213,6 @@ class TeamStat extends Model
 
     public static function getOpponentOffensiveRebounds($teamId, $scheduleId)
     {
-        // Assuming you have a Schedule model with a relation to teams
         $schedule = Schedule::find($scheduleId);
         if (!$schedule) {
             return 0; // Return 0 if schedule is not found

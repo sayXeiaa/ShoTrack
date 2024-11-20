@@ -21,9 +21,12 @@
                                 <select name="tournament_id" id="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Tournament</option>
                                     @foreach($tournaments as $tournament)
-                                        <option value="{{ $tournament->id }}" data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}" {{ $tournament->id == $team->tournament_id ? 'selected' : '' }}>
-                                            {{ $tournament->name }}
-                                        </option>                                    
+                                    <option value="{{ $tournament->id }}" 
+                                        data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}" 
+                                        data-tournament-type="{{ $tournament->tournament_type }}"
+                                        {{ $tournament->id == $team->tournament_id ? 'selected' : '' }}>
+                                        {{ $tournament->name }}
+                                    </option>                                
                                     @endforeach
                                 </select>
                                 @error('tournament_id')
@@ -53,14 +56,6 @@
                                 @enderror
                             </div>
 
-                            <label for="team_acronym" class="text-lg font-medium">Team Acronym</label>
-                            <div class="my-3">
-                                <input value="{{ old('team_acronym', $team->team_acronym) }}" name="team_acronym" placeholder="Enter Shortened Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('team_acronym')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
                             <label for="head_coach_name" class="text-lg font-medium">Team Head Coach</label>
                             <div class="my-3">
                                 <input value="{{ old('head_coach_name', $team->head_coach_name) }}" name="head_coach_name" placeholder="Enter Coach Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -69,28 +64,38 @@
                                 @enderror
                             </div>
 
-                            <label for="school_president" class="text-lg font-medium">School President</label>
-                            <div class="my-3">
-                                <input value="{{ old('school_president', $team->school_president) }}" name="school_president" placeholder="Enter School President Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('school_president')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            <div id="school-fields" style="display: none;">
+                                <label for="team_acronym" class="text-lg font-medium">Team Acronym</label>
+                                <div class="my-3">
+                                    <input value="{{ old('team_acronym', $team->team_acronym) }}" name="team_acronym" placeholder="Enter Shortened Team Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    @error('team_acronym')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                            <label for="sports_director" class="text-lg font-medium">Sports Director</label>
-                            <div class="my-3">
-                                <input value="{{ old('sports_director', $team->sports_director) }}" name="sports_director" placeholder="Enter Sports Director Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('sports_director')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <label for="years_playing_in_bucal" class="text-lg font-medium">Years Playing in BUCAL</label>
-                            <div class="my-3">
-                                <input value="{{ old('years_playing_in_bucal', $team->years_playing_in_bucal) }}" name="years_playing_in_bucal" placeholder="Enter the number of years playing in BUCAL" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('years_playing_in_bucal"')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
+                                <label for="school_president" class="text-lg font-medium">School President</label>
+                                <div class="my-3">
+                                    <input value="{{ old('school_president', $team->school_president) }}" name="school_president" placeholder="Enter School President Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    @error('school_president')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            
+                                <label for="sports_director" class="text-lg font-medium">Sports Director</label>
+                                <div class="my-3">
+                                    <input value="{{ old('sports_director', $team->sports_director) }}" name="sports_director" placeholder="Enter Sports Director Name" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    @error('sports_director')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            
+                                <label for="years_playing_in_bucal" class="text-lg font-medium">Years Playing in BUCAL</label>
+                                <div class="my-3">
+                                    <input value="{{ old('years_playing_in_bucal', $team->years_playing_in_bucal) }}" name="years_playing_in_bucal" placeholder="Enter the number of years playing in BUCAL" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    @error('years_playing_in_bucal')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <label for="address" class="text-lg font-medium">Address</label>
                             <div class="my-3">
@@ -154,16 +159,30 @@
 
         // Initialize category field visibility based on the current tournament
         document.addEventListener('DOMContentLoaded', function() {
-            var tournamentSelect = document.getElementById('tournament_id');
-            var selectedOption = tournamentSelect.querySelector('option[selected]');
-            var hasCategories = selectedOption ? selectedOption.getAttribute('data-has-categories') === 'true' : false;
-            var categoryField = document.getElementById('category-field');
+    var tournamentSelect = document.getElementById('tournament_id');
+    var categoryField = document.getElementById('category-field');
+    var schoolFields = document.getElementById('school-fields');
 
-            if (hasCategories) {
-                categoryField.style.display = 'block'; // Show category field if tournament has categories
-            } else {
-                categoryField.style.display = 'none'; // Hide category field if tournament does not have categories
-            }
-        });
+    // Define a function to update the visibility of the fields based on the selected tournament option
+    function updateFieldVisibility() {
+        var selectedOption = tournamentSelect.selectedOptions[0];
+        var hasCategories = selectedOption ? selectedOption.getAttribute('data-has-categories') === 'true' : false;
+        var tournamentType = selectedOption ? selectedOption.getAttribute('data-tournament-type') : '';
+
+        // Show/hide the category field based on `has_categories`
+        categoryField.style.display = hasCategories ? 'block' : 'none';
+
+        // Show/hide the school-specific fields based on tournament type
+        schoolFields.style.display = (tournamentType === 'school') ? 'block' : 'none';
+    }
+
+    // Trigger the visibility update on page load
+    updateFieldVisibility();
+
+    // Listen for changes to the tournament selection
+    tournamentSelect.addEventListener('change', updateFieldVisibility);
+});
+
     </script>
+    
 </x-app-layout>

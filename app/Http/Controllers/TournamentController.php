@@ -38,6 +38,8 @@ class TournamentController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'has_categories' => 'required|boolean',
+            'tournament_type' => 'required|in:school,non-school',
+            'tournament_location' => 'nullable|string|max:255',
         ]);
 
         if ($validator->passes()){
@@ -47,6 +49,8 @@ class TournamentController extends Controller
             $tournament->description =$request->description;
             $tournament->start_date = $request->start_date;
             $tournament->end_date = $request->end_date;
+            $tournament->tournament_type = $request->tournament_type;
+            $tournament->tournament_location = $request->tournament_location;
             $tournament->save();
 
             return redirect()->route('tournaments.index')->with('success', 'Tournament added successfully.');
@@ -80,6 +84,8 @@ class TournamentController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'has_categories' => 'required|boolean',
+            'tournament_type' => 'required|in:school,non-school',
+            'tournament_location' => 'nullable|string|max:255',
         ]);
 
         if ($validator->passes()){
@@ -88,6 +94,8 @@ class TournamentController extends Controller
             $tournament->start_date = $request->start_date;
             $tournament->end_date = $request->end_date;
             $tournament->has_categories = $request->input('has_categories', false);
+            $tournament->tournament_type = $request->tournament_type;
+            $tournament->tournament_location = $request->tournament_location;
             $tournament->save();
 
             return redirect()->route('tournaments.index')->with('success', 'Tournament updated successfully.');

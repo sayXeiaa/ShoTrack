@@ -24,6 +24,8 @@
                         <th class="px-6 py-3 text-left">End Date</th>
                         @can('edit tournaments')
                         <th class="px-6 py-3 text-left">Categories</th>
+                        <th class="px-6 py-3 text-left">Type</th>
+                        <th class="px-6 py-3 text-left">Address</th>
                         <th class="px-6 py-3 text-left" width="180">Created</th>
                         <th class="px-6 py-3 text-center" width="180">Action</th>
                         @endcan
@@ -52,6 +54,15 @@
                         <td class="px-6 py-3 text-left">
                             {{ $tournament->has_categories ? 'Yes' : 'No' }}
                         </td>
+
+                        <td class="px-6 py-3 text-left">
+                            {{ $tournament->tournament_type === 'school' ? 'School' : 'Non-School' }}
+                        </td>
+                        
+                        <td class="px-6 py-3 text-left">
+                            {{ $tournament->tournament_location }}
+                        </td>
+
                         <td class="px-6 py-3 text-left">
                             {{ \Carbon\Carbon::parse($tournament->created_at)->format('d M, Y') }}
                         </td>

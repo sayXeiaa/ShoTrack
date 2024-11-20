@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();
+            $table->enum('tournament_type', ['school', 'non-school']);
+            $table->string('tournament_location')->nullable();
             $table->boolean('has_categories')->default(false);
             $table->timestamps();
         });

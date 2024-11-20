@@ -66,6 +66,31 @@
                                 @enderror
                             </div>
 
+                            <!-- Tournament Type -->
+                            <label class="text-lg font-medium">Tournament Type</label>
+                            <div class="my-3 flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <input type="radio" id="tournament_type_school" name="tournament_type" value="school" {{ old('tournament_type') === 'school' ? 'checked' : '' }}>
+                                    <label for="tournament_type_school" class="ml-2">School</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="tournament_type_non_school" name="tournament_type" value="non-school" {{ old('tournament_type') === 'non-school' ? 'checked' : '' }}>
+                                    <label for="tournament_type_non_school" class="ml-2">Non-School</label>
+                                </div>
+                                @error('tournament_type')
+                                    <p class="text-red-400 font-medium mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Tournament Location -->
+                            <label for="tournament_location" class="text-lg font-medium">Tournament Location</label>
+                            <div class="my-3">
+                                <input type="text" id="tournament_location" name="tournament_location" value="{{ old('tournament_location') }}" placeholder="Enter Tournament Location" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                @error('tournament_location')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>
                         </div>
                     </form>

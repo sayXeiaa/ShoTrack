@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('category')->nullable(); 
             $table->string('name');
-            $table->string('team_acronym');
             $table->string('head_coach_name');
-            $table->string('school_president');
-            $table->string('sports_director');
-            $table->integer('years_playing_in_bucal');
-            $table->string('address');
+
+            $table->string('team_acronym')->nullable();
+            $table->string('school_president')->nullable();
+            $table->string('sports_director')->nullable();
+            $table->integer('years_playing_in_bucal')->nullable();
+            $table->string('address')->nullable();
+
             $table->string('logo')->nullable();
             $table->integer('wins')->default(0);
             $table->integer('losses')->default(0);

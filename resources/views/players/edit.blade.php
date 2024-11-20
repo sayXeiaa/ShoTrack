@@ -89,12 +89,14 @@
                                 @enderror
                             </div>
 
-                            <label for="years_playing_in_bucal" class="text-lg font-medium">Years Playing in BUCAL</label>
-                            <div class="my-3">
-                                <input value="{{ old('years_playing_in_bucal', $player->years_playing_in_bucal) }}" name="years_playing_in_bucal" placeholder="Enter the number of years playing in BUCAL" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                @error('years_playing_in_bucal')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
+                            <div id="school-fields" style="display: none;">
+                                <label for="years_playing_in_bucal" class="text-lg font-medium">Years Playing in BUCAL</label>
+                                <div class="my-3">
+                                    <input value="{{ old('years_playing_in_bucal', $player->years_playing_in_bucal) }}" name="years_playing_in_bucal" placeholder="Enter the number of years playing in BUCAL" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    @error('years_playing_in_bucal')
+                                        <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
                             <label for="position" class="text-lg font-medium">Position</label>
@@ -152,6 +154,7 @@
                 const categorySelectionDiv = document.getElementById('category-selection');
                 const teamSelect = document.getElementById('team_id');
     
+                // Function to update the visibility of the category dropdown
                 function updateCategoryVisibility() {
                     const selectedOption = tournamentSelect.selectedOptions[0];
                     const hasCategories = selectedOption ? selectedOption.getAttribute('data-has-categories') === 'true' : false;
@@ -160,52 +163,56 @@
                         categorySelectionDiv.style.display = 'block';
                     } else {
                         categorySelectionDiv.style.display = 'none';
+                        categorySelect.selectedIndex = 0; // Reset category selection
                     }
                 }
     
+                // Function to fetch and populate teams based on tournament and category
                 function updateTeams() {
-    const tournamentId = tournamentSelect.value;
-    const category = categorySelect.value;
-    teamSelect.innerHTML = '<option value="">Select a Team</option>'; // Reset teams dropdown
-
-    if (tournamentId) {
-        $.ajax({
-            url: '{{ route('teams.by_tournament') }}',
-            type: 'GET',
-            data: {
-                tournament_id: tournamentId,
-                category: category
-            },
-            dataType: 'json',
-            success: function(data) {
-                if (data.teams && Array.isArray(data.teams)) {
-                    data.teams.forEach(team => {
-                        var option = document.createElement('option');
-                        option.value = team.id;
-                        option.textContent = team.name;
-                        teamSelect.appendChild(option);
-                    });
-
-                    // Set the selected team if the player is assigned to one
-                    const selectedTeamId = '{{ old('team_id', $player->team_id) }}';
-                    if (selectedTeamId) {
-                        teamSelect.value = selectedTeamId;
-                    }
-                } else {
-                    teamSelect.innerHTML = '<option value="">No Teams Available</option>';
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('AJAX Error:', textStatus, errorThrown);
-                alert('Failed to fetch teams.');
-            }
-        });
-    } else {
-        teamSelect.innerHTML = '<option value="">Select a Team</option>'; // Reset if no tournament selected
-    }
-}
-
+                    const tournamentId = tournamentSelect.value;
+                    const category = categorySelect.value;
     
+                    // Reset teams dropdown
+                    teamSelect.innerHTML = '<option value="">Select a Team</option>';
+    
+                    if (tournamentId) {
+                        $.ajax({
+                            url: '{{ route('teams.by_tournament') }}',
+                            type: 'GET',
+                            data: {
+                                tournament_id: tournamentId,
+                                category: category // Pass selected category
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log('Teams data:', data);
+    
+                                if (data.teams && data.teams.length > 0) {
+                                    data.teams.forEach(team => {
+                                        const option = document.createElement('option');
+                                        option.value = team.id;
+                                        option.textContent = team.name;
+    
+                                        // Preserve the previously selected team
+                                        if (team.id == {{ $player->team_id }}) {
+                                            option.selected = true;
+                                        }
+    
+                                        teamSelect.appendChild(option);
+                                    });
+                                } else {
+                                    teamSelect.innerHTML = '<option value="">No Teams Available</option>';
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('AJAX Error:', textStatus, errorThrown);
+                                alert('Failed to fetch teams.');
+                            }
+                        });
+                    }
+                }
+    
+                // Event listeners for tournament and category dropdowns
                 tournamentSelect.addEventListener('change', function() {
                     updateCategoryVisibility();
                     updateTeams();
@@ -215,7 +222,7 @@
                     updateTeams(); // Update teams when category changes
                 });
     
-                // Initialize visibility and teams on page load
+                // Initialize visibility and populate teams on page load
                 updateCategoryVisibility();
                 updateTeams();
             });

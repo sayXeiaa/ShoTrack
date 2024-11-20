@@ -56,23 +56,34 @@ class TeamController extends Controller
     public function store(Request $request)
 {
     // Define validation rules
+
     $rules = [
         'name' => 'required|min:5',
-        'team_acronym' => 'required|max:5',
         'head_coach_name' => 'required|string|max:255',
-        'school_president' => 'required|string|max:255',
-        'sports_director' => 'required|string|max:255',
-        'years_playing_in_bucal' => 'required|integer',
         'address' => 'required|min:5',
         'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         'tournament_id' => 'required|exists:tournaments,id',
     ];
 
     // Add category validation if the tournament has categories
-    $tournament = Tournaments::find($request->tournament_id); // Use the correct model name
-    if ($tournament && $tournament->has_categories) {
-        $rules['category'] = 'required|string|in:Juniors,Seniors';
+    $tournament = Tournaments::find($request->tournament_id); 
+    
+
+    if ($tournament) {
+        if ($tournament->has_categories) {
+            // Add category validation if tournament has categories
+            $rules['category'] = 'required|string|in:Juniors,Seniors';
+        }
+
+        if ($tournament->tournament_type === 'school') {
+            // Add school-specific validation if tournament type is 'school'
+            $rules['school_president'] = 'required|string|max:255';
+            $rules['team_acronym'] = 'required|max:7';
+            $rules['sports_director'] = 'required|string|max:255';
+            $rules['years_playing_in_bucal'] = 'required|integer';
+        }
     }
+
 
     // Validate the request data
     $validator = Validator::make($request->all(), $rules);
@@ -80,11 +91,7 @@ class TeamController extends Controller
     if ($validator->passes()) {
         $team = new Teams(); // Use the correct model name
         $team->name = $request->name;
-        $team->team_acronym = $request->team_acronym;
         $team->head_coach_name = $request->head_coach_name;
-        $team->school_president = $request->school_president;
-        $team->sports_director = $request->sports_director;
-        $team->years_playing_in_bucal = $request->years_playing_in_bucal;
         $team->address = $request->address;
         $team->tournament_id = $request->tournament_id;
 
@@ -92,6 +99,13 @@ class TeamController extends Controller
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('logos', 'public');
             $team->logo = $logoPath;
+        }
+
+        if ($tournament && $tournament->tournament_type === 'school') {
+            $team->team_acronym = $request->team_acronym;
+            $team->school_president = $request->school_president;
+            $team->sports_director = $request->sports_director;
+            $team->years_playing_in_bucal = $request->years_playing_in_bucal;
         }
 
         // Set category if applicable
@@ -134,62 +148,71 @@ class TeamController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $team = teams::findOrFail($id); // Use the correct model name
-        $tournament = Tournaments::find($request->tournament_id); // Use the correct model name
-
-        $validator = Validator::make($request->all(), [
-            'category' => 'nullable|string|in:Juniors,Seniors',
+        // Find the existing team and related tournament
+        $team = Teams::findOrFail($id); // Use the correct model name
+        $tournament = Tournaments::find($request->tournament_id);
+    
+        // Define base validation rules
+        $rules = [
             'name' => 'required|min:5',
-            'team_acronym' => 'required|max:5',
             'head_coach_name' => 'required|string|max:255',
-            'school_president' => 'required|string|max:255',
-            'sports_director' => 'required|string|max:255',
-            'years_playing_in_bucal' => 'required|integer',
             'address' => 'required|min:5',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-            'tournament_id' => 'nullable|exists:tournaments,id',
-        ]);
-
+            'tournament_id' => 'required|exists:tournaments,id',
+        ];
+    
+        // Add additional validation if the tournament has categories
+        if ($tournament) {
+            if ($tournament->has_categories) {
+                $rules['category'] = 'required|string|in:Juniors,Seniors';
+            }
+    
+            if ($tournament->tournament_type === 'school') {
+                // Add school-specific validation if tournament type is 'school'
+                $rules['school_president'] = 'required|string|max:255';
+                $rules['team_acronym'] = 'required|max:7';
+                $rules['sports_director'] = 'required|string|max:255';
+                $rules['years_playing_in_bucal'] = 'required|integer';
+            }
+        }
+    
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules);
+    
         if ($validator->passes()) {
             // Update team details
             $team->name = $request->name;
-            $team->team_acronym = $request->team_acronym;
-            $team->head_coach_name = $request->head_coach_name; // Fixed field name
-            $team->school_president = $request->school_president;
-            $team->sports_director = $request->sports_director;
-            $team->years_playing_in_bucal = $request->years_playing_in_bucal;
+            $team->head_coach_name = $request->head_coach_name;
             $team->address = $request->address;
-
-             // Handle logo upload
+            $team->tournament_id = $request->tournament_id;
+    
+            // Handle logo upload
             if ($request->hasFile('logo')) {
                 $logoPath = $request->file('logo')->store('logos', 'public');
                 $team->logo = $logoPath;
             }
-            
-            // Update tournament_id only if provided
-            if ($request->has('tournament_id')) {
-                $team->tournament_id = $request->tournament_id;
-                $tournament = Tournaments::find($request->tournament_id); // Fetch updated tournament if necessary
+    
+            // Set school-specific fields if tournament type is 'school'
+            if ($tournament && $tournament->tournament_type === 'school') {
+                $team->team_acronym = $request->team_acronym;
+                $team->school_president = $request->school_president;
+                $team->sports_director = $request->sports_director;
+                $team->years_playing_in_bucal = $request->years_playing_in_bucal;
             }
-            
-            // Check if the tournament allows categories
-            if ($tournament && $tournament->has_categories && !$request->has('category')) {
-                return redirect()->route('teams.edit', $id)->withInput()->withErrors(['category' => 'Category is required for this tournament.']);
+    
+            // Set category if applicable
+            if ($tournament && $tournament->has_categories) {
+                $team->category = $request->category;
             }
-
-            if ($tournament && !$tournament->has_categories && $request->has('category')) {
-                return redirect()->route('teams.edit', $id)->withInput()->withErrors(['category' => 'Category is not allowed for this tournament.']);
-            }
-
-            // Update the team
-            $team->category = $request->category; // Set the category if applicable
+    
             $team->save();
-
+    
             return redirect()->route('teams.index')->with('success', 'Team updated successfully.');
         } else {
             return redirect()->route('teams.edit', $id)->withInput()->withErrors($validator);
         }
     }
+    
 
 
     /**

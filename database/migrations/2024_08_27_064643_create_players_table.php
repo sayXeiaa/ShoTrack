@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->integer('number');
-            $table->integer('years_playing_in_bucal');
+            $table->integer('years_playing_in_bucal')->nullable();
             $table->string('position');
             $table->date('date_of_birth')->nullable();
             $table->integer('age')->nullable();

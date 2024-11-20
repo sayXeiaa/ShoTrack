@@ -21,11 +21,10 @@
                         <select id="tournament" name="tournament_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">All Tournaments</option>
                             @foreach($tournaments as $tournament)
-                                <option value="{{ $tournament->id }}" 
-                                    {{ request('tournament_id') == $tournament->id ? 'selected' : '' }}
-                                    data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}">
-                                    {{ $tournament->name }}
-                                </option>
+                            <option value="{{ $tournament->id }}" {{ request('tournament_id') == $tournament->id ? 'selected' : '' }} data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}" 
+                                data-tournament-type="{{ $tournament->tournament_type }}">
+                                {{ $tournament->name }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -34,9 +33,14 @@
                         <label for="team" class="block text-sm font-medium text-gray-700">Select Team</label>
                         <select id="team" name="team_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">All Teams</option>
-                            <!-- Teams  -->
+                            @foreach($teams as $team)
+                                <option value="{{ $team->id }}" data-tournament-id="{{ $team->tournament_id }}" data-category-id="{{ $team->category_id }}">
+                                    {{ $team->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
+
                     <div class="flex-1">
                         <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search Players</label>
                         <input type="text" name="search" placeholder="Search by Name" value="{{ request('search') }}" class="border rounded px-2 py-1 w-full" id="search-input" />
@@ -55,7 +59,6 @@
                     </select>
                 </form>
             </div>
-            
 
             <table id="players-table" class="w-full">
                 <thead class="bg-gray-50">
@@ -68,7 +71,7 @@
                         <th class="px-6 py-3 text-left">Age</th>
                         <th class="px-6 py-3 text-left">Height</th>
                         <th class="px-6 py-3 text-left">Weight</th>
-                        <th class="px-6 py-3 text-left">Years Playing</th> 
+                        <th class="px-6 py-3 text-left school-field">Years Playing</th> 
                         {{-- <th class="px-6 py-3 text-left">Created</th> --}}
                         @can('edit players')
                         <th class="px-6 py-3 text-center" width="180">Action</th>
@@ -88,7 +91,7 @@
                                 <td class="px-6 py-3 text-left">{{ $player->age }} </td>
                                 <td class="px-6 py-3 text-left">{{ $player->height }} ft</td>
                                 <td class="px-6 py-3 text-left">{{ $player->weight }} kg</td>
-                                <td class="px-6 py-3 text-left">{{ $player->years_playing_in_bucal }}</td>
+                                <td class="px-6 py-3 text-left school-field">{{ $player->years_playing_in_bucal }}</td>
                                 {{-- <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->created_at)->format('d M, Y') }}</td> --}}
                                 @can ('edit players')
                                 <td class="px-6 py-3 text-center">
@@ -108,162 +111,144 @@
     </div>
 
     <x-slot name="script">
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            const tournamentSelect = document.getElementById('tournament');
-            const categorySelect = document.getElementById('category');
-            const teamSelect = document.getElementById('team');
-            const categorySelection = document.getElementById('category-selection');
-            const playersTableBody = document.querySelector('#players-table tbody');
-    
-        function updateCategoryVisibility() {
-            const selectedOption = tournamentSelect.selectedOptions[0];
-            const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
-    
-            categorySelection.style.display = hasCategories ? 'block' : 'none';
-        }
-    
-        function updateTeams() {
-            const tournamentId = tournamentSelect.value;
-            const category = categorySelect.value;
-    
-            fetch(`{{ route('teams.by_tournament') }}?tournament_id=${tournamentId}&category=${category}`)
-                .then(response => response.json())
-                .then(data => {
-                teamSelect.innerHTML = '<option value="">All Teams</option>';
-                    data.teams.forEach(team => {
-                    const option = document.createElement('option');
-                    option.value = team.id;
-                    option.textContent = team.name;
-                    teamSelect.appendChild(option);
-                        });
-                })
-                    .catch(error => console.error('Error fetching teams:', error));
-        }
-    
-        function updatePlayers() {
-            const teamId = teamSelect.value;
-            const category = categorySelect.value;
-    
-            // Fetch players based on both team and category
-            fetch(`{{ route('players.by_team') }}?team_id=${teamId}&category=${category}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error('Error fetching players:', data.error);
-                        return;
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+                const tournamentSelect = document.getElementById('tournament');
+                const categorySelect = document.getElementById('category');
+                const teamSelect = document.getElementById('team');
+                const categorySelection = document.getElementById('category-selection');
+                const playersTableBody = document.querySelector('#players-table tbody');
+                const schoolFields = document.querySelectorAll('.school-field');
+                const searchInput = document.getElementById('search-input');
+                let debounceTimeout;
+
+                function updateCategoryVisibility() {
+                    const selectedTeamOption = teamSelect.selectedOptions[0];
+                    let selectedTournamentOption = tournamentSelect.selectedOptions[0];
+                    let hasCategories = selectedTournamentOption?.getAttribute('data-has-categories') === 'true';
+                    let tournamentType = selectedTournamentOption?.dataset.tournamentType;
+
+                    // Check if a team is selected first
+                    if (selectedTeamOption && selectedTeamOption.value) {
+                        const teamTournamentId = selectedTeamOption.getAttribute('data-tournament-id');
+
+                        // Change the tournament dropdown selection to match the team's tournament
+                        if (teamTournamentId) {
+                            Array.from(tournamentSelect.options).forEach(option => {
+                                if (option.value === teamTournamentId) {
+                                    option.selected = true;
+                                }
+                            });
+
+                            // Refresh selectedTournamentOption after updating the selection
+                            selectedTournamentOption = tournamentSelect.selectedOptions[0];
+                            hasCategories = selectedTournamentOption?.getAttribute('data-has-categories') === 'true';
+                            tournamentType = selectedTournamentOption?.dataset.tournamentType;
+                        }
                     }
-    
-                    playersTableBody.innerHTML = ''; // Clear existing rows
-    
-                    data.players.forEach(player => {
-                        const tr = document.createElement('tr');
-                        tr.classList.add('border-b');
-                        tr.innerHTML = `
-                            <td class="px-6 py-3 text-left">${player.first_name}</td>
-                            <td class="px-6 py-3 text-left">${player.last_name}</td>
-                            <td class="px-6 py-3 text-left">${player.number}</td>
-                            <td class="px-6 py-3 text-left">${player.position}</td>
-                            <td class="px-6 py-3 text-left">${new Date(player.date_of_birth).toLocaleDateString()}</td>
-                            <td class="px-6 py-3 text-left">${player.age}</td>
-                            <td class="px-6 py-3 text-left">${player.height} ft</td>
-                            <td class="px-6 py-3 text-left">${player.weight} kg</td>
-                            <td class="px-6 py-3 text-left">${player.years_playing_in_bucal}</td>
-                            <td class="px-6 py-3 text-center">
-                                <a href="/players/${player.id}/edit" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                <a href="javascript:void(0);" onclick="deletePlayer(${player.id})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                            </td>
-                        `;
-                        playersTableBody.appendChild(tr);
-                        });
-                })
-                    .catch(error => console.error('Error fetching players:', error));
-        }
-    
-        tournamentSelect.addEventListener('change', function() {
-            updateCategoryVisibility();
-            updateTeams();
 
-            this.form.submit();
-        });
-    
-        categorySelect.addEventListener('change', function() {
-            updateTeams();
-            updatePlayers(); // Update players when category changes
-        });
-    
-        teamSelect.addEventListener('change', updatePlayers);
-            // Initial setup on page load
-            updateCategoryVisibility();
-            updateTeams();
-        });
-    
-    function deletePlayer(id) {
-        if (confirm("Are you sure you want to delete?")) {
-            $.ajax({
-                url: '{{ route("players.destroy", ":id") }}'.replace(':id', id),
-                type: 'DELETE',
-                data: { id: id },
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    window.location.href = '{{ route("players.index") }}';
-                },
-                error: function(xhr) {
-                    alert("An error occurred while deleting the player.");
+                    // Show or hide school-specific fields based on tournament type
+                    const schoolFields = document.querySelectorAll('.school-field'); // Includes both <th> and <td>
+                    if (tournamentType === 'school') {
+                        schoolFields.forEach(field => (field.style.display = 'table-cell')); // Show fields
+                    } else {
+                        schoolFields.forEach(field => (field.style.display = 'none')); // Hide fields
+                    }
+
+                    // Show or hide category selection based on whether the tournament has categories
+                    categorySelection.style.display = hasCategories ? 'block' : 'none';
                 }
+        
+                // Function to fetch and update team options
+                function updateTeams() {
+                    const tournamentId = tournamentSelect.value;
+                    const category = categorySelect.value;
+        
+                    fetch(`{{ route('teams.by_tournament') }}?tournament_id=${tournamentId}&category=${category}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear existing options and add placeholder
+                            teamSelect.innerHTML = '<option value="">All Teams</option>';
+                            data.teams.forEach(team => {
+                                const option = document.createElement('option');
+                                option.value = team.id;
+                                option.textContent = team.name;
+                                option.setAttribute('data-tournament-id', team.tournament_id);
+                                teamSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching teams:', error));
+                }
+        
+                // Function to delete a player
+                function deletePlayer(id) {
+                    if (confirm("Are you sure you want to delete?")) {
+                        $.ajax({
+                            url: '{{ route("players.destroy", ":id") }}'.replace(':id', id),
+                            type: 'DELETE',
+                            data: { id: id },
+                            dataType: 'json',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            success: function () {
+                                window.location.href = '{{ route("players.index") }}';
+                            },
+                            error: function () {
+                                alert("An error occurred while deleting the player.");
+                            }
+                        });
+                    }
+                }
+        
+                // Function to fetch filtered players
+                function fetchFilteredPlayers() {
+                    const tournamentId = tournamentSelect.value;
+                    const category = categorySelect ? categorySelect.value : '';
+                    const teamId = teamSelect.value;
+                    const searchValue = searchInput?.value || '';
+        
+                    fetch(`{{ route('players.index') }}?tournament_id=${tournamentId}&category=${category}&team_id=${teamId}&search=${encodeURIComponent(searchValue)}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            const parsedHtml = new DOMParser().parseFromString(html, 'text/html');
+                            const newTableBody = parsedHtml.querySelector('#players-table tbody');
+                            if (newTableBody) {
+                                playersTableBody.innerHTML = newTableBody.innerHTML;
+                                updateCategoryVisibility();
+                            }
+                        })
+                        .catch(error => console.error('Error fetching players:', error));
+                }
+        
+                // Event listeners
+                tournamentSelect.addEventListener('change', function () {
+                    updateCategoryVisibility();
+                    updateTeams();
+                    fetchFilteredPlayers();
+                });
+        
+                categorySelect?.addEventListener('change', function () {
+                    updateTeams();
+                    fetchFilteredPlayers();
+                });
+        
+                teamSelect.addEventListener('change', function () {
+                    updateCategoryVisibility();
+                    fetchFilteredPlayers();
+                });
+        
+                searchInput?.addEventListener('input', function () {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(fetchFilteredPlayers, 300);
+                });
+        
+                // Initial setup on page load
+                updateCategoryVisibility();
+                updateTeams();
             });
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const tournamentSelect = document.getElementById('tournament');
-    const categorySelect = document.getElementById('category');
-    const teamSelect = document.getElementById('team');
-    const searchInput = document.getElementById('search-input');
-    const filterForm = document.getElementById('filter-form');
-    const playersTableBody = document.querySelector('#players-table tbody');
-    let debounceTimeout;
-
-    // Function to fetch filtered players
-    function fetchFilteredPlayers() {
-        const tournamentId = tournamentSelect.value;
-        const category = categorySelect ? categorySelect.value : '';
-        const teamId = teamSelect.value;
-        const searchValue = searchInput.value;
-
-        fetch(`{{ route('players.index') }}?tournament_id=${tournamentId}&category=${category}&team_id=${teamId}&search=${encodeURIComponent(searchValue)}`)
-            .then(response => response.text())
-            .then(html => {
-                playersTableBody.innerHTML = new DOMParser().parseFromString(html, 'text/html').querySelector('#players-table tbody').innerHTML;
-            })
-            .catch(error => console.error('Error fetching players:', error));
-    }
-
-    // Remove search input
-    searchInput.addEventListener('input', function() {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(fetchFilteredPlayers, 300);
-    });
-
-    // Trigger filtering when any filter changes
-    tournamentSelect.addEventListener('change', function() {
-        fetchFilteredPlayers();
-    });
-
-    categorySelect?.addEventListener('change', function() {
-        fetchFilteredPlayers();
-    });
-
-    teamSelect.addEventListener('change', function() {
-        fetchFilteredPlayers();
-    });
-
-});
-    
-    </script>
+        </script>
+        
     </x-slot>
 
 </x-app-layout>

@@ -20,7 +20,8 @@
                     <select id="tournament" name="tournament_id" class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" onchange="this.form.submit()">
                         <option value="">All Tournaments</option>
                         @foreach($tournaments as $tournament)
-                            <option value="{{ $tournament->id }}" {{ request('tournament_id') == $tournament->id ? 'selected' : '' }} data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}">
+                            <option value="{{ $tournament->id }}" {{ request('tournament_id') == $tournament->id ? 'selected' : '' }} data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}" 
+                                data-tournament-type="{{ $tournament->tournament_type }}">
                                 {{ $tournament->name }}
                             </option>
                         @endforeach
@@ -48,9 +49,9 @@
                         <th class="px-6 py-3 text-left">Team Logo</th>
                         <th class="px-6 py-3 text-left">Team Name</th>
                         <th class="px-6 py-3 text-left">Head Coach</th>
-                        <th class="px-6 py-3 text-left">School President</th>
-                        <th class="px-6 py-3 text-left">Sports Director</th>
-                        <th class="px-6 py-3 text-left">Years in BUCAL</th>
+                        <th class="px-6 py-3 text-left school-field">School President</th>
+                        <th class="px-6 py-3 text-left school-field">Sports Director</th>
+                        <th class="px-6 py-3 text-left school-field">Years in BUCAL</th>
                         <th class="px-6 py-3 text-left">Address</th>
                         @can('edit teams')
                         <th class="px-6 py-3 text-left" width="180">Created</th>
@@ -78,13 +79,13 @@
                         <td class="px-6 py-3 text-left">
                             {{ $team->head_coach_name }}
                         </td>
-                        <td class="px-6 py-3 text-left">
+                        <td class="px-6 py-3 text-left school-field">
                             {{ $team->school_president }}
                         </td>
-                        <td class="px-6 py-3 text-left">
+                        <td class="px-6 py-3 text-left school-field">
                             {{ $team->sports_director }}
                         </td>
-                        <td class="px-6 py-3 text-left">
+                        <td class="px-6 py-3 text-left school-field">
                             {{ $team->years_playing_in_bucal }}
                         </td>
                         <td class="px-6 py-3 text-left">
@@ -113,27 +114,41 @@
     <x-slot name="script">
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
-            const tournamentSelect = document.getElementById('tournament');
-            const categorySelect = document.getElementById('category-selection');
+    const tournamentSelect = document.getElementById('tournament');
+    const categorySelect = document.getElementById('category-selection');
+    const schoolFields = document.querySelectorAll('.school-field'); // Add a class for school-specific fields
 
-            function updateCategoryVisibility() {
-                const selectedOption = tournamentSelect.selectedOptions[0];
-                const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
+    function updateCategoryVisibility() {
+        const selectedOption = tournamentSelect.selectedOptions[0];
+        const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
+        const tournamentType = selectedOption.dataset.tournamentType; // Assume tournament type is stored here
 
-                if (hasCategories) {
-                    categorySelect.style.display = 'block';
-                } else {
-                    categorySelect.style.display = 'none';
-                }
-            }
+        // Show or hide category selection based on tournament type
+        if (hasCategories) {
+            categorySelect.style.display = 'block';
+        } else {
+            categorySelect.style.display = 'none';
+        }
 
-            tournamentSelect.addEventListener('change', function() {
-                updateCategoryVisibility();
-                this.form.submit(); // Submit form after changing tournament
+        // Hide or show school-specific fields if the selected tournament is "school"
+        if (tournamentType === 'school') {
+            schoolFields.forEach(function(field) {
+                field.style.display = 'table-cell'; // Hide fields for school tournaments
             });
+        } else {
+            schoolFields.forEach(function(field) {
+                field.style.display = 'none'; // Show fields for other tournament types
+            });
+        }
+    }
 
-            updateCategoryVisibility(); // Initial check on page load
-        });
+    tournamentSelect.addEventListener('change', function() {
+        updateCategoryVisibility();
+        this.form.submit(); // Submit form after changing tournament
+    });
+
+    updateCategoryVisibility(); // Initial check on page load
+});
 
             function deleteteam(id){
                 if(confirm("Are you sure you want to delete?")) {

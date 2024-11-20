@@ -114,41 +114,41 @@
     <x-slot name="script">
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
-    const tournamentSelect = document.getElementById('tournament');
-    const categorySelect = document.getElementById('category-selection');
-    const schoolFields = document.querySelectorAll('.school-field'); // Add a class for school-specific fields
+            const tournamentSelect = document.getElementById('tournament');
+            const categorySelect = document.getElementById('category-selection');
+            const schoolFields = document.querySelectorAll('.school-field'); 
 
-    function updateCategoryVisibility() {
-        const selectedOption = tournamentSelect.selectedOptions[0];
-        const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
-        const tournamentType = selectedOption.dataset.tournamentType; // Assume tournament type is stored here
+            function updateCategoryVisibility() {
+                const selectedOption = tournamentSelect.selectedOptions[0];
+                const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
+                const tournamentType = selectedOption.dataset.tournamentType; 
 
-        // Show or hide category selection based on tournament type
-        if (hasCategories) {
-            categorySelect.style.display = 'block';
-        } else {
-            categorySelect.style.display = 'none';
-        }
+                // Show or hide category selection based on tournament type
+                if (hasCategories) {
+                    categorySelect.style.display = 'block';
+                } else {
+                    categorySelect.style.display = 'none';
+                }
 
-        // Hide or show school-specific fields if the selected tournament is "school"
-        if (tournamentType === 'school') {
-            schoolFields.forEach(function(field) {
-                field.style.display = 'table-cell'; // Hide fields for school tournaments
+                // Hide or show school-specific fields if the selected tournament is "school"
+                if (tournamentType === 'school') {
+                    schoolFields.forEach(function(field) {
+                        field.style.display = 'table-cell'; // Hide fields for school tournaments
+                    });
+                } else {
+                    schoolFields.forEach(function(field) {
+                        field.style.display = 'none'; // Show fields for other tournament types
+                    });
+                }
+            }
+
+            tournamentSelect.addEventListener('change', function() {
+                updateCategoryVisibility();
+                this.form.submit(); // Submit form after changing tournament
             });
-        } else {
-            schoolFields.forEach(function(field) {
-                field.style.display = 'none'; // Show fields for other tournament types
+
+            updateCategoryVisibility(); // Initial check on page load
             });
-        }
-    }
-
-    tournamentSelect.addEventListener('change', function() {
-        updateCategoryVisibility();
-        this.form.submit(); // Submit form after changing tournament
-    });
-
-    updateCategoryVisibility(); // Initial check on page load
-});
 
             function deleteteam(id){
                 if(confirm("Are you sure you want to delete?")) {

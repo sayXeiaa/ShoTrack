@@ -97,25 +97,64 @@ class ScheduleController extends Controller
             'date' => 'required|date',
             'time' => ['required', new Time12HourFormat],
             'venue' => 'required|string|max:255',
-            'team1_id' => 'required|exists:teams,id',
+            'team1_id' => 'required|exists:teams,id|different:team2_id',
             'team2_id' => 'required|exists:teams,id',
             'category' => 'nullable|string',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->route('schedules.create')->withInput()->withErrors($validator);
         }
-    
-        // Fetch the tournament to check if it has categories
-        $tournamentId = $request->input('tournament_id');
-        $tournament = Tournaments::findOrFail($tournamentId);
-        $hasCategories = $tournament->has_categories;
-    
+
         // Convert 12-hour time format to 24-hour format
         $time12Hour = $request->input('time');
         $dateTime = \DateTime::createFromFormat('g:i A', $time12Hour);
         $time24Hour = $dateTime ? $dateTime->format('H:i') : null;
-    
+
+        if (!$dateTime) {
+            return redirect()->route('schedules.create')
+                ->withInput()
+                ->withErrors(['time' => 'Invalid time format.']);
+        }
+
+        $proposedTime = $dateTime->getTimestamp();
+
+        // Check for scheduling conflicts at the same venue
+        $existingSchedules = Schedule::where('date', $request->date)
+            ->where('venue', $request->venue)
+            ->get();
+
+            foreach ($existingSchedules as $existing) {
+                // Parse the time from the database
+                $existingTime = \DateTime::createFromFormat('H:i:s', $existing->time);
+            
+                if ($existingTime) {
+                    $existingTimestamp = $existingTime->getTimestamp();
+                    $timeDifference = abs($proposedTime - $existingTimestamp) / 60; // Time difference in minutes
+            
+                    // Validate against the 90-minute rule
+                    if ($timeDifference < 90) {
+                        return redirect()->route('schedules.create')
+                            ->withInput()
+                            ->withErrors([
+                                'time' => 'Games at the same venue must be scheduled at least 1 hour and 30 minutes apart.',
+                                'venue' => 'The selected venue is not available within the selected time.',
+                            ]);
+                    }
+                } else {
+                    // Handle parsing errors
+                    return redirect()->route('schedules.create')
+                        ->withInput()
+                        ->withErrors(['time' => 'Failed to parse an existing schedule time.']);
+                }
+            }
+
+        // Fetch the tournament to check if it has categories
+        $tournamentId = $request->input('tournament_id');
+        $tournament = Tournaments::findOrFail($tournamentId);
+        $hasCategories = $tournament->has_categories;
+
+        // Create the new schedule
         $schedule = new Schedule();
         $schedule->tournament_id = $request->tournament_id;
         $schedule->date = $request->date;
@@ -123,18 +162,17 @@ class ScheduleController extends Controller
         $schedule->venue = $request->venue;
         $schedule->team1_id = $request->team1_id;
         $schedule->team2_id = $request->team2_id;
-    
+
         // Only set category if the tournament has categories
         if ($hasCategories) {
             $schedule->category = $request->input('category');
         }
-    
+
         $schedule->save();
         $this->initializePlayerStats($schedule);
-    
+
         return redirect()->route('schedules.index')->with('success', 'Game schedule added successfully.');
     }
-    
 
     /**
      * Display the specified resource.

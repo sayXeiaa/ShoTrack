@@ -23,12 +23,13 @@
                                 <select id="tournament" name="tournament_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Tournament</option>
                                     @foreach($tournaments as $tournament)
-                                        <option value="{{ $tournament->id }}"
-                                                data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}">
+                                        <option value="{{ $tournament->id }}" 
+                                                data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}"
+                                                {{ old('tournament_id') == $tournament->id ? 'selected' : '' }}>
                                             {{ $tournament->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </select>                                
                                 @error('tournament_id')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -41,9 +42,9 @@
                             <div class="my-3">
                                 <select id="category" name="category" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Category</option>
-                                    <option value="juniors">Juniors</option>
-                                    <option value="seniors">Seniors</option>
-                                </select>
+                                    <option value="juniors" {{ old('category') == 'juniors' ? 'selected' : '' }}>Juniors</option>
+                                    <option value="seniors" {{ old('category') == 'seniors' ? 'selected' : '' }}>Seniors</option>
+                                </select>                                
                                 @error('category')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
@@ -80,9 +81,11 @@
                             <select name="team1_id" id="team1" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 <option value="">Select Team 1</option>
                                 @foreach ($teams as $team)
-                                    <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                    <option value="{{ $team->id }}" {{ old('team1_id') == $team->id ? 'selected' : '' }}>
+                                        {{ $team->name }}
+                                    </option>
                                 @endforeach
-                            </select>
+                            </select>                            
                             @error('team1_id')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
@@ -93,9 +96,11 @@
                             <select name="team2_id" id="team2" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                 <option value="">Select Team 2</option>
                                 @foreach ($teams as $team)
-                                    <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                    <option value="{{ $team->id }}" {{ old('team2_id') == $team->id ? 'selected' : '' }}>
+                                        {{ $team->name }}
+                                    </option>
                                 @endforeach
-                            </select>
+                            </select>                            
                             @error('team2_id')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
@@ -109,78 +114,131 @@
     </div>
 
     <x-slot name="script">
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-                const tournamentSelect = document.getElementById('tournament');
-                const categorySelect = document.getElementById('category');
-                const categorySelectionDiv = document.getElementById('category-selection');
-                const team1Select = document.getElementById('team1');
-                const team2Select = document.getElementById('team2');
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+        const tournamentSelect = document.getElementById('tournament');
+        const categorySelect = document.getElementById('category');
+        const categorySelectionDiv = document.getElementById('category-selection');
+        const team1Select = document.getElementById('team1');
+        const team2Select = document.getElementById('team2');
 
-                function updateCategoryVisibility() {
-                    const selectedOption = tournamentSelect.selectedOptions[0];
-                    const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
+        function updateCategoryVisibility() {
+            const selectedOption = tournamentSelect.selectedOptions[0];
+            const hasCategories = selectedOption.getAttribute('data-has-categories') === 'true';
 
-                    if (hasCategories) {
-                        categorySelectionDiv.style.display = 'block';
-                    } else {
-                        categorySelectionDiv.style.display = 'none';
-                    }
-                }
+            // If the selected tournament has no categories, reset and hide the category dropdown
+            if (hasCategories) {
+                categorySelectionDiv.style.display = 'block'; // Show category dropdown
+            } else {
+                categorySelectionDiv.style.display = 'none'; // Hide category dropdown
 
-                function updateTeams() {
-                    const tournamentId = tournamentSelect.value;
-                    const category = categorySelect.value;
-                    team1Select.innerHTML = '<option value="">Select Team 1</option>'; // Reset team1 dropdown
-                    team2Select.innerHTML = '<option value="">Select Team 2</option>'; // Reset team2 dropdown
+                // Clear the category selection (reset to default value)
+                categorySelect.value = ''; // Reset to the default value (Select Category)
+            }
+        }
 
-                    if (tournamentId) {
-                        $.ajax({
-                            url: '{{ route('teams.by_tournament') }}',
-                            type: 'GET',
-                            data: {
-                                tournament_id: tournamentId,
-                                category: category // Send category value
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data.teams && data.teams.length > 0) {
-                                    data.teams.forEach(team => {
-                                        var option = document.createElement('option');
-                                        option.value = team.id;
-                                        option.textContent = team.name;
-                                        team1Select.appendChild(option.cloneNode(true)); // Add to team1
-                                        team2Select.appendChild(option); // Add to team2
-                                    });
-                                } else {
-                                    team1Select.innerHTML = '<option value="">No Teams Available</option>'; // No teams found message
-                                    team2Select.innerHTML = '<option value="">No Teams Available</option>'; // No teams found message
+        function updateTeams() {
+            const tournamentId = tournamentSelect.value;
+            const category = categorySelect.value;
+
+            // Reset dropdowns before updating
+            team1Select.innerHTML = '<option value="">Select Team 1</option>';
+            team2Select.innerHTML = '<option value="">Select Team 2</option>';
+
+            // Retrieve previously selected teams
+            const oldTeam1 = "{{ old('team1_id') }}";
+            const oldTeam2 = "{{ old('team2_id') }}";
+
+            // Log selected tournament and category
+            console.log('Selected Tournament:', tournamentId);
+            console.log('Selected Category:', category);
+
+            if (tournamentId) {
+                $.ajax({
+                    url: '{{ route('teams.by_tournament') }}',
+                    type: 'GET',
+                    data: {
+                        tournament_id: tournamentId,
+                        category: category // Send category value
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        //Log the received data
+                        console.log('AJAX Response:', data);
+
+                        if (data.teams && data.teams.length > 0) {
+                            // Populate teams into the dropdowns
+                            data.teams.forEach(team => {
+                                const option1 = document.createElement('option');
+                                option1.value = team.id;
+                                option1.textContent = team.name;
+                                
+                                // Set as selected if matches old value
+                                if (team.id == oldTeam1) {
+                                    option1.selected = true;
                                 }
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.error('AJAX Error:', textStatus, errorThrown); // Debugging statement
-                                alert('Failed to fetch teams.');
-                            }
-                        });
-                    } else {
-                        team1Select.innerHTML = '<option value="">Select Team 1</option>'; // Reset team1 dropdown if no tournament selected
-                        team2Select.innerHTML = '<option value="">Select Team 2</option>'; // Reset team2 dropdown if no tournament selected
+                                team1Select.appendChild(option1);
+
+                                const option2 = document.createElement('option');
+                                option2.value = team.id;
+                                option2.textContent = team.name;
+
+                                // Set as selected if matches old value
+                                if (team.id == oldTeam2) {
+                                    option2.selected = true;
+                                }
+                                team2Select.appendChild(option2);
+                            });
+                        } else {
+                            // If no teams available, show message
+                            team1Select.innerHTML = '<option value="">No Teams Available</option>';
+                            team2Select.innerHTML = '<option value="">No Teams Available</option>';
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', textStatus, errorThrown);
+                        alert('Failed to fetch teams.');
+
+                        // Reset dropdowns on error
+                        team1Select.innerHTML = '<option value="">Select Team 1</option>';
+                        team2Select.innerHTML = '<option value="">Select Team 2</option>';
                     }
-                }
-
-                tournamentSelect.addEventListener('change', function() {
-                    updateCategoryVisibility();
-                    updateTeams();
                 });
+            }
+        }
 
-                categorySelect.addEventListener('change', function() {
-                    updateTeams(); // Update teams when category changes
-                });
+        function filterTeams() {
+            const selectedTeam1 = team1Select.value;
+            const selectedTeam2 = team2Select.value;
 
-                // Initialize visibility and teams on page load
-                updateCategoryVisibility();
-                updateTeams();
+            // Filter options for team2 based on team1 selection
+            Array.from(team2Select.options).forEach(option => {
+                option.style.display = (option.value === selectedTeam1 && selectedTeam1) ? 'none' : 'block';
             });
-        </script>
+
+            // Filter options for team1 based on team2 selection
+            Array.from(team1Select.options).forEach(option => {
+                option.style.display = (option.value === selectedTeam2 && selectedTeam2) ? 'none' : 'block';
+            });
+        }
+
+        tournamentSelect.addEventListener('change', function() {
+            updateCategoryVisibility();
+            updateTeams();
+        });
+
+        categorySelect.addEventListener('change', function() {
+            updateTeams();
+        });
+
+        team1Select.addEventListener('change', filterTeams);
+        team2Select.addEventListener('change', filterTeams);
+
+        // Initialize visibility and teams on page load
+        updateCategoryVisibility();
+        updateTeams();
+    });
+    </script>
     </x-slot>
+    
 </x-app-layout>

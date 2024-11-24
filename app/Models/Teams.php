@@ -19,6 +19,7 @@ class Teams extends Model
         'years_playing_in_bucal',
         'address',
         'logo',
+        'tournament_id',
     ];
 
     /**

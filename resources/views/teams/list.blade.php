@@ -5,7 +5,9 @@
                 {{ __('Teams') }}
             </h2>
             @can('edit teams')
-            <a href="{{ route('teams.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">Create</a>
+            <button id="create-team" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">
+                Create
+            </button>            
             @endcan
         </div>
     </x-slot>
@@ -112,6 +114,7 @@
         </div>
     </div>
     <x-slot name="script">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
             const tournamentSelect = document.getElementById('tournament');
@@ -166,6 +169,27 @@
                     });
                 }
             }
+
+        document.getElementById('create-team').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Create Team',
+                text: 'Choose how you want to create a team:',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Create Team via Upload',
+                cancelButtonText: 'Create Team Manually',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the route for team creation via upload 
+                    window.location.href = "{{ route('teams.bulkUploadForm') }}";
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Redirect to the route for manual team creation
+                    window.location.href = "{{ route('teams.create') }}";
+                }
+            });
+        });
+
         </script>        
     </x-slot>
 </x-app-layout>

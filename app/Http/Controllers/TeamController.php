@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\teams;
 use App\Models\tournaments;
+use App\Imports\TeamsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ArrayExport;
+use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
@@ -256,6 +260,69 @@ class TeamController extends Controller
         $teams = $query->get();
         
         return response()->json(['teams' => $teams]);
+    }
+
+    public function bulkUploadForm()
+    {
+
+        $tournaments = Tournaments::all();
+
+        return view('teams.upload', compact('tournaments')); 
+    }
+
+    public function bulkUpload(Request $request)
+    {
+        Log::info('bulkUpload method called.');
+    
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+            'tournament_id' => 'required|exists:tournaments,id',
+        ]);
+    
+        try {
+            Log::info('Request validation passed.', [
+                'tournament_id' => $request->input('tournament_id'),
+                'file_name' => $request->file('file')->getClientOriginalName(),
+            ]);
+    
+            $tournamentId = $request->input('tournament_id');
+            
+            Log::info('Starting file import.', ['tournament_id' => $tournamentId]);
+    
+            // Import the file using the TeamsImport class
+            Excel::import(new TeamsImport($tournamentId), $request->file('file'));
+    
+            Log::info('File import completed successfully.');
+    
+            return redirect()->route('teams.index')->with('success', 'Teams imported successfully.');
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Error during file import.', ['error' => $e->getMessage()]);
+            
+            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled.');
+        
+            return redirect()->route('teams.bulkUploadForm')->withInput();
+        }
+    }
+
+    public function downloadSchoolTemplate()
+    {
+        $headers = [
+            ['Team name', 'Head Coach Name', 'Address', 'Category', 'Team Acronym', 'School President', 'Sports Director', 'Years Playing in Bucal'],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'team_template.xlsx');
+    }
+
+    public function downloadNonSchoolTemplate()
+    {
+        $headers = [
+            ['Team name', 'Head Coach Name', 'Address', 'Category'],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'non_school_team_template.xlsx');
     }
     
 }

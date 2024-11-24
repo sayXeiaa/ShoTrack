@@ -75,7 +75,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
     Route::get('/teams/{id}/edit', [TeamController::class, 'edit'])->name('teams.edit');
     Route::put('/teams/{id}', [TeamController::class, 'update'])->name('teams.update');
-    Route::delete('/teams', [TeamController::class, 'destroy'])->name('teams.destroy');
+    Route::delete('/teams', [TeamController::class, 'destroy'])->name('teams.destroy');  
+
+    // Route to display the bulk upload form
+    Route::get('/teams/upload', [TeamController::class, 'bulkUploadForm'])->name('teams.bulkUploadForm');
+    // Route to handle the bulk upload submission
+    Route::post('/teams/upload', [TeamController::class, 'bulkUpload'])->name('teams.bulkUpload');
+    // Route to download the school team template
+    Route::get('/teams/template/download/school', [TeamController::class, 'downloadSchoolTemplate'])->name('teams.template.download.school');
+    // Route to download the non-school team template
+    Route::get('/teams/template/download/non-school', [TeamController::class, 'downloadNonSchoolTemplate'])->name('teams.template.download.nonSchool');
+
 
     //Player routes
     // Route::get('/players', [PlayerController::class, 'index'])->name('players.index');

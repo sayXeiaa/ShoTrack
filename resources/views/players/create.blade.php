@@ -56,6 +56,11 @@
                             <div class="my-3">
                                 <select id="team_id" name="team_id" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Team</option>
+                                    @foreach($teams as $team)
+                                        <option value="{{ $team->id }}" {{ old('team_id') == $team->id ? 'selected' : '' }}>
+                                            {{ $team->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('team_id')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
@@ -96,21 +101,21 @@
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
-                        </div>
 
-                        <label for="position" class="text-lg font-medium">Position</label>
-                        <div class="my-3">
-                            <select name="position" id="position" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                <option value="" disabled selected>Select Player Position</option>
-                                <option value="Point Guard" {{ old('position') == 'Point Guard' ? 'selected' : '' }}>Point Guard (PG)</option>
-                                <option value="Shooting Guard" {{ old('position') == 'Shooting Guard' ? 'selected' : '' }}>Shooting Guard (SG)</option>
-                                <option value="Small Forward" {{ old('position') == 'Small Forward' ? 'selected' : '' }}>Small Forward (SF)</option>
-                                <option value="Power Forward" {{ old('position') == 'Power Forward' ? 'selected' : '' }}>Power Forward (PF)</option>
-                                <option value="Center" {{ old('position') == 'Center' ? 'selected' : '' }}>Center (C)</option>
-                            </select>
-                            @error('position')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                            <label for="position" class="text-lg font-medium">Position</label>
+                            <div class="my-3">
+                                <select name="position" id="position" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    <option value="" disabled selected>Select Player Position</option>
+                                    <option value="Point Guard" {{ old('position') == 'Point Guard' ? 'selected' : '' }}>Point Guard (PG)</option>
+                                    <option value="Shooting Guard" {{ old('position') == 'Shooting Guard' ? 'selected' : '' }}>Shooting Guard (SG)</option>
+                                    <option value="Small Forward" {{ old('position') == 'Small Forward' ? 'selected' : '' }}>Small Forward (SF)</option>
+                                    <option value="Power Forward" {{ old('position') == 'Power Forward' ? 'selected' : '' }}>Power Forward (PF)</option>
+                                    <option value="Center" {{ old('position') == 'Center' ? 'selected' : '' }}>Center (C)</option>
+                                </select>
+                                @error('position')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <label for="date_of_birth" class="text-lg font-medium">Date of Birth</label>
@@ -176,6 +181,7 @@
                 function updateTeams() {
                     const tournamentId = tournamentSelect.value;
                     const category = categorySelect.value;
+                    const selectedTeamId = '{{ old('team_id') }}'; 
                     teamSelect.innerHTML = '<option value="">Select a Team</option>'; // Reset teams dropdown
 
                     if (tournamentId) {
@@ -195,6 +201,12 @@
                                         var option = document.createElement('option');
                                         option.value = team.id;
                                         option.textContent = team.name;
+
+                                        // Set the previously selected team as selected
+                                        if (team.id == selectedTeamId) {
+                                            option.selected = true;
+                                        }
+
                                         teamSelect.appendChild(option);
                                     });
                                 } else {
@@ -210,6 +222,7 @@
                         teamSelect.innerHTML = '<option value="">Select a Team</option>'; // Reset teams dropdown if no tournament selected
                     }
                 }
+
 
                 tournamentSelect.addEventListener('change', function() {
                     updateCategoryVisibility();

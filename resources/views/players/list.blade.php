@@ -66,7 +66,7 @@
                         <th class="px-6 py-3 text-left">First Name</th>
                         <th class="px-6 py-3 text-left">Last Name</th>
                         <th class="px-6 py-3 text-left">Number</th>
-                        <th class="px-6 py-3 text-left">Position</th>
+                        <th class="px-6 py-3 text-left school-field">Position</th>
                         <th class="px-6 py-3 text-left">Date of Birth</th>
                         <th class="px-6 py-3 text-left">Age</th>
                         <th class="px-6 py-3 text-left">Height</th>
@@ -86,7 +86,7 @@
                                 <td class="px-6 py-3 text-left">{{ $player->first_name }}</td>
                                 <td class="px-6 py-3 text-left">{{ $player->last_name }}</td>
                                 <td class="px-6 py-3 text-left">{{ $player->number }}</td>
-                                <td class="px-6 py-3 text-left">{{ $player->position }}</td>
+                                <td class="px-6 py-3 text-left school-field">{{ $player->position }}</td>
                                 <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') }}</td>
                                 <td class="px-6 py-3 text-left">{{ $player->age }} </td>
                                 <td class="px-6 py-3 text-left">{{ $player->height }} ft</td>

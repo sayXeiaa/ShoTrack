@@ -10,6 +10,8 @@ class Players extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['category', 'team_id', 'first_name', 'last_name', 'number', 'years_playing_in_bucal', 'position', 'date_of_birth', 'age', 'height', 'weight'];
+
     public function team()
     {
         return $this->belongsTo(Teams::class);

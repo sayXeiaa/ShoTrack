@@ -5,7 +5,9 @@
                 {{ __('PLAYERS') }}
             </h2>
             @can('edit players')
-            <a href="{{ route('players.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">Create</a>
+            <button id="create-player" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">
+                Create
+            </button>
             @endcan
         </div>
     </x-slot>
@@ -111,6 +113,7 @@
     </div>
 
     <x-slot name="script">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function () {
                 const tournamentSelect = document.getElementById('tournament');
@@ -247,6 +250,27 @@
                 updateCategoryVisibility();
                 updateTeams();
             });
+
+            document.getElementById('create-player').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Create Player',
+                text: 'Choose how you want to create a player:',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Create Player via Upload',
+                cancelButtonText: 'Create Player Manually',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the route for team creation via upload 
+                    window.location.href = "{{ route('players.bulkUploadForm') }}";
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Redirect to the route for manual team creation
+                    window.location.href = "{{ route('players.create') }}";
+                }
+            });
+        });
+
         </script>
         
     </x-slot>

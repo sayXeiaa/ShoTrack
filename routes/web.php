@@ -97,6 +97,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/players-by-team', [PlayerController::class, 'getByTeam'])->name('players.by_team');
 
+     // Route to display the bulk upload form
+    Route::get('/players/upload', [PlayerController::class, 'bulkUploadForm'])->name('players.bulkUploadForm');
+     // Route to handle the bulk upload submission
+    Route::post('/players/upload', [PlayerController::class, 'bulkUpload'])->name('players.bulkUpload');
+     // Route to download the school team template
+    Route::get('/players/template/download/school', [PlayerController::class, 'downloadSchoolTemplate'])->name('players.template.download.school');
+     // Route to download the non-school team template
+    Route::get('/players/template/download/non-school', [PlayerController::class, 'downloadNonSchoolTemplate'])->name('players.template.download.nonSchool');
+
     
     //player stats routes
     Route::get('/playerstats/create', [PlayerStatsController::class, 'create'])->name('playerstats.create');

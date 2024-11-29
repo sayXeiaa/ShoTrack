@@ -76,35 +76,6 @@
         </div>
     </div>
 
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tournamentSelect = document.getElementById('tournament_id');
-            const uploadSection = document.getElementById('upload-section');
-            const templateDownloadLink = document.getElementById('template-download');
-    
-            // Function to handle visibility
-            const updateVisibility = () => {
-                const selectedOption = tournamentSelect.options[tournamentSelect.selectedIndex];
-                const tournamentType = selectedOption.getAttribute('data-tournament-type');
-                const templateRoute = selectedOption.getAttribute('data-template-route');
-    
-                if (tournamentType) {
-                    uploadSection.classList.remove('hidden');
-                    templateDownloadLink.href = templateRoute;
-                } else {
-                    uploadSection.classList.add('hidden');
-                    templateDownloadLink.href = '#';
-                }
-            };
-    
-            // Run on page load to restore state
-            updateVisibility();
-    
-            // Run on change to handle user selection
-            tournamentSelect.addEventListener('change', updateVisibility);
-        });
-    </script>     --}}
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tournamentSelect = document.getElementById('tournament_id');

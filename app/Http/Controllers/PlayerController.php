@@ -8,6 +8,10 @@ use App\Models\Players;
 use App\Models\Teams;
 use App\Models\tournaments;
 use Illuminate\Validation\Rule;
+use App\Imports\PlayersImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ArrayExport;
+use Illuminate\Support\Facades\Log;
 
 class PlayerController extends Controller
 {
@@ -262,6 +266,69 @@ class PlayerController extends Controller
         $players = $query->get();
     
         return response()->json(['players' => $players]);
+    }
+    
+    public function bulkUploadForm()
+    {
+
+        $tournaments = Tournaments::all();
+
+        return view('players.upload', compact('tournaments')); 
+    }
+
+    public function bulkUpload(Request $request)
+    {
+        Log::info('bulkUpload method called.');
+    
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+            'tournament_id' => 'required|exists:tournaments,id',
+        ]);
+    
+        try {
+            Log::info('Request validation passed.', [
+                'tournament_id' => $request->input('tournament_id'),
+                'file_name' => $request->file('file')->getClientOriginalName(),
+            ]);
+    
+            $tournamentId = $request->input('tournament_id');
+            
+            Log::info('Starting file import.', ['tournament_id' => $tournamentId]);
+    
+            // Import the file using the PlayersImport class
+            Excel::import(new PlayersImport($tournamentId), $request->file('file'));
+    
+            Log::info('File import completed successfully.');
+    
+            return redirect()->route('players.index')->with('success', 'Players imported successfully.');
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Error during file import.', ['error' => $e->getMessage()]);
+            
+            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled.');
+        
+            return redirect()->route('players.bulkUploadForm')->withInput();
+        }
+    }
+
+    public function downloadSchoolTemplate()
+    {
+        $headers = [
+            ['Category', 'Team Name', 'First Name', 'Last Name', 'Jersey Number', 'Years Playing in Bucal', 'Position', 'Date of Birth', 'Height', 'Weight' ],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'School_Tournament_Player_template.xlsx');
+    }
+
+    public function downloadNonSchoolTemplate()
+    {
+        $headers = [
+            ['Category', 'Team Name', 'First Name', 'Last Name', 'Jersey Number', 'Date of Birth', 'Height', 'Weight'],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'Non_School_Tournament_Player_template.xlsx');
     }
     
 }

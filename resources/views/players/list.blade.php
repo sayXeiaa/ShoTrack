@@ -115,6 +115,28 @@
     <x-slot name="script">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
+
+            // Function to delete a player
+            function deletePlayer(id) {
+                        if (confirm("Are you sure you want to delete?")) {
+                            $.ajax({
+                                url: '{{ route("players.destroy", ":id") }}'.replace(':id', id),
+                                type: 'DELETE',
+                                data: { id: id },
+                                dataType: 'json',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                success: function () {
+                                    window.location.href = '{{ route("players.index") }}';
+                                },
+                                error: function () {
+                                    alert("An error occurred while deleting the player.");
+                                }
+                            });
+                        }
+                    }
+
             document.addEventListener('DOMContentLoaded', function () {
                 const tournamentSelect = document.getElementById('tournament');
                 const categorySelect = document.getElementById('category');
@@ -181,27 +203,6 @@
                             });
                         })
                         .catch(error => console.error('Error fetching teams:', error));
-                }
-        
-                // Function to delete a player
-                function deletePlayer(id) {
-                    if (confirm("Are you sure you want to delete?")) {
-                        $.ajax({
-                            url: '{{ route("players.destroy", ":id") }}'.replace(':id', id),
-                            type: 'DELETE',
-                            data: { id: id },
-                            dataType: 'json',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            success: function () {
-                                window.location.href = '{{ route("players.index") }}';
-                            },
-                            error: function () {
-                                alert("An error occurred while deleting the player.");
-                            }
-                        });
-                    }
                 }
         
                 // Function to fetch filtered players

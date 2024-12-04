@@ -13,7 +13,9 @@ function getInitials($teamName) {
                 {{ __('Game Schedules') }}
             </h2>
             @can('edit schedules')
-                <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2">Create</a>
+                <button id="create-schedule" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2">
+                    Create
+                </button> 
             @endcan
         </div>
     </x-slot>
@@ -87,7 +89,7 @@ function getInitials($teamName) {
                             </div>
                         </div>
 
-                        <div class="mt-4 flex justify-center ml-[32rem]">
+                        <div class="mt-4 mb-4 flex justify-center ml-[32rem]">
                             <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline">
                                 View Box Score
                             </a>
@@ -121,6 +123,7 @@ function getInitials($teamName) {
     </div>
 
     <x-slot name="script">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
                 const tournamentSelect = document.getElementById('tournament');
@@ -162,6 +165,27 @@ function getInitials($teamName) {
                     });
                 }
             }
+
+            document.getElementById('create-schedule').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Create Schedule',
+                text: 'Choose how you want to create a schedule:',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Create Schedule via Upload',
+                cancelButtonText: 'Create Schedule Manually',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the route for team creation via upload 
+                    window.location.href = "{{ route('schedules.bulkUploadForm') }}";
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Redirect to the route for manual team creation
+                    window.location.href = "{{ route('schedules.create') }}";
+                }
+            });
+        });
+
         </script>
     </x-slot>
 </x-app-layout>

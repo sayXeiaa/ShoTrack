@@ -13,6 +13,9 @@ use App\Models\PlayerStat;
 use App\models\Players;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Imports\SchedulesImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ArrayExport;
 
 class ScheduleController extends Controller
 {
@@ -506,4 +509,68 @@ class ScheduleController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function bulkUploadForm()
+    {
+
+        $tournaments = Tournaments::all();
+
+        return view('schedules.upload', compact('tournaments')); 
+    }
+
+    public function bulkUpload(Request $request)
+    {
+        Log::info('bulkUpload method called.');
+    
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+            'tournament_id' => 'required|exists:tournaments,id',
+        ]);
+    
+        try {
+            Log::info('Request validation passed.', [
+                'tournament_id' => $request->input('tournament_id'),
+                'file_name' => $request->file('file')->getClientOriginalName(),
+            ]);
+    
+            $tournamentId = $request->input('tournament_id');
+            
+            Log::info('Starting file import.', ['tournament_id' => $tournamentId]);
+    
+            // Import the file using the PlayersImport class
+            Excel::import(new SchedulesImport($tournamentId), $request->file('file'));
+    
+            Log::info('File import completed successfully.');
+    
+            return redirect()->route('schedules.index')->with('success', 'Schedules imported successfully.');
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Error during file import.', ['error' => $e->getMessage()]);
+            
+            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled.');
+        
+            return redirect()->route('schedules.bulkUploadForm')->withInput();
+        }
+    }
+
+    public function downloadSchoolTemplate()
+    {
+        $headers = [
+            ['Category', 'Date', 'Time', 'Venue', 'Team 1 Name', 'Team 2 Name'],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'School_Tournament_Schedule_template.xlsx');
+    }
+
+    public function downloadNonSchoolTemplate()
+    {
+        $headers = [
+            ['Category', 'Date', 'Time', 'Venue', 'Team 1 Name', 'Team 2 Name'],
+        ];
+
+        // Generate and download the Excel file
+        return Excel::download(new ArrayExport($headers), 'Non_School_Tournament_Schedule_template.xlsx');
+    }
+    
 }

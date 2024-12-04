@@ -312,7 +312,7 @@ class TeamController extends Controller
         ];
 
         // Generate and download the Excel file
-        return Excel::download(new ArrayExport($headers), 'team_template.xlsx');
+        return Excel::download(new ArrayExport($headers), 'School_Tournament_Team_template.xlsx');
     }
 
     public function downloadNonSchoolTemplate()
@@ -322,7 +322,7 @@ class TeamController extends Controller
         ];
 
         // Generate and download the Excel file
-        return Excel::download(new ArrayExport($headers), 'non_school_team_template.xlsx');
+        return Excel::download(new ArrayExport($headers), 'Non_School_Tournament_Team_template.xlsx');
     }
     
 }

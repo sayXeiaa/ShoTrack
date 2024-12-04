@@ -17,10 +17,12 @@ class Schedule extends Model
 
     // The attributes that are mass assignable
     protected $fillable = [
-        'match_date',
+        'date',
+        'time',
         'venue',
         'team1_id',
         'team2_id',
+        'category',
         'tournament_id',
         'remaining_game_time',
         'time_elapsed',

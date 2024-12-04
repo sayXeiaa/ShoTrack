@@ -124,6 +124,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/scores/{scheduleId}', [ScoreController::class, 'getScores'])->name('scores.get');
     Route::post('/schedules/{id}/complete', [ScheduleController::class, 'markAsCompleted']);
 
+     // Route to display the bulk upload form
+    Route::get('/schedules/upload', [ScheduleController::class, 'bulkUploadForm'])->name('schedules.bulkUploadForm');
+     // Route to handle the bulk upload submission
+    Route::post('/schedules/upload', [ScheduleController::class, 'bulkUpload'])->name('schedules.bulkUpload');
+     // Route to download the school team template
+    Route::get('/schedules/template/download/school', [ScheduleController::class, 'downloadSchoolTemplate'])->name('schedules.template.download.school');
+     // Route to download the non-school team template
+    Route::get('/schedules/template/download/non-school', [ScheduleController::class, 'downloadNonSchoolTemplate'])->name('schedules.template.download.nonSchool');
+
+
     //Player Stats routes
     // Route::get('/playerstats', [PlayerStatsController::class, 'index'])->name('playerstats.index');
     Route::get('/playerstats/create/{schedule_id}', [PlayerStatsController::class, 'create'])->name('playerstats.create');

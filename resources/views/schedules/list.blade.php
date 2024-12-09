@@ -47,18 +47,27 @@ function getInitials($teamName) {
 
             @if ($schedules->isNotEmpty())
                 @foreach ($schedules as $schedule)
-                    <div class="bg-white shadow-md rounded-lg mb-4 p-6">
-                        <div class="flex justify-between items-center">
-                            <div class="flex-1">
-                                <p class="text-xl font-semibold">{{ \Carbon\Carbon::parse($schedule->date)->format('M d, Y') }} at {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}</p>
-                                <p class="text-base text-gray-500">{{ $schedule->venue }}</p>
-                                <p class="text-lg mt-2">{{ $schedule->team1->name }} <span class="font-bold">vs</span> {{ $schedule->team2->name }}</p>
-                            </div>
-                        </div>
 
+                <div class="bg-white shadow-md rounded-lg mb-4 p-6">
+                    <!-- Parent Container -->
+                    <div class="flex flex-col sm:flex-row justify-between">
+                        <!-- Schedule Details -->
+                        <div class="flex-1">
+                            <p class="text-lg sm:text-xl font-semibold">
+                                {{ \Carbon\Carbon::parse($schedule->date)->format('M d, Y') }} at 
+                                {{ \Carbon\Carbon::parse($schedule->time)->format('g:i A') }}
+                            </p>
+                            <p class="text-sm sm:text-base text-gray-500">
+                                {{ $schedule->venue }}
+                            </p>
+                            <p class="text-md sm:text-lg mt-2">
+                                {{ $schedule->team1->name }} <span class="font-bold">vs</span> {{ $schedule->team2->name }}
+                            </p>
+                        </div>
+                
                         <!-- Scores Box -->
-                        <div class="mt-[-6rem] flex justify-end"> 
-                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2 w-full max-w-sm"> 
+                        <div class="mt-6 sm:mt-0 flex justify-end sm:justify-start">
+                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2 w-full max-w-sm">
                                 <div class="text-center">
                                     <div class="grid grid-cols-6 gap-1">
                                         <!-- Team Names Column -->
@@ -67,18 +76,18 @@ function getInitials($teamName) {
                                         <div class="font-bold">2</div>
                                         <div class="font-bold">3</div>
                                         <div class="font-bold">4</div>
-                                        <div class="font-bold">Final</div> 
-
+                                        <div class="font-bold">Final</div>
+                        
                                         <!-- Team 1 Initials -->
-                                        <div class="font-bold">{{ getInitials($schedule->team1->name) }}</div>
+                                        <div class="team-initials">{{ getInitials($schedule->team1->name) }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 4)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('team_id', $schedule->team1->id)->sum('score') }}</div> <!-- Total for Team 1 -->
-
+                        
                                         <!-- Team 2 Initials -->
-                                        <div class="font-bold">{{ getInitials($schedule->team2->name) }}</div>
+                                        <div class="team-initials">{{ getInitials($schedule->team2->name) }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
@@ -88,30 +97,34 @@ function getInitials($teamName) {
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mt-4 mb-4 flex justify-center ml-[32rem]">
-                            <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline">
-                                View Box Score
-                            </a>
-                        </div>
-
-                            <div class="flex space-x-2 -mt-8">
-                                @can ('edit schedules')
-                                <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                @endcan
-                                @can ('manage statistics')
-                                @if (!$schedule->is_completed)
-                                    <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
-                                        Manage Game
-                                    </a>
-                                @endif       
-                                @endcan 
-                            </div>
-
+                        
                     </div>
-                @endforeach
+                
+                    <!-- View Box Score -->
+                    <div class="mt-2 mb-4 mr-52 sm:mb-4 flex justify-start sm:justify-end">
+                        <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline">
+                            View Box Score
+                        </a>
+                    </div>
+                
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap space-x-2 sm:-mt-16 justify-center sm:justify-start">
+                        @can('edit schedules')
+                        <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                        <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                        @endcan
+                        @can('manage statistics')
+                        @if (!$schedule->is_completed)
+                        <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
+                            Manage Game
+                        </a>
+                        @endif
+                        @endcan
+                    </div>
 
+                </div>
+                
+                @endforeach
             @else
                 <p class="text-lg text-gray-600">No schedules available.</p>
             @endif
@@ -121,6 +134,22 @@ function getInitials($teamName) {
             </div>
         </div>
     </div>
+
+    <style>
+        .team-initials {
+            width: 3rem; /* Set a fixed width */
+            height: 2rem; /* Set a fixed height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            background-color: #f0f0f0; /* Optional: background for better visibility */
+            border: 1px solid #ccc; /* Optional: border for styling */
+            border-radius: 0.25rem; /* Optional: rounded corners */
+        }
+    </style>
+    
 
     <x-slot name="script">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

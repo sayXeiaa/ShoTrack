@@ -12,12 +12,12 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-message></x-message>
 
             <div class="mb-4">
-                <form method="GET" action="{{ route('players.index') }}" id="filter-form" class="flex items-center space-x-4">
+                <form method="GET" action="{{ route('players.index') }}" id="filter-form" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <div class="flex-1">
                         <label for="tournament" class="block text-sm font-medium text-gray-700">Select Tournament</label>
                         <select id="tournament" name="tournament_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -62,52 +62,60 @@
                 </form>
             </div>
 
-            <table id="players-table" class="w-full">
-                <thead class="bg-gray-50">
-                    <tr class="border-b">
-                        <th class="px-6 py-3 text-left">First Name</th>
-                        <th class="px-6 py-3 text-left">Last Name</th>
-                        <th class="px-6 py-3 text-left">Number</th>
-                        <th class="px-6 py-3 text-left school-field">Position</th>
-                        <th class="px-6 py-3 text-left">Date of Birth</th>
-                        <th class="px-6 py-3 text-left">Age</th>
-                        <th class="px-6 py-3 text-left">Height</th>
-                        <th class="px-6 py-3 text-left">Weight</th>
-                        <th class="px-6 py-3 text-left school-field">Years Playing</th> 
-                        {{-- <th class="px-6 py-3 text-left">Created</th> --}}
-                        @can('edit players')
-                        <th class="px-6 py-3 text-center" width="180">Action</th>
-                        @endcan
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @if ($players->isNotEmpty())
-                        @foreach ($players as $player)
-                            <tr class="border-b">
-                                {{-- <td class="px-6 py-3 text-left">{{ $player->id }}</td> --}}
-                                <td class="px-6 py-3 text-left">{{ $player->first_name }}</td>
-                                <td class="px-6 py-3 text-left">{{ $player->last_name }}</td>
-                                <td class="px-6 py-3 text-left">{{ $player->number }}</td>
-                                <td class="px-6 py-3 text-left school-field">{{ $player->position }}</td>
-                                <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') }}</td>
-                                <td class="px-6 py-3 text-left">{{ $player->age }} </td>
-                                <td class="px-6 py-3 text-left">{{ $player->height }} ft</td>
-                                <td class="px-6 py-3 text-left">{{ $player->weight }} kg</td>
-                                <td class="px-6 py-3 text-left school-field">{{ $player->years_playing_in_bucal }}</td>
-                                {{-- <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->created_at)->format('d M, Y') }}</td> --}}
-                                @can ('edit players')
-                                <td class="px-6 py-3 text-center">
-                                    <a href="{{ route('players.edit', $player->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                                    <a href="javascript:void(0);" onclick="deletePlayer({{ $player->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                                </td>
-                                @endcan
-                            </tr>    
-                        @endforeach
-                    @endif
-                </tbody>
-            </table>
-            <div class="my-3">
-                {{ $players->links() }}
+            <div class="overflow-x-auto">
+                <table id="players-table" class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr class="border-b">
+                            <th class="px-6 py-3 text-left">First Name</th>
+                            <th class="px-6 py-3 text-left">Last Name</th>
+                            <th class="px-6 py-3 text-left">Number</th>
+                            <th class="px-6 py-3 text-left school-field">Position</th>
+                            <th class="px-6 py-3 text-left">Date of Birth</th>
+                            <th class="px-6 py-3 text-left">Age</th>
+                            <th class="px-6 py-3 text-left">Height</th>
+                            <th class="px-6 py-3 text-left">Weight</th>
+                            <th class="px-6 py-3 text-left school-field">Years Playing</th> 
+                            {{-- <th class="px-6 py-3 text-left">Created</th> --}}
+                            @can('edit players')
+                            <th class="px-6 py-3 text-center" width="180">Action</th>
+                            @endcan
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        @if ($players->isNotEmpty())
+                            @foreach ($players as $player)
+                                <tr class="border-b">
+                                    {{-- <td class="px-6 py-3 text-left">{{ $player->id }}</td> --}}
+                                    <td class="px-6 py-3 text-left">{{ $player->first_name }}</td>
+                                    <td class="px-6 py-3 text-left">{{ $player->last_name }}</td>
+                                    <td class="px-6 py-3 text-left">{{ $player->number }}</td>
+                                    <td class="px-6 py-3 text-left school-field">{{ $player->position }}</td>
+                                    <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') }}</td>
+                                    <td class="px-6 py-3 text-left">{{ $player->age }} </td>
+                                    <td class="px-6 py-3 text-left">{{ $player->height }} ft</td>
+                                    <td class="px-6 py-3 text-left">{{ $player->weight }} kg</td>
+                                    <td class="px-6 py-3 text-left school-field">{{ $player->years_playing_in_bucal }}</td>
+                                    {{-- <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->created_at)->format('d M, Y') }}</td> --}}
+                                    @can ('edit players')
+                                    <td class="px-6 py-3 text-center">
+                                        <div class="flex flex-col sm:flex-row sm:justify-center space-y-2 sm:space-y-0 sm:space-x-2">
+                                            <a href="{{ route('players.edit', $player->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">
+                                                Edit
+                                            </a>
+                                            <a href="javascript:void(0);" onclick="deletePlayer({{ $player->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>                                    
+                                    @endcan
+                                </tr>    
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                <div class="my-3">
+                    {{ $players->links() }}
+                </div>
             </div>
         </div>
     </div>

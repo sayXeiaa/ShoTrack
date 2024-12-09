@@ -12,8 +12,8 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-message></x-message>
 
             <div class="mb-4">
@@ -43,74 +43,80 @@
                 </form>
             </div>            
             
-
-            <table id="teams-table" class="w-full">
-                <thead class="bg-gray-50">
-                    <tr class="border-b">
-                        {{-- <th class="px-6 py-3 text-left" width="60">#</th> --}}
-                        <th class="px-6 py-3 text-left">Team Logo</th>
-                        <th class="px-6 py-3 text-left">Team Name</th>
-                        <th class="px-6 py-3 text-left">Head Coach</th>
-                        <th class="px-6 py-3 text-left school-field">School President</th>
-                        <th class="px-6 py-3 text-left school-field">Sports Director</th>
-                        <th class="px-6 py-3 text-left school-field">Years in BUCAL</th>
-                        <th class="px-6 py-3 text-left">Address</th>
-                        @can('edit teams')
-                        <th class="px-6 py-3 text-left" width="180">Created</th>
-                        <th class="px-6 py-3 text-center" width="180">Action</th>
-                        @endcan
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @if ($teams->isNotEmpty())
-                    @foreach ($teams as $team)
-                    <tr class="border-b">
-                        {{-- <td class="px-6 py-3 text-left">
-                            {{ $team->id }}
-                        </td> --}}
-                        <td class="px-6 py-3 text-left">
-                            @if ($team->logo)
-                                <img src="{{ asset('storage/' . $team->logo) }}" alt="Team Logo" class="w-32 h-32 object-contain">
-                            @else
-                                No Logo
-                            @endif
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $team->name }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $team->head_coach_name }}
-                        </td>
-                        <td class="px-6 py-3 text-left school-field">
-                            {{ $team->school_president }}
-                        </td>
-                        <td class="px-6 py-3 text-left school-field">
-                            {{ $team->sports_director }}
-                        </td>
-                        <td class="px-6 py-3 text-left school-field">
-                            {{ $team->years_playing_in_bucal }}
-                        </td>
-                        <td class="px-6 py-3 text-left">
-                            {{ $team->address }}
-                        </td>
-                        @can ('edit teams')
-                        <td class="px-6 py-3 text-left">
-                            {{ \Carbon\Carbon::parse($team->created_at)->format('d M, Y') }}
-                        </td>
-                        <td class="px-6 py-3 text-center">
-                            <a href="{{ route('teams.edit', $team->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                            <a href="javascript:void(0);" onclick="deleteteam({{ $team->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                        </td>
-                        @endcan
-                    </tr>    
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
-            <div class="my-3">
-                {{ $teams->links() }}
+            <div class="overflow-x-auto">
+                <table id="teams-table" class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr class="border-b">
+                            {{-- <th class="px-6 py-3 text-left" width="60">#</th> --}}
+                            <th class="px-6 py-3 text-left">Team Logo</th>
+                            <th class="px-6 py-3 text-left">Team Name</th>
+                            <th class="px-6 py-3 text-left">Head Coach</th>
+                            <th class="px-6 py-3 text-left school-field">School President</th>
+                            <th class="px-6 py-3 text-left school-field">Sports Director</th>
+                            <th class="px-6 py-3 text-left school-field">Years in BUCAL</th>
+                            <th class="px-6 py-3 text-left">Address</th>
+                            @can('edit teams')
+                            <th class="px-6 py-3 text-left" width="180">Created</th>
+                            <th class="px-6 py-3 text-center" width="180">Action</th>
+                            @endcan
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        @if ($teams->isNotEmpty())
+                        @foreach ($teams as $team)
+                        <tr class="border-b">
+                            {{-- <td class="px-6 py-3 text-left">
+                                {{ $team->id }}
+                            </td> --}}
+                            <td class="px-6 py-3 text-left">
+                                @if ($team->logo)
+                                    <img src="{{ asset('storage/' . $team->logo) }}" alt="Team Logo" class="w-32 h-32 object-contain">
+                                @else
+                                    No Logo
+                                @endif
+                            </td>
+                            <td class="px-6 py-3 text-left">
+                                {{ $team->name }}
+                            </td>
+                            <td class="px-6 py-3 text-left">
+                                {{ $team->head_coach_name }}
+                            </td>
+                            <td class="px-6 py-3 text-left school-field">
+                                {{ $team->school_president }}
+                            </td>
+                            <td class="px-6 py-3 text-left school-field">
+                                {{ $team->sports_director }}
+                            </td>
+                            <td class="px-6 py-3 text-left school-field">
+                                {{ $team->years_playing_in_bucal }}
+                            </td>
+                            <td class="px-6 py-3 text-left">
+                                {{ $team->address }}
+                            </td>
+                            @can ('edit teams')
+                            <td class="px-6 py-3 text-left">
+                                {{ \Carbon\Carbon::parse($team->created_at)->format('d M, Y') }}
+                            </td>
+                            <td class="px-6 py-3 text-center">
+                                <div class="flex flex-col sm:flex-row sm:justify-center space-y-2 sm:space-y-0 sm:space-x-2">
+                                    <a href="{{ route('teams.edit', $team->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">
+                                        Edit
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="deleteteam({{ $team->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>                            
+                            @endcan
+                        </tr>    
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                <div class="my-3">
+                    {{ $teams->links() }}
+                </div>
             </div>
-            
         </div>
     </div>
     <x-slot name="script">

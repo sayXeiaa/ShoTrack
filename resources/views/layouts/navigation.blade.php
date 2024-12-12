@@ -51,23 +51,31 @@
                         {{ __('Schedules') }}
                     </x-nav-link>
 
-                    {{-- Leaderboards Link with Hover Dropdown --}}
-                    <div x-data="{ open: false }" class="relative inline-block" @mouseover="open = true" @mouseleave="open = false">
-                        <x-nav-link class="text-white hover:text-blue-300 mt-5" @mouseover="open = true" @mouseleave="open = false">
+                    <div x-data="{ open: false }" class="relative inline-block">
+                        {{-- Leaderboards Link --}}
+                        <x-nav-link class="text-white hover:text-blue-300 mt-5"
+                                    @click="open = !open" 
+                                    @mouseover="open = true" 
+                                    @mouseleave="open = false"> 
                             {{ __('Leaderboards') }}
                         </x-nav-link>
 
-                        {{-- Dropdown Menu (appears on hover) --}}
-                        <div x-show="open" x-transition 
+                        <div 
+                            x-show="open" 
+                            x-transition 
                             class="absolute bg-white shadow-lg rounded-lg mt-2 py-2 w-48 z-10" 
-                            @mouseover="open = true" @mouseleave="open = false">
-                            {{-- <!-- Player Leaderboards  --}}
-                            <a href="{{ route('leaderboards.players') }}"
+                            @mouseover="open = true" 
+                            @mouseleave="open = false" 
+                            @click.away="open = false"> 
+                            
+                            {{-- Player Leaderboards --}}
+                            <a href="{{ route('leaderboards.players') }}" 
                             class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
                                 {{ __('Player Leaderboards') }}
                             </a>
+                            
                             {{-- Team Leaderboards --}}
-                            <a href="{{ route('leaderboards.index') }}"
+                            <a href="{{ route('leaderboards.index') }}" 
                             class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
                                 {{ __('Team Leaderboards') }}
                             </a>
@@ -123,7 +131,8 @@
             
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-200 transition duration-150 ease-in-out">
+                <button @click="open = ! open" 
+                    class="inline-flex items-center justify-center p-2 rounded-md text-white sm:text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-200 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -136,25 +145,38 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-blue-600 hover:bg-blue-100">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-blue-600 hover:bg-blue-100">
+            <x-responsive-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Tournaments') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')" class="text-blue-600 hover:bg-blue-100">
+            <x-responsive-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Teams') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')" class="text-blue-600 hover:bg-blue-100">
+            <x-responsive-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Players') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
+            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Game Schedules') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
-                {{ __('Leaderboards') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-blue-600 hover:bg-blue-100">
+            <!-- Leaderboards Dropdown -->
+            <div x-data="{ open: false }" class="relative">
+                <button 
+                    @click="open = !open" 
+                    class="block w-full text-left px-4 py-2 text-white sm:text-blue-600 hover:bg-black-100">
+                    {{ __('Leaderboards') }}
+                </button>
+                <div x-show="open" x-transition class="mt-2 bg-blue shadow-lg rounded-lg py-2 w-full">
+                    <x-responsive-nav-link :href="route('leaderboards.players')" class="block px-4 py-2 text-white sm:text-blue-600 hover:bg-blue-100">
+                        {{ __('Player Leaderboards') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('leaderboards.index')" class="block px-4 py-2 text-white sm:text-blue-600 hover:bg-blue-100">
+                        {{ __('Team Leaderboards') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
+            <x-responsive-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                 {{ __('Analytics') }}
             </x-responsive-nav-link>
         </div>
@@ -163,19 +185,19 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 @if (Auth::check())
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <div class="font-medium text-base text-white sm:text-blue-600 hover:bg-blue-100">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-white sm:text-blue-600 hover:bg-blue-100">{{ Auth::user()->email }}</div>
                 @else
                     <div class="space-x-4">
-                        <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:bg-blue-100">{{ __('Log In') }}</a>
-                        <a href="{{ route('register') }}" class="text-sm text-blue-600 hover:bg-blue-100">{{ __('Register') }}</a>
+                        <a href="{{ route('login') }}" class="text-sm text-white sm:text-blue-600 hover:bg-blue-100">{{ __('Log In') }}</a>
+                        <a href="{{ route('register') }}" class="text-sm text-white sm:text-blue-600 hover:bg-blue-100">{{ __('Register') }}</a>
                     </div>
                 @endif
             </div>
 
             <div class="mt-3 space-y-1">
                 @if (Auth::check())
-                    <x-responsive-nav-link :href="route('profile.edit')" class="text-blue-600 hover:bg-blue-100">
+                    <x-responsive-nav-link :href="route('profile.edit')" class="text-white sm:text-blue-600 hover:bg-blue-100">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
@@ -183,7 +205,7 @@
                         @csrf
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();" class="text-blue-600 hover:bg-blue-100">
+                                        this.closest('form').submit();" class="text-white sm:text-blue-600 hover:bg-blue-100">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>

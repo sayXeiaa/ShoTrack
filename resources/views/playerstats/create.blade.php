@@ -43,18 +43,22 @@
                             <!-- Team A Section -->
                             <div class="flex flex-col items-center w-1/2">
                                 <!-- Starting Players for Team A -->
-                                <div class="flex flex-wrap justify-center gap-2" id="startingTeamA">
-                                    @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center" 
-                                            data-team="teamA" data-position="starting" data-index="{{ $i }}"
-                                            data-player-number="{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}"
-                                            onclick="selectPlayer(this)">
-                                            <p>{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}</p>
-                                        </div>
-                                    @endfor
+                                <p class="font-semibold mb-2 mt-4 -ml-72">On Court:</p>
+                                <div class="max-w-full mx-auto px-2 sm:px-4 lg:px-6 border border-gray-300 rounded-lg shadow-md p-2">
+                                    <div class="flex flex-wrap justify-center gap-1" id="startingTeamA">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-1 w-16 h-16 flex items-center justify-center" 
+                                                data-team="teamA" data-position="starting" data-index="{{ $i }}"
+                                                data-player-number="{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}"
+                                                onclick="selectPlayer(this)">
+                                                <p>{{ isset($startingPlayersTeamA[$i]) ? $startingPlayersTeamA[$i]->number : '' }}</p>
+                                            </div>
+                                        @endfor
+                                    </div>
                                 </div>
                     
                                 <!-- Bench Players for Team A -->
+                                <p class="font-semibold mb-2 mt-4 -ml-64">Bench Players:</p>
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamA">
                                     @foreach ($benchPlayersTeamA as $player)
                                         <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
@@ -84,17 +88,21 @@
                             <!-- Team B Section -->
                             <div class="flex flex-col items-center w-1/2">
                                 <!-- Starting Players for Team B -->
-                                <div class="flex flex-wrap justify-center gap-2" id="startingTeamB">
-                                    @for ($i = 0; $i < 5; $i++)
-                                        <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
-                                            data-team="teamB" data-position="starting" data-index="{{ $i }}"
-                                            onclick="selectPlayer(this)">
-                                            <p>{{ isset($startingPlayersTeamB[$i]) ? $startingPlayersTeamB[$i]->number : '' }}</p>
-                                        </div>
-                                    @endfor
-                                </div>
+                                <p class="font-semibold mb-2 mt-4 -ml-72">On Court:</p>
+                                <div class="max-w-full mx-auto px-2 sm:px-4 lg:px-6 border border-gray-300 rounded-lg shadow-md p-2">
+                                    <div class="flex flex-wrap justify-center gap-1" id="startingTeamB">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-1 w-16 h-16 flex items-center justify-center" 
+                                                data-team="teamB" data-position="starting" data-index="{{ $i }}"
+                                                onclick="selectPlayer(this)">
+                                                <p>{{ isset($startingPlayersTeamB[$i]) ? $startingPlayersTeamB[$i]->number : '' }}</p>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>                                
                     
                                 <!-- Bench Players for Team B -->
+                                <p class="font-semibold mb-2 mt-4 -ml-64">Bench Players:</p>
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamB">
                                     @foreach ($benchPlayersTeamB as $player)
                                         <div class="player-box bg-gray-500  hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
@@ -479,51 +487,59 @@
     }
 
     function performSubstitution() {
-        // Check if both players are selected
-        if (!selectedBenchPlayer || selectedStartingPosition === null) {
-            alert('Please select a player from the bench and a starting position to substitute.');
-            return;
-        }
-
-        // Check if both players are from the same team
-        if (selectedBenchPlayer.team !== selectedStartingPosition.team) {
-            alert('You can only substitute players within the same team.');
-            return;
-        }
-
-        // Get the team and position-related selectors
-        const startingSelector = `#starting${selectedStartingPosition.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box:nth-child(${selectedStartingPosition.index + 1})`;
-        const benchSelector = `#benchPlayers${selectedBenchPlayer.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box[data-player-number="${selectedBenchPlayer.playerNumber}"]`;
-
-        // Find the starting and bench boxes
-        const startingBox = document.querySelector(startingSelector);
-        const benchBox = document.querySelector(benchSelector);
-
-        // Check if the boxes are found
-        if (startingBox && benchBox) {
-            // Get the player number currently in the starting position
-            const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
-
-            // Swap player numbers
-            startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
-            benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
-
-            // Update data attributes
-            startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
-            benchBox.dataset.playerNumber = startingPlayerNumber;
-
-            // Reset selections
-            selectedBenchPlayer = null;
-            selectedStartingPosition = null;
-
-            // Remove highlights from all player boxes
-            document.querySelectorAll('.player-box').forEach(box => {
-                box.classList.remove('border-4', 'border-green-500'); // Adjust these classes to match your highlight styles
-            });
-        } else {
-            alert('Error: Could not find the necessary player boxes.');
-        }
+    // Check if both players are selected
+    if (!selectedBenchPlayer || selectedStartingPosition === null) {
+        alert('Please select a player from the bench and a starting position to substitute.');
+        return;
     }
+
+    // Check if both players are from the same team
+    if (selectedBenchPlayer.team !== selectedStartingPosition.team) {
+        alert('You can only substitute players within the same team.');
+        return;
+    }
+
+    // Get the team and position-related selectors
+    const startingSelector = `#starting${selectedStartingPosition.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box:nth-child(${selectedStartingPosition.index + 1})`;
+    const benchSelector = `#benchPlayers${selectedBenchPlayer.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box[data-player-number="${selectedBenchPlayer.playerNumber}"]`;
+
+    // Find the starting and bench boxes
+    const startingBox = document.querySelector(startingSelector);
+    const benchBox = document.querySelector(benchSelector);
+
+    // Check if the boxes are found
+    if (startingBox && benchBox) {
+        // Get the player number currently in the starting position
+        const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
+
+        // Swap player numbers
+        startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
+        benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
+
+        // Update data attributes
+        startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
+        benchBox.dataset.playerNumber = startingPlayerNumber;
+
+        // Change background color for substituted players
+        startingBox.classList.remove('bg-gray-500');
+        startingBox.classList.add('bg-blue-700');
+
+        benchBox.classList.remove('bg-green-500', 'bg-blue-700'); // Reset to original if previously changed
+        benchBox.classList.add('bg-gray-500');
+
+        // Reset selections
+        selectedBenchPlayer = null;
+        selectedStartingPosition = null;
+
+        // Remove highlights from all player boxes
+        document.querySelectorAll('.player-box').forEach(box => {
+            box.classList.remove('border-4', 'border-green-500');
+        });
+    } else {
+        alert('Error: Could not find the necessary player boxes.');
+    }
+}
+
 
     function getStartingPlayers() {
         const startingPlayers = {

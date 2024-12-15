@@ -100,26 +100,26 @@ function getInitials($teamName) {
                         
                     </div>
                 
-                    <!-- View Box Score -->
-                    <div class="mt-2 mb-4 mr-52 sm:mb-4 flex justify-start sm:justify-end">
-                        <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline">
+                    <div class="flex flex-wrap justify-between items-center mt-2">
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-2 mt-4 mb-2 sm:-mt-4 justify-center sm:justify-start">
+                            @can('edit schedules')
+                            <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                            <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                            @endcan
+                            @can('manage statistics')
+                            @if (!$schedule->is_completed)
+                            <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
+                                Manage Game
+                            </a>
+                            @endif
+                            @endcan
+                        </div>
+                
+                        <!-- View Box Score -->
+                        <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline mr-52">
                             View Box Score
                         </a>
-                    </div>
-                
-                    <!-- Action Buttons -->
-                    <div class="flex flex-wrap space-x-2 sm:-mt-16 justify-center sm:justify-start">
-                        @can('edit schedules')
-                        <a href="{{ route('schedules.edit', $schedule->id) }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-                        <a href="javascript:void(0);" onclick="deleteschedule({{ $schedule->id }})" class="bg-red-600 text-base rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-                        @endcan
-                        @can('manage statistics')
-                        @if (!$schedule->is_completed)
-                        <a href="{{ route('playerstats.create', ['schedule_id' => $schedule->id]) }}" class="bg-blue-600 text-base rounded-md text-white px-3 py-2 hover:bg-blue-500">
-                            Manage Game
-                        </a>
-                        @endif
-                        @endcan
                     </div>
 
                 </div>

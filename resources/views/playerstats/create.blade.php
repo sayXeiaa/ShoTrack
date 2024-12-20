@@ -487,60 +487,65 @@
     }
 
     function performSubstitution() {
-    // Check if both players are selected
-    if (!selectedBenchPlayer || selectedStartingPosition === null) {
-        alert('Please select a player from the bench and a starting position to substitute.');
-        return;
+        // Check if both players are selected
+        if (!selectedBenchPlayer || selectedStartingPosition === null) {
+            alert('Please select a player from the bench and a starting position to substitute.');
+            return;
+        }
+
+        // Check if the bench player has an actual player number
+        if (!selectedBenchPlayer.playerNumber || selectedBenchPlayer.playerNumber.trim() === '') {
+            alert('The selected bench position does not have a player to substitute.');
+            return;
+        }
+
+        // Check if both players are from the same team
+        if (selectedBenchPlayer.team !== selectedStartingPosition.team) {
+            alert('You can only substitute players within the same team.');
+            return;
+        }
+
+        // Get the team and position-related selectors
+        const startingSelector = `#starting${selectedStartingPosition.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box:nth-child(${selectedStartingPosition.index + 1})`;
+        const benchSelector = `#benchPlayers${selectedBenchPlayer.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box[data-player-number="${selectedBenchPlayer.playerNumber}"]`;
+
+        // Find the starting and bench boxes
+        const startingBox = document.querySelector(startingSelector);
+        const benchBox = document.querySelector(benchSelector);
+
+        // Check if the boxes are found
+        if (startingBox && benchBox) {
+            // Get the player number currently in the starting position
+            const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
+
+            // Swap player numbers
+            startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
+            benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
+
+            // Update data attributes
+            startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
+            benchBox.dataset.playerNumber = startingPlayerNumber;
+
+            // Change background color for substituted players
+            startingBox.classList.remove('bg-gray-500');
+            startingBox.classList.add('bg-blue-700');
+
+            benchBox.classList.remove('bg-green-500', 'bg-blue-700'); 
+            benchBox.classList.add('bg-gray-500');
+
+            // Reset selections
+            selectedBenchPlayer = null;
+            selectedStartingPosition = null;
+
+            // Remove highlights from all player boxes
+            document.querySelectorAll('.player-box').forEach(box => {
+                box.classList.remove('border-4', 'border-green-500');
+            });
+        } else {
+            alert('Error: Could not find the necessary player boxes.');
+        }
     }
-
-    // Check if both players are from the same team
-    if (selectedBenchPlayer.team !== selectedStartingPosition.team) {
-        alert('You can only substitute players within the same team.');
-        return;
-    }
-
-    // Get the team and position-related selectors
-    const startingSelector = `#starting${selectedStartingPosition.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box:nth-child(${selectedStartingPosition.index + 1})`;
-    const benchSelector = `#benchPlayers${selectedBenchPlayer.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box[data-player-number="${selectedBenchPlayer.playerNumber}"]`;
-
-    // Find the starting and bench boxes
-    const startingBox = document.querySelector(startingSelector);
-    const benchBox = document.querySelector(benchSelector);
-
-    // Check if the boxes are found
-    if (startingBox && benchBox) {
-        // Get the player number currently in the starting position
-        const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
-
-        // Swap player numbers
-        startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
-        benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
-
-        // Update data attributes
-        startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
-        benchBox.dataset.playerNumber = startingPlayerNumber;
-
-        // Change background color for substituted players
-        startingBox.classList.remove('bg-gray-500');
-        startingBox.classList.add('bg-blue-700');
-
-        benchBox.classList.remove('bg-green-500', 'bg-blue-700'); // Reset to original if previously changed
-        benchBox.classList.add('bg-gray-500');
-
-        // Reset selections
-        selectedBenchPlayer = null;
-        selectedStartingPosition = null;
-
-        // Remove highlights from all player boxes
-        document.querySelectorAll('.player-box').forEach(box => {
-            box.classList.remove('border-4', 'border-green-500');
-        });
-    } else {
-        alert('Error: Could not find the necessary player boxes.');
-    }
-}
-
-
+    
     function getStartingPlayers() {
         const startingPlayers = {
             teamA: [],
@@ -716,6 +721,7 @@
      // Function for the "Turnover" button
     function madeTurnover() {
         recordShot('made', 'turnover');
+        stopTimer();
     }
 
     // Function for the "Foul" button

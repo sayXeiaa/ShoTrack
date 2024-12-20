@@ -23,8 +23,8 @@ return new class extends Migration
             $table->boolean('is_completed')->default(false);
             $table->timestamps();
             $table->foreignId('tournament_id')->constrained('tournaments');
-            $table->foreignId('team1_id')->constrained('teams');
-            $table->foreignId('team2_id')->constrained('teams');
+            $table->foreignId('team1_id')->constrained('teams')->onDelete('cascade');;
+            $table->foreignId('team2_id')->constrained('teams')->onDelete('cascade');;
             $table->string('category')->nullable(); 
 
         });

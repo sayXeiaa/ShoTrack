@@ -21,6 +21,8 @@ class Schedule extends Model
         'time',
         'venue',
         'team1_id',
+        'team1_color',
+        'team2_color',
         'team2_id',
         'category',
         'tournament_id',

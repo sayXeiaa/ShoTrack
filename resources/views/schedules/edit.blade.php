@@ -62,7 +62,7 @@
 
                         <label for="time" class="text-lg font-medium">Time</label>
                         <div class="my-3">
-                            <input type="text" id="time" name="time" value="{{ old('time') }}" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;" placeholder="e.g., 12:00 PM">
+                            <input type="text" id="time" name="time" value="{{ old('time', $schedule->time) }}" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;" placeholder="e.g., 12:00 PM">
                             @error('time')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
@@ -91,6 +91,18 @@
                             @enderror
                         </div>
 
+                        <label for="team1Color" class="text-lg font-medium">Team 1 Color</label>
+                        <div class="my-3">
+                            <select name="team1_color" id="team1Color" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <option value="">Select Color</option>
+                                <option value="light" {{ old('team1_color', $schedule->team1_color) == 'light' ? 'selected' : '' }}>Light</option>
+                                <option value="dark" {{ old('team1_color', $schedule->team1_color) == 'dark' ? 'selected' : '' }}>Dark</option>
+                            </select>
+                            @error('team1_color')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>   
+
                         <label for="team2" class="text-lg font-medium">Team 2</label>
                         <div class="my-3">
                             <select name="team2_id" id="team2" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -102,6 +114,18 @@
                                 @endforeach
                             </select>
                             @error('team2_id')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <label for="team2Color" class="text-lg font-medium">Team 2 Color</label>
+                        <div class="my-3">
+                            <select name="team2_color" id="team2Color" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <option value="">Select Color</option>
+                                <option value="light" {{ old('team2_color', $schedule->team2_color) == 'light' ? 'selected' : '' }}>Light</option>
+                                <option value="dark" {{ old('team2_color', $schedule->team2_color) == 'dark' ? 'selected' : '' }}>Dark</option>
+                            </select>
+                            @error('team2_color')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>

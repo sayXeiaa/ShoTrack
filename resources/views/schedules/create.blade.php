@@ -91,6 +91,18 @@
                             @enderror
                         </div>
 
+                        <label for="team1Color" class="text-lg font-medium">Team 1 Color</label>
+                        <div class="my-3">
+                            <select name="team1_color" id="team1Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <option value="">Select Color</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>                            
+                            @error('team1_color')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>                    
+
                         <label for="team2" class="text-lg font-medium">Team 2</label>
                         <div class="my-3">
                             <select name="team2_id" id="team2" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -102,6 +114,18 @@
                                 @endforeach
                             </select>                            
                             @error('team2_id')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <label for="team2Color" class="text-lg font-medium">Team 2 Color</label>
+                        <div class="my-3">
+                            <select name="team2_color" id="team2Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                <option value="">Select Color</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>                            
+                            @error('team2_color')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
@@ -121,6 +145,8 @@
         const categorySelectionDiv = document.getElementById('category-selection');
         const team1Select = document.getElementById('team1');
         const team2Select = document.getElementById('team2');
+        const team1ColorSelect = document.getElementById("team1Color");
+        const team2ColorSelect = document.getElementById("team2Color");
 
         function updateCategoryVisibility() {
             const selectedOption = tournamentSelect.selectedOptions[0];
@@ -222,6 +248,24 @@
             });
         }
 
+        function filterColors() {
+            const selectedColor1 = team1ColorSelect.value;
+            const selectedColor2 = team2ColorSelect.value;
+
+            // Filter options for team2 based on team1 selection
+            Array.from(team2ColorSelect.options).forEach(option => {
+                option.style.display = (option.value === selectedColor1 && selectedColor1) ? 'none' : 'block';
+            });
+
+            // Filter options for team1 based on team2 selection
+            Array.from(team1ColorSelect.options).forEach(option => {
+                option.style.display = (option.value === selectedColor2 && selectedColor2) ? 'none' : 'block';
+            });
+        }
+
+        team1ColorSelect.addEventListener("change", filterColors);
+        team2ColorSelect.addEventListener("change", filterColors);
+
         tournamentSelect.addEventListener('change', function() {
             updateCategoryVisibility();
             updateTeams();
@@ -237,6 +281,7 @@
         // Initialize visibility and teams on page load
         updateCategoryVisibility();
         updateTeams();
+        filterColors();
     });
     </script>
     </x-slot>

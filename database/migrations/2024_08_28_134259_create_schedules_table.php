@@ -26,6 +26,8 @@ return new class extends Migration
             $table->foreignId('team1_id')->constrained('teams')->onDelete('cascade');;
             $table->foreignId('team2_id')->constrained('teams')->onDelete('cascade');;
             $table->string('category')->nullable(); 
+            $table->string('team1_color')->nullable(); 
+            $table->string('team2_color')->nullable(); 
 
         });
     }

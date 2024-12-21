@@ -35,12 +35,14 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            '*.category' => 'nullable|string',
             '*.date' => 'required|date',
             '*.time' => ['required', new Time12HourFormat],
             '*.venue' => 'required|string|max:255',
             '*.team_1_name' => 'required|string|max:255|different:*.team_2_name',
             '*.team_2_name' => 'required|string|max:255',
+            '*.category' => 'nullable|string',
+            '*.team_1_color' => 'nullable|string',
+            '*.team_2_color' => 'nullable|string',
         ];
     }
 
@@ -88,13 +90,15 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
         ]);
 
         return new Schedule([
-            'category' => $tournament->has_categories ? $row['category'] : null,
+            'tournament_id' => $this->tournamentId,
             'date' => $matchDate,
             'time' => $matchTime,
             'venue' => $row['venue'],
             'team1_id' => $team1->id,
+            'team1_color' => $row['team_1_color'],
             'team2_id' => $team2->id,
-            'tournament_id' => $this->tournamentId,
+            'team2_color' => $row['team_2_color'],
+            'category' => $tournament->has_categories ? $row['category'] : null,
         ]);
     }
 

@@ -103,6 +103,8 @@ class ScheduleController extends Controller
             'team1_id' => 'required|exists:teams,id|different:team2_id',
             'team2_id' => 'required|exists:teams,id',
             'category' => 'nullable|string',
+            'team1_color' => 'nullable|string',
+            'team2_color' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -165,6 +167,8 @@ class ScheduleController extends Controller
         $schedule->venue = $request->venue;
         $schedule->team1_id = $request->team1_id;
         $schedule->team2_id = $request->team2_id;
+        $schedule->team1_color = $request->team1_color;
+        $schedule->team2_color = $request->team2_color;
 
         // Only set category if the tournament has categories
         if ($hasCategories) {
@@ -227,6 +231,8 @@ class ScheduleController extends Controller
             'team1_id' => 'required|exists:teams,id',
             'team2_id' => 'required|exists:teams,id',
             'category' => 'nullable|string',
+            'team1_color' => 'nullable|string',
+            'team2_color' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -245,6 +251,8 @@ class ScheduleController extends Controller
         $schedule->venue = $request->venue;
         $schedule->team1_id = $request->team1_id;
         $schedule->team2_id = $request->team2_id;
+        $schedule->team1_color = $request->team1_color;
+        $schedule->team2_color = $request->team2_color;
 
         if ($hasCategories) {
             $schedule->category = $request->input('category');
@@ -556,7 +564,7 @@ class ScheduleController extends Controller
     public function downloadSchoolTemplate()
     {
         $headers = [
-            ['Category', 'Date', 'Time', 'Venue', 'Team 1 Name', 'Team 2 Name'],
+            ['Category', 'Date', 'Time', 'Venue', 'Team 1 Name', 'Team 1 Color', 'Team 2 Name', 'Team 2 Color'],
         ];
 
         // Generate and download the Excel file

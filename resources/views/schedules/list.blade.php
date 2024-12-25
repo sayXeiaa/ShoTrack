@@ -60,9 +60,9 @@ function getInitials($teamName) {
                             <p class="text-sm sm:text-base text-gray-500">
                                 {{ $schedule->venue }}
                             </p>
-                            <p class="text-md sm:text-lg mt-2">
-                                {{ $schedule->team1->name }} <span class="font-bold">vs</span> {{ $schedule->team2->name }}
-                            </p>
+                            {{ $schedule->team1->name }}{{ $schedule->team1_color ? " (" . ucfirst($schedule->team1_color) . ")" : '' }} 
+                            <span class="font-bold">vs</span> 
+                            {{ $schedule->team2->name }}{{ $schedule->team2_color ? " (" . ucfirst($schedule->team2_color) . ")" : '' }}
                         </div>
                 
                         <!-- Scores Box -->

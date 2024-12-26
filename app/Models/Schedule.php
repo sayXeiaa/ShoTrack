@@ -58,4 +58,9 @@ class Schedule extends Model
     {
         return $this->hasMany(PlayerStat::class);
     }
+
+    public function teamMetrics()
+    {
+        return $this->hasMany(TeamMetric::class);
+    }
 }

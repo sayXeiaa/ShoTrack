@@ -44,4 +44,9 @@ class Teams extends Model
     {
         return $this->hasMany(TeamStat::class, 'team_id'); 
     }
+
+    public function metrics()
+    {
+        return $this->hasMany(TeamMetric::class);
+    }
 }

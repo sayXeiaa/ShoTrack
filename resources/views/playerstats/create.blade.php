@@ -125,36 +125,54 @@
 
                             <!-- Assist -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeAssist()">Assist</button>
-                                {{-- <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="()">No Assist</button> --}}
                             </div>
 
                             <!-- Made Points -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPoints()">Made 2 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeThreePoints()">Made 3 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeFreeThrow()">Made Free Throw</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPoints()">Made 2 Points</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeThreePoints()">Made 3 Points</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeFreeThrow()">Made Free Throw</button>
+                                <button type="button" class="bg-blue-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeBlock()">Block</button>
                             </div>
 
                             <!-- Missed Points -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedTwoPoints()">Missed 2 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedThreePoints()">Missed 3 Points</button>
-                                <button type="button" class="bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="missedFreeThrow()">Missed Free Throw</button>
+                                <button type="button" class="bg-red-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="missedTwoPoints()">Missed 2 Points</button>
+                                <button type="button" class="bg-red-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="missedThreePoints()">Missed 3 Points</button>
+                                <button type="button" class="bg-red-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="missedFreeThrow()">Missed Free Throw</button>
+                                <button type="button" class="bg-blue-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeSteal()">Steal</button>
                             </div>
 
                             <!-- Rebounds -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeOffensiveRebound()">Offensive Rebound</button>
-                                <button type="button" class="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="madeDefensiveRebound()">Defensive Rebound</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeOffensiveRebound()">Offensive Rebound</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeDefensiveRebound()">Defensive Rebound</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeAssist()">Assist</button>
+                                <button type="button" class="bg-blue-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTurnover()">Turnover</button>
                             </div>
 
                             <!-- Block, Steal, Turnover, Foul -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeBlock()">Block</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeSteal()">Steal</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeTurnover()">Turnover</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Foul</button>
+                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Personal Foul</button>
+                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Technical Foul</button>
+                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Unsportsmanlike Foul</button>
+                                
+                            </div>
+
+                            <!-- Micro stats -->
+                            <p class="font-semibold mb-2 mt-4">Micro Stats:</p>
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPointOffTurnover()">2-Point Off Turnover</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeThreePointOffTurnover()">3-Point Off Turnover</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPointFastbreak()">2-Point Fastbreak</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeThreePointFastbreak()">3-Point Fastbreak</button>
+                                
+                            </div>
+
+                            <div class="mb-4 grid grid-cols-4 gap-4">
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeOnePointSecondChance()">1-Point 2nd Chance</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTwoPointSecondChance()">2-Point 2nd Chance</button>
+                                <button type="button" class="bg-green-700 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeThreePointSecondChance()">3-Point 2nd Chance</button>
                             </div>
 
                             <div class="mb-4 grid grid-cols-4 gap-4">
@@ -646,6 +664,69 @@
         });
     }
 
+    function recordTeamMetric(result, type_of_stat) {
+        const selectedPlayer = selectedBenchPlayer || selectedStartingPosition;
+        const currentGameTime = document.getElementById('gameTime').textContent;
+
+        if (!selectedPlayer) {
+            alert('Please select a player first.');
+            return;
+        }
+
+        const teamPlaceholder = selectedPlayer.team;
+        const teamId = getTeamId(teamPlaceholder);
+        const scheduleId = getCurrentScheduleId();
+        const quarter = getCurrentQuarter();
+
+        if (!teamId) {
+            alert('Invalid team selected.');
+            return;
+        }
+
+        let points = 0;
+
+        // Determine points based on the type of stat
+        if (type_of_stat === 'one_point_second_chance' ) {
+            points = 1;
+        }
+        else if (type_of_stat === 'two_point_off_turnover' || type_of_stat === 'two_point_fastbreak' || type_of_stat === 'two_point_second_chance') {
+            points = 2;
+        } else if (type_of_stat === 'three_point_off_turnover' || type_of_stat === 'three_point_fastbreak' || type_of_stat === 'three_point_second_chance') {
+            points = 3;
+        }
+
+        console.log('Team Metric Data being sent:', {
+            teamId: teamId,
+            scheduleId: scheduleId,
+            quarter: quarter,
+            type_of_stat: type_of_stat,
+            points: points,
+            result: result,
+            gameTime: currentGameTime
+        });
+
+        $.ajax({
+            url: '{{ route('team-metrics.store') }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                team_id: teamId,
+                type_of_stat: type_of_stat,
+                points: points,
+                result: result,
+                schedule_id: scheduleId,
+                quarter: quarter,
+                game_time: currentGameTime
+            },
+            success: function(response) {
+                console.log('Team metric recorded successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error recording team metric:', status, error);
+            }
+        });
+    }
+
     function recordScore(teamPlaceholder, points, scheduleId, quarter, gameTime) {
         const teamId = getTeamId(teamPlaceholder);
 
@@ -733,6 +814,48 @@
      // Function for the "Foul" button
     function madeAssist() {
         recordShot('made', 'assist');
+    }
+
+    // Function for the "2-Point Off Turnover" button
+    function madeTwoPointOffTurnover() {
+        recordShot('made', 'two_point');
+        recordTeamMetric('made', 'two_point_off_turnover');
+    }
+
+    // Function for the "3-Point Off Turnover" button
+    function madeThreePointOffTurnover() {
+        recordShot('made', 'three_point');
+        recordTeamMetric('made', 'three_point_off_turnover');
+    }
+
+    // Function for the "2-Point Fastbreak" button
+    function madeTwoPointFastbreak() {
+        recordShot('made', 'two_point');
+        recordTeamMetric('made', 'two_point_fastbreak');
+    }
+
+    // Function for the "3-Point Fastbreak" button
+    function madeThreePointFastbreak() {
+        recordShot('made', 'three_point');
+        recordTeamMetric('made', 'three_point_fastbreak');
+    }
+
+    // Function for the "1-Point Second Chance" button
+    function madeOnePointSecondChance() {
+        recordShot('made', 'free_throw');
+        recordTeamMetric('made', 'one_point_second_chance');
+    }
+
+     // Function for the "2-Point Second Chance" button
+    function madeTwoPointSecondChance() {
+        recordShot('made', 'two_point');
+        recordTeamMetric('made', 'two_point_second_chance');
+    }
+
+     // Function for the "3-Point Second Chance" button
+    function madeThreePointSecondChance() {
+        recordShot('made', 'three_point');
+        recordTeamMetric('made', 'three_point_second_chance');
     }
 
     let displayedEntries = [];

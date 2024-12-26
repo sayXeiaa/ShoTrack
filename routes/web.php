@@ -15,6 +15,7 @@ use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\TeamStatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\TeamMetricController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -218,6 +219,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedules-by-tournament/{tournamentId}', [ScheduleController::class, 'getSchedulesByTournament']);
 
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+
+    //Team Metric Routes:
+    Route::post('/team-metrics/store', [TeamMetricController::class, 'store'])->name('team-metrics.store');
 
 });
 require __DIR__.'/auth.php';

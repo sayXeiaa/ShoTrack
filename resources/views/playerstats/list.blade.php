@@ -43,6 +43,9 @@
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300" data-type="playByPlay">
                     Play-By-Play
                 </button>
+                <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300" data-type="teamComparison">
+                    Team Comparison
+                </button>
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300" data-type="gameChart">
                     Game Chart
                 </button>
@@ -374,6 +377,9 @@
                 $totalStealsTeam1 = $playerStatsTeam1->sum('steals');
                 $totalBlocksTeam1 = $playerStatsTeam1->sum('blocks');
                 $totalTurnoversTeam1 = $playerStatsTeam1->sum('turnovers');
+                $totalDefensiveReboundsTeam1 = $playerStatsTeam1->sum('defensive_rebounds');
+                $totalOffensiveReboundsTeam1 = $playerStatsTeam1->sum('offensive_rebounds');
+
 
                 $totalFGMTeam1 = $playerStatsTeam1->sum(function($stat) {
                     return $stat->two_pt_fg_made + $stat->three_pt_fg_made;
@@ -383,7 +389,15 @@
                     return $stat->two_pt_fg_attempt + $stat->three_pt_fg_attempt;
                 });
 
+                $total2ptTeam1 = $playerStatsTeam1->sum(function($stat) {
+                    return $stat->two_pt_fg_made;
+                });
+
                 $totalFGPercentageTeam1 = ($totalFGATeam1 > 0) ? number_format(($totalFGMTeam1 / $totalFGATeam1) * 100, 1) : 0.0;
+
+                $total2PMTeam1 = $playerStatsTeam1->sum('two_pt_fg_made');
+                $total2PATeam1 = $playerStatsTeam1->sum('two_pt_fg_attempt');
+                $total2ptPercentageTeam1 = ($total2PATeam1 > 0) ? number_format(($total2PMTeam1 / $total2PATeam1) * 100, 1) : 0.0;
 
                 $total3PMTeam1 = $playerStatsTeam1->sum('three_pt_fg_made');
                 $total3PATeam1 = $playerStatsTeam1->sum('three_pt_fg_attempt');
@@ -400,6 +414,9 @@
                 $totalStealsTeam2 = $playerStatsTeam2->sum('steals');
                 $totalBlocksTeam2 = $playerStatsTeam2->sum('blocks');
                 $totalTurnoversTeam2 = $playerStatsTeam2->sum('turnovers');
+                $totalDefensiveReboundsTeam2 = $playerStatsTeam2->sum('defensive_rebounds');
+                $totalOffensiveReboundsTeam2 = $playerStatsTeam2->sum('offensive_rebounds');
+
 
                 $totalFGMTeam2 = $playerStatsTeam2->sum(function($stat) {
                     return $stat->two_pt_fg_made + $stat->three_pt_fg_made;
@@ -409,7 +426,15 @@
                     return $stat->two_pt_fg_attempt + $stat->three_pt_fg_attempt;
                 });
 
+                $total2ptTeam2 = $playerStatsTeam1->sum(function($stat) {
+                    return $stat->two_pt_fg_made;
+                });
+
                 $totalFGPercentageTeam2 = ($totalFGATeam2 > 0) ? number_format(($totalFGMTeam2 / $totalFGATeam2) * 100, 1) : 0.0;
+
+                $total2PMTeam2 = $playerStatsTeam1->sum('two_pt_fg_made');
+                $total2PATeam2 = $playerStatsTeam1->sum('two_pt_fg_attempt');
+                $total2ptPercentageTeam2 = ($total2PATeam2 > 0) ? number_format(($total2PMTeam1 / $total2PATeam1) * 100, 1) : 0.0;
 
                 $total3PMTeam2 = $playerStatsTeam2->sum('three_pt_fg_made');
                 $total3PATeam2 = $playerStatsTeam2->sum('three_pt_fg_attempt');
@@ -419,6 +444,138 @@
                 $totalFTAttemptTeam2 = $playerStatsTeam2->sum('free_throw_attempt');
                 $totalFreeThrowPercentageTeam2 = ($totalFTAttemptTeam2 > 0) ? number_format(($totalFTMadeTeam2 / $totalFTAttemptTeam2) * 100, 1) : 0.0;
             @endphp
+
+            <div id="teamComparison" class="content-section hidden bg-gray-100 p-6 rounded-md shadow-lg">
+                <h2 class="text-2xl font-bold mb-6 text-center text-black">Team Comparison</h2>
+                
+                <!-- Team Names -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-extrabold text-lg text-black">{{ $schedule->team1->name }}</div>
+                    <div class="font-semibold text-black">Team Name</div>
+                    <div class="font-extrabold text-lg text-black">{{ $schedule->team2->name }}</div>
+                </div>
+
+                <!-- Data Rows -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-xl text-black">{{ $totalPointsTeam1 }}</div>
+                    <div class="font-semibold text-black">Score</div>
+                    <div class="font-medium text-xl text-black">{{ $totalPointsTeam2 }}</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $total2ptTeam1 }} / {{ $total2PATeam1 }}</div>
+                    <div class="font-semibold text-black">2-Point Field Goals</div>
+                    <div class="font-medium text-black">{{ $total2ptTeam2 }} / {{ $total2PATeam2 }}</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $total2ptPercentageTeam1 }}%</div>
+                    <div class="font-semibold text-black">2-Point Percentage</div>
+                    <div class="font-medium text-black">{{ $total2ptPercentageTeam2 }}%</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $total3PMTeam1 }} / {{ $total3PATeam1 }}</div>
+                    <div class="font-semibold text-black">3-Point Shots</div>
+                    <div class="font-medium text-black">{{ $total3PMTeam2 }} / {{ $total3PATeam2 }}</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $total3ptPercentageTeam1 }}%</div>
+                    <div class="font-semibold text-black">3-Point Percentage</div>
+                    <div class="font-medium text-black">{{ $total3ptPercentageTeam2 }}%</div>
+                </div>
+
+                <!-- Additional Statistics -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalFGMTeam1 }} / {{ $totalFGATeam1 }}</div>
+                    <div class="font-semibold text-black">Field Goals</div>
+                    <div class="font-medium text-black">{{ $totalFGMTeam2 }} / {{ $totalFGATeam2 }}</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalFGPercentageTeam1 }}%</div>
+                    <div class="font-semibold text-black">Field Goal Percentage</div>
+                    <div class="font-medium text-black">{{ $totalFGPercentageTeam2 }}%</div>
+                </div>
+
+                <!-- Defensive Rebounds -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalDefensiveReboundsTeam1 }}</div>
+                    <div class="font-semibold text-black">Defensive Rebounds</div>
+                    <div class="font-medium text-black">{{ $totalDefensiveReboundsTeam2 }}</div>
+                </div>
+
+                <!-- Offensive Rebounds -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalOffensiveReboundsTeam1 }}</div>
+                    <div class="font-semibold text-black">Offensive Rebounds</div>
+                    <div class="font-medium text-black">{{ $totalOffensiveReboundsTeam2 }}</div>
+                </div>
+
+                <!-- Assists -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalAssistsTeam1 }}</div>
+                    <div class="font-semibold text-black">Assists</div>
+                    <div class="font-medium text-black">{{ $totalAssistsTeam2 }}</div>
+                </div>
+
+                <!-- Steals -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalStealsTeam1 }}</div>
+                    <div class="font-semibold text-black">Steals</div>
+                    <div class="font-medium text-black">{{ $totalStealsTeam2 }}</div>
+                </div>
+
+                <!-- Blocks -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalBlocksTeam1 }}</div>
+                    <div class="font-semibold text-black">Blocks</div>
+                    <div class="font-medium text-black">{{ $totalBlocksTeam2 }}</div>
+                </div>
+
+                <!-- Turnovers -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">Turnovers</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+
+                <!-- Points Off Turnover -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">Points Off Turnover</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+
+                <!-- Fastbreak Points -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">Fast Break Points</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+
+                <!-- 2nd Chance Points -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">2nd Chance Points</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+
+                <!-- Starter Points -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">Starter Points</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+
+                <!-- Bench Points -->
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-semibold text-black">Bench Points</div>
+                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                </div>
+            </div>
 
             <div id="gameChart" class="content-section hidden">
                 <canvas id="teamComparisonChart" width="400" height="200"></canvas>
@@ -469,7 +626,7 @@
     });
 
     // Event listener for navigation buttons
-    document.querySelectorAll('.nav-btn[data-type="boxScore"], .nav-btn[data-type="playByPlay"], .nav-btn[data-type="gameChart"]').forEach(button => {
+    document.querySelectorAll('.nav-btn[data-type="boxScore"], .nav-btn[data-type="playByPlay"], .nav-btn[data-type="gameChart"], .nav-btn[data-type="teamComparison"]').forEach(button => {
         button.addEventListener('click', function() {
             // Remove active class from all buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -486,13 +643,13 @@
 
             // Hide all content sections
             document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.add('hidden'); // Hide the section
+                section.classList.add('hidden'); 
             });
 
             // Show the selected content section
             const selectedSection = document.getElementById(selectedType);
             if (selectedSection) {
-                selectedSection.classList.remove('hidden'); // Show the selected section
+                selectedSection.classList.remove('hidden');
             }
 
             // Reset quarter buttons when switching from play-by-play to other sections
@@ -507,12 +664,19 @@
                     qBtn.classList.remove('active');
                     qBtn.classList.add('bg-gray-400');
                 });
-                // Optionally hide play entries when switching away
                 filterPlayByPlayData(undefined);
             }
 
             if (selectedType === 'gameChart') {
                 loadTeamComparisonChart();
+            }
+
+            // Show the team comparison section
+            if (selectedType === 'teamComparison') {
+                const teamComparisonSection = document.getElementById('teamComparison');
+                if (teamComparisonSection) {
+                    teamComparisonSection.classList.remove('hidden'); 
+                }
             }
         });
     });

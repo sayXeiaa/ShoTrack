@@ -36,7 +36,7 @@
                 </h2>
             </div>
             
-            <div class="text-lg font-bold ml-2 flex space-x-4">
+            <div class="text-lg font-bold ml-2 flex flex-wrap gap-2">
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300 active-btn" data-type="boxScore">
                     Box Score
                 </button>
@@ -49,7 +49,7 @@
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300" data-type="gameChart">
                     Game Chart
                 </button>
-            </div>
+            </div>            
             
             <!-- Team 1 Player Statistics -->
             <div id="boxScore" class="content-section">
@@ -57,34 +57,34 @@
                 @if ($playerStatsTeam1->isNotEmpty() || $remainingPlayersTeam1->isNotEmpty())
                     <div class="bg-gray-50 p-6 rounded-lg shadow-md my-6">
                         {{-- <h3 class="text-lg font-semibold mb-6">Player Statistics</h3> --}}
-                        <div class="table-wrapper overflow-x-auto">
+                        <div class="overflow-x-auto">
                             <table class="min-w-full stats-table border-collapse border border-gray-300">
                                 <thead class="bg-[#314795]">
                                     <tr class="text-white">
                                         <th class="border px-4 py-2 w-32">PLAYER</th>
-                                        <th class="border px-4 py-2">MIN</th>
-                                        <th class="border px-4 py-2">FGM</th>
-                                        <th class="border px-4 py-2">FGA</th> 
-                                        <th class="border px-4 py-2">FG%</th>
-                                        <th class="border px-4 py-2">2PM</th>
-                                        <th class="border px-4 py-2">2PA</th>
-                                        <th class="border px-4 py-2">2P%</th>
-                                        <th class="border px-4 py-2">3PM</th>
-                                        <th class="border px-4 py-2">3PA</th>
-                                        <th class="border px-4 py-2">3P%</th>
-                                        <th class="border px-4 py-2">FTM</th>
-                                        <th class="border px-4 py-2">FTA</th>
-                                        <th class="border px-4 py-2">FT%</th>
-                                        <th class="border px-4 py-2 w-12">OREB</th>
-                                        <th class="border px-4 py-2">DREB</th>
-                                        <th class="border px-4 py-2">REB</th>
-                                        <th class="border px-4 py-2">AST</th>
-                                        <th class="border px-4 py-2">STL</th>
-                                        <th class="border px-4 py-2">BLK</th>
-                                        <th class="border px-4 py-2">TO</th>
-                                        <th class="border px-4 py-2">PF</th>
-                                        <th class="border px-4 py-2">PTS</th>
-                                        <th class="border px-4 py-2">+/–</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">MIN</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">FGM</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">FGA</th> 
+                                        <th class="border px-4 py-2 w-14 sm:16">FG%</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">2PM</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">2PA</th>
+                                        <th class="border px-4 py-2 w-14 sm:16">2P%</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">3PM</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">3PA</th>
+                                        <th class="border px-4 py-2 w-14 sm:16">3P%</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">FTM</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">FTA</th>
+                                        <th class="border px-4 py-2 w-14 sm:16">FT%</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">OREB</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">DREB</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">REB</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">AST</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">STL</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">BLK</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">TO</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">PF</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">PTS</th>
+                                        <th class="border px-4 py-2 w-12 sm:16">+/–</th>
                                         @can('edit statistics')
                                         <th class="px-6 py-3 text-center" width="180">Action</th>
                                         @endcan
@@ -208,34 +208,34 @@
                     @if ($playerStatsTeam2->isNotEmpty() || $remainingPlayersTeam2->isNotEmpty())
                         <div class="bg-gray-50 p-6 rounded-lg shadow-md my-6">
                             {{-- <h3 class="text-lg font-semibold mb-6">Player Statistics</h3> --}}
-                            <div class="table-wrapper">
+                            <div class="overflow-x-auto">
                                 <table class="min-w-full stats-table border-collapse border border-gray-300">
                                     <thead class="bg-[#314795]">
                                         <tr class="text-white">
                                             <th class="border px-4 py-2 w-32">PLAYER</th>
-                                            <th class="border px-4 py-2">MIN</th>
-                                            <th class="border px-4 py-2">FGM</th>
-                                            <th class="border px-4 py-2">FGA</th> 
-                                            <th class="border px-4 py-2">FG%</th>
-                                            <th class="border px-4 py-2">2PM</th>
-                                            <th class="border px-4 py-2">2PA</th>
-                                            <th class="border px-4 py-2">2P%</th>
-                                            <th class="border px-4 py-2">3PM</th>
-                                            <th class="border px-4 py-2">3PA</th>
-                                            <th class="border px-4 py-2">3P%</th>
-                                            <th class="border px-4 py-2">FTM</th>
-                                            <th class="border px-4 py-2">FTA</th>
-                                            <th class="border px-4 py-2">FT%</th>
-                                            <th class="border px-4 py-2 w-12">OREB</th>
-                                            <th class="border px-4 py-2">DREB</th>
-                                            <th class="border px-4 py-2">REB</th>
-                                            <th class="border px-4 py-2">AST</th>
-                                            <th class="border px-4 py-2">STL</th>
-                                            <th class="border px-4 py-2">BLK</th>
-                                            <th class="border px-4 py-2">TO</th>
-                                            <th class="border px-4 py-2">PF</th>
-                                            <th class="border px-4 py-2">PTS</th>
-                                            <th class="border px-4 py-2">+/–</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">MIN</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">FGM</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">FGA</th> 
+                                            <th class="border px-4 py-2 w-12 sm:16">FG%</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">2PM</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">2PA</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">2P%</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">3PM</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">3PA</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">3P%</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">FTM</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">FTA</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">FT%</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">OREB</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">DREB</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">REB</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">AST</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">STL</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">BLK</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">TO</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">PF</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">PTS</th>
+                                            <th class="border px-4 py-2 w-12 sm:16">+/–</th>
                                             @can ('edit statistics')
                                             <th class="px-6 py-3 text-center" width="180">Action</th>
                                             @endcan

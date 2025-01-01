@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\TeamStat;
 use App\Models\Score;
+use App\Models\TeamMetric;
 use Illuminate\Support\Facades\Validator;
 
 class PlayerStatsController extends Controller
@@ -74,10 +75,36 @@ class PlayerStatsController extends Controller
                 $play->action_text = $this->getActionText($play->type_of_stat, $play->result);
             }
 
+        // Fetch team metrics for both teams
+        $teamMetricsTeam1 = TeamMetric::where('team_id', $schedule->team1_id)->get();
+        $teamMetricsTeam2 = TeamMetric::where('team_id', $schedule->team2_id)->get();
+
+        $totalPointsOffTurnoverTeam1 = $teamMetricsTeam1->sum('points_off_turnover');
+        $totalPointsOffTurnoverTeam2 = $teamMetricsTeam2->sum('points_off_turnover');
+        $totalFastBreakPointsTeam1 = $teamMetricsTeam1->sum('fast_break_points');
+        $totalFastBreakPointsTeam2 = $teamMetricsTeam2->sum('fast_break_points');
+        $totalSecondChancePointsTeam1 = $teamMetricsTeam1->sum('second_chance_points');
+        $totalSecondChancePointsTeam2 = $teamMetricsTeam2->sum('second_chance_points');
+        $totalStarterPointsTeam1 = $teamMetricsTeam1->sum('starter_points');
+        $totalStarterPointsTeam2 = $teamMetricsTeam2->sum('starter_points');
+        $totalBenchPointsTeam1 = $teamMetricsTeam1->sum('bench_points');
+        $totalBenchPointsTeam2 = $teamMetricsTeam2->sum('bench_points');
 
         // Pass data to the view
-        return view('playerstats.list', compact('schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1', 'remainingPlayersTeam2', 'teamAScore', 'teamBScore', 'playByPlayData'));
-    }
+        return view('playerstats.list', compact(
+'schedule', 'playerStatsTeam1', 'playerStatsTeam2', 'remainingPlayersTeam1',
+            'remainingPlayersTeam2', 'teamAScore', 'teamBScore', 'playByPlayData', 
+            'totalPointsOffTurnoverTeam1', 
+            'totalPointsOffTurnoverTeam2',
+            'totalFastBreakPointsTeam1',
+            'totalFastBreakPointsTeam2',
+            'totalSecondChancePointsTeam1',
+            'totalSecondChancePointsTeam2',
+            'totalStarterPointsTeam1',
+            'totalStarterPointsTeam2',
+            'totalBenchPointsTeam1',
+            'totalBenchPointsTeam2'));
+            }
 
     /**
      * Show the form for creating a new resource.
@@ -359,6 +386,11 @@ class PlayerStatsController extends Controller
         
             // Update plus-minus for the offensive team
             $startingPlayersOffensive = $validated['starting_players'][$shootingTeamId == "1" ? 'teamA' : 'teamB'] ?? [];
+
+            // Store the starter players' data in the session for Team A
+            if (!session()->has('starting_players_team_a')) {
+                session(['starting_players_team_a' => $validated['starting_players']['teamA'] ?? []]);
+            }
             
             foreach ($startingPlayersOffensive as $playerNumber) {
                 $playerId = Players::where('number', $playerNumber)->where('team_id', $actualShootingTeamId)->pluck('id')->first();
@@ -373,6 +405,11 @@ class PlayerStatsController extends Controller
         
             // Update plus-minus for the defensive team
             $startingPlayersDefensive = $validated['starting_players'][$opposingTeamId == $teamAId ? 'teamA' : 'teamB'] ?? [];
+
+            // Store the starter players' data in the session for Team B
+            if (!session()->has('starting_players_team_b')) {
+                session(['starting_players_team_b' => $validated['starting_players']['teamB'] ?? []]);
+            }
             
             foreach ($startingPlayersDefensive as $playerNumber) {
                 $playerId = Players::where('number', $playerNumber)->where('team_id', $opposingTeamId)->pluck('id')->first();
@@ -383,6 +420,76 @@ class PlayerStatsController extends Controller
                         $currentPlayerStat->save();
                     }
                 }
+            }
+
+            // Get all player IDs for Team A and Team B
+            $allPlayersTeamA = Players::where('team_id', $teamAId)->pluck('id')->toArray();
+            $allPlayersTeamB = Players::where('team_id', $teamBId)->pluck('id')->toArray();
+
+            // Calculate starter and bench points for Team A
+            $startingPlayersTeamA = session('starting_players_team_a', []);
+            $benchPlayersTeamA = array_diff($allPlayersTeamA, array_map(function ($playerNumber) use ($teamAId) {
+                return Players::where('number', $playerNumber)->where('team_id', $teamAId)->pluck('id')->first();
+            }, $startingPlayersTeamA));
+
+            $starterPointsTeamA = 0;
+            $benchPointsTeamA = 0;
+
+            foreach ($allPlayersTeamA as $playerId) {
+                $playerStat = PlayerStat::where('player_id', $playerId)
+                                        ->where('schedule_id', $validated['schedule_id'])
+                                        ->first();
+                if ($playerStat) {
+                    if (in_array($playerId, $benchPlayersTeamA)) {
+                        $benchPointsTeamA += $playerStat->points;
+                    } else {
+                        $starterPointsTeamA += $playerStat->points;
+                    }
+                }
+            }
+
+            // Save starter and bench points for Team A
+            $teamMetricA = TeamMetric::where('schedule_id', $validated['schedule_id'])
+                                ->where('team_id', $teamAId)
+                                ->first();
+
+            if ($teamMetricA) {
+                $teamMetricA->starter_points = $starterPointsTeamA;
+                $teamMetricA->bench_points = $benchPointsTeamA;
+                $teamMetricA->save();
+            }
+
+            // Calculate starter and bench points for Team B
+            $startingPlayersTeamB = session('starting_players_team_b', []);
+            $benchPlayersTeamB = array_diff($allPlayersTeamB, array_map(function ($playerNumber) use ($teamBId) {
+                return Players::where('number', $playerNumber)->where('team_id', $teamBId)->pluck('id')->first();
+            }, $startingPlayersTeamB));
+
+            $starterPointsTeamB = 0;
+            $benchPointsTeamB = 0;
+
+            foreach ($allPlayersTeamB as $playerId) {
+                $playerStat = PlayerStat::where('player_id', $playerId)
+                                        ->where('schedule_id', $validated['schedule_id'])
+                                        ->first();
+                if ($playerStat) {
+                    if (in_array($playerId, $benchPlayersTeamB)) {
+                        $benchPointsTeamB += $playerStat->points;
+                    } else {
+                        $starterPointsTeamB += $playerStat->points;
+                    }
+                }
+            }
+
+            // Save starter and bench points for Team B
+            $teamMetricB = TeamMetric::where('schedule_id', $validated['schedule_id'])
+                                ->where('team_id', $teamBId)
+                                ->first();
+
+            if ($teamMetricB) {
+                $teamMetricB->starter_points = $starterPointsTeamB;
+                $teamMetricB->bench_points = $benchPointsTeamB;
+                $teamMetricB->save();
             }
         }
 

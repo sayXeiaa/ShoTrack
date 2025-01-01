@@ -57,7 +57,7 @@
                 @if ($playerStatsTeam1->isNotEmpty() || $remainingPlayersTeam1->isNotEmpty())
                     <div class="bg-gray-50 p-6 rounded-lg shadow-md my-6">
                         {{-- <h3 class="text-lg font-semibold mb-6">Player Statistics</h3> --}}
-                        <div class="table-wrapper">
+                        <div class="table-wrapper overflow-x-auto">
                             <table class="min-w-full stats-table border-collapse border border-gray-300">
                                 <thead class="bg-[#314795]">
                                     <tr class="text-white">
@@ -98,8 +98,12 @@
                                                 @php
                                                     $initial = strtoupper(substr($stat->player->first_name, 0, 1)); // Get initial of first name
                                                     $lastName = $stat->player->last_name; // Get last name
+                                                    $number = $stat->player->number;
                                                 @endphp
-                                                {{ $initial }}. {{ $lastName }}
+                                                <div class="flex items-left">
+                                                    <span class="text-gray-500 w-12 text-left">#{{ $number }}</span>
+                                                    <span class="text-left font-bold">{{ $initial }}. {{ $lastName }}</span>
+                                                </div>
                                             @else
                                                 N/A
                                             @endif
@@ -156,8 +160,12 @@
                                             @php
                                                 $initial = strtoupper(substr($player->first_name, 0, 1)); // Get initial of first name
                                                 $lastName = $player->last_name; // Get last name
+                                                $number = $stat->player->number;
                                             @endphp
-                                            {{ $initial }}. {{ $lastName }}
+                                            <div class="flex items-left">
+                                                <span class="text-gray-500 w-12 text-left">#{{ $number }}</span>
+                                                <span class="text-left font-bold">{{ $initial }}. {{ $lastName }}</span>
+                                            </div>
                                         </td>
                                         <td class="border px-4 py-2">0</td> 
                                         <td class="border px-4 py-2">0</td> 
@@ -241,8 +249,12 @@
                                                     @php
                                                         $initial = strtoupper(substr($stat->player->first_name, 0, 1)); // Get initial of first name
                                                         $lastName = $stat->player->last_name; // Get last name
+                                                        $number = $stat->player->number;
                                                     @endphp
-                                                    {{ $initial }}. {{ $lastName }}
+                                                    <div class="flex items-left">
+                                                        <span class="text-gray-500 w-12 text-left">#{{ $number }}</span>
+                                                        <span class="text-left font-bold">{{ $initial }}. {{ $lastName }}</span>
+                                                    </div>
                                                 @else
                                                     N/A
                                                 @endif
@@ -298,8 +310,12 @@
                                                 @php
                                                     $initial = strtoupper(substr($player->first_name, 0, 1)); // Get initial of first name
                                                     $lastName = $player->last_name; // Get last name
+                                                    $number = $stat->player->number;
                                                 @endphp
-                                                {{ $initial }}. {{ $lastName }}
+                                                <div class="flex items-left">
+                                                    <span class="text-gray-500 w-12 text-left">#{{ $number }}</span>
+                                                    <span class="text-left font-bold">{{ $initial }}. {{ $lastName }}</span>
+                                                </div>
                                             </td>
                                             <td class="border px-4 py-2">0</td>
                                             <td class="border px-4 py-2">0</td>
@@ -543,37 +559,37 @@
 
                 <!-- Points Off Turnover -->
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-medium text-black">{{ $totalPointsOffTurnoverTeam1 }}</div>
                     <div class="font-semibold text-black">Points Off Turnover</div>
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                    <div class="font-medium text-black">{{ $totalPointsOffTurnoverTeam2}}</div>
                 </div>
 
                 <!-- Fastbreak Points -->
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-medium text-black">{{ $totalFastBreakPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Fast Break Points</div>
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                    <div class="font-medium text-black">{{ $totalFastBreakPointsTeam2 }}</div>
                 </div>
 
                 <!-- 2nd Chance Points -->
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-medium text-black">{{ $totalSecondChancePointsTeam1 }}</div>
                     <div class="font-semibold text-black">2nd Chance Points</div>
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                    <div class="font-medium text-black">{{ $totalSecondChancePointsTeam2 }}</div>
                 </div>
 
                 <!-- Starter Points -->
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-medium text-black">{{ $totalStarterPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Starter Points</div>
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                    <div class="font-medium text-black">{{ $totalStarterPointsTeam2 }}</div>
                 </div>
 
                 <!-- Bench Points -->
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
+                    <div class="font-medium text-black">{{ $totalBenchPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Bench Points</div>
-                    <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
+                    <div class="font-medium text-black">{{ $totalBenchPointsTeam2 }}</div>
                 </div>
             </div>
 

@@ -454,7 +454,7 @@
     let selectedStartingPosition = null;
 
     function selectPlayer(playerBox) {
-        const teamPlaceholder = playerBox.dataset.team; // team should be 'teamA' or 'teamB'
+        const teamPlaceholder = playerBox.dataset.team; 
         const position = playerBox.dataset.position;
         const index = position === 'starting' ? parseInt(playerBox.dataset.index, 10) : null;
         const playerNumber = playerBox.dataset.playerNumber || '';
@@ -466,15 +466,15 @@
             index: index,
             box: playerBox,
             teamId: getTeamId(teamPlaceholder),
-            scheduleId: scheduleId 
+            scheduleId: scheduleId
         };
 
         if (position === 'bench') {
             selectedBenchPlayer = selectedPlayer;
-            highlightSelected(playerBox);
+            highlightSelected(playerBox, 'bench');
         } else if (position === 'starting') {
             selectedStartingPosition = selectedPlayer;
-            highlightSelected(playerBox);
+            highlightSelected(playerBox, 'starting');
         }
 
         console.log('Selected Player Data:', {
@@ -484,7 +484,7 @@
             teamId: selectedPlayer.teamId,
             scheduleId: selectedPlayer.scheduleId
         });
-        console.log(getCurrentQuarter()); 
+        console.log(getCurrentQuarter());
     }
 
     function updateBox(box, playerNumber) {
@@ -493,14 +493,13 @@
         box.querySelector('p').textContent = playerNumber;
     }
 
-    // Highlight selected player
-    function highlightSelected(playerBox) {
+    function highlightSelected(playerBox, type) {
         // Clear previous highlights
-        document.querySelectorAll('.player-box').forEach(box => {
-            box.classList.remove('border-4', 'border-green-500');
+        document.querySelectorAll(`.player-box[data-position="${type}"]`).forEach(box => {
+            box.classList.remove('border-4', 'border-4', 'border-green-500');
         });
 
-        // Highlight current selection
+        // Highlight the current selection
         playerBox.classList.add('border-4', 'border-green-500');
     }
 

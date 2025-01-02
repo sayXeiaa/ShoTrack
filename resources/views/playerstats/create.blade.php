@@ -153,10 +153,10 @@
 
                             <!-- Block, Steal, Turnover, Foul -->
                             <div class="mb-4 grid grid-cols-4 gap-4">
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Personal Foul</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Technical Foul</button>
-                                <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Unsportsmanlike Foul</button>
-                                
+                                <button type="button" class="bg-gray-500 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeFoul()">Personal Foul</button>
+                                <button type="button" class="bg-gray-500 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeTechnicalFoul()">Technical Foul</button>
+                                <button type="button" class="bg-gray-500 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeUnsportsmanlikeFoul()">Unsportsmanlike Foul</button>
+                                <button type="button" class="bg-gray-500 transition-transform transform hover:scale-105 text-white font-bold py-2 px-4 rounded" onclick="madeDisqualifyingFoul()">Disqualifying Foul</button>
                             </div>
 
                             <!-- Micro stats -->
@@ -845,16 +845,33 @@
         recordTeamMetric('made', 'one_point_second_chance');
     }
 
-     // Function for the "2-Point Second Chance" button
+    // Function for the "2-Point Second Chance" button
     function madeTwoPointSecondChance() {
         recordShot('made', 'two_point');
         recordTeamMetric('made', 'two_point_second_chance');
     }
 
-     // Function for the "3-Point Second Chance" button
+    // Function for the "3-Point Second Chance" button
     function madeThreePointSecondChance() {
         recordShot('made', 'three_point');
         recordTeamMetric('made', 'three_point_second_chance');
+    }
+
+    // Function for the "Technical Foul" button
+    function madeTechnicalFoul() {
+        recordShot('made', 'technical_foul');
+        stopTimer();
+    }
+
+    // Function for the "Unsportsmanlike Foul" button
+    function madeUnsportsmanlikeFoul() {
+        recordShot('made', 'unsportsmanlike_foul');
+        stopTimer();
+    }
+
+    // Function for the "Disqualifying Foul" button
+    function madeDisqualifyingFoul() {
+        recordShot('made', 'disqualifying_foul');
     }
 
     let displayedEntries = [];

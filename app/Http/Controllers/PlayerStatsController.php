@@ -156,7 +156,7 @@ class PlayerStatsController extends Controller
         $validated = $request->validate([
             'player_number' => 'required|integer',
             'team' => 'required|integer',
-            'type_of_stat' => 'required|string|in:two_point,three_point,free_throw,offensive_rebound,defensive_rebound,steal,block,assist,turnover,foul',
+            'type_of_stat' => 'required|string',
             'result' => 'required|string|in:made,missed',
             'schedule_id' => 'required|integer',
             'game_time' => 'required|string',
@@ -304,6 +304,15 @@ class PlayerStatsController extends Controller
                 break;
             case 'assist':
                 $stat->assists++;
+                break;
+            case 'technical_foul':
+                $stat->technical_fouls++;
+                break;
+            case 'unsportsmanlike_foul':
+                $stat->unsportsmanlike_fouls++;
+                break;
+            case 'disqualifying_foul':
+                $stat->disqualifying_fouls++;
                 break;
         }
 

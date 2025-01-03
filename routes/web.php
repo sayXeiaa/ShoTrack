@@ -223,5 +223,6 @@ Route::middleware('auth')->group(function () {
     //Team Metric Routes:
     Route::post('/team-metrics/store', [TeamMetricController::class, 'store'])->name('team-metrics.store');
 
+    Route::get('/team-fouls/{scheduleId}/{quarter}', [PlayByPlayController::class, 'getTeamFouls']);
 });
 require __DIR__.'/auth.php';

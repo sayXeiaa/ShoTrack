@@ -343,7 +343,7 @@
         if (currentQuarter < 4) {
             totalElapsedTime += (600 - timeLeft); // Update total elapsed time
             currentQuarter++;
-            resetTimer(); /
+            resetTimer();
             stopTimer(); 
             updateDisplay(); 
             sendElapsedTimeDataToBackend(); 
@@ -499,6 +499,26 @@
             scheduleId: selectedPlayer.scheduleId
         });
         console.log(getCurrentQuarter());
+    }
+
+    function removeSelectedPlayer(position) {
+        if (position === 'bench' && selectedBenchPlayer) {
+            // Clear the selected bench player data
+            selectedBenchPlayer = null;
+            // Optionally, remove the highlight to indicate the unselection
+            document.querySelectorAll(`.player-box[data-position="bench"]`).forEach(box => {
+                box.classList.remove('border-4', 'border-green-500');
+            });
+        } else if (position === 'starting' && selectedStartingPosition) {
+            // Clear the selected starting player data
+            selectedStartingPosition = null;
+            // Optionally, remove the highlight to indicate the unselection
+            document.querySelectorAll(`.player-box[data-position="starting"]`).forEach(box => {
+                box.classList.remove('border-4', 'border-green-500');
+            });
+        }
+
+        console.log(`Removed selected player data from ${position}.`);
     }
 
     function updateBox(box, playerNumber) {
@@ -670,6 +690,9 @@
                 document.getElementById('team-a-score').textContent = response.teamAScore;
                 document.getElementById('team-b-score').textContent = response.teamBScore;
                 loadPlayByPlay(); // Refresh the play-by-play display
+
+                const position = selectedPlayer.box.dataset.position;
+                removeSelectedPlayer(position);
             },
             error: function(xhr, status, error) {
                 console.error('Error recording event:', status, error);

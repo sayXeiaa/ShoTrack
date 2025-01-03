@@ -939,34 +939,39 @@
                     displayedEntries = []; // Reset displayed entries for the new load
 
                     response.play_by_play.forEach(entry => {
-                        // Destructure entry data
-                        const { player_name, game_time, action, points, team_A_score, team_B_score } = entry;
+                    // Destructure entry data
+                    const { player_name, player_number, game_time, action, points, team_A_score, team_B_score } = entry;
 
-                        // Create the HTML for the statistic entry
-                        const statisticEntry = `
-                        <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
-                            <!-- Player Name -->
-                            <div class="live-statistic-left flex-1 text-left truncate">
-                                <span class="font-semibold text-gray-800 text-base">${player_name}</span>
-                            </div>
-                            <!-- Game Time and Action -->
-                            <div class="live-statistic-center flex-1 text-center">
-                                <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
-                                <span class="block text-gray-700 text-sm mt-1">
-                                    ${action} (${points !== null ? `${points} points` : 'No points'})
-                                </span>
-                            </div>
-                            <!-- Individual Scores -->
-                            <div class="live-statistic-right flex-1 text-right">
-                                <span class="text-lg font-bold text-gray-900">${team_A_score || '0'}</span> - 
-                                <span class="text-lg font-bold text-gray-900">${team_B_score || '0'}</span>
-                            </div>
+                    // Determine the points text
+                    const pointsText = points && points !== 0 ? `(${points} points)` : '';
+
+                    // Create the HTML for the statistic entry
+                    const statisticEntry = `
+                    <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
+                        <!-- Player Name -->
+                        <div class="live-statistic-left flex-1 text-left truncate">
+                            <span class="text-gray-500 text-sm block">#${player_number}</span>
+                            <span class="font-semibold text-gray-800 text-base">${player_name}</span>
                         </div>
-                        `;
+                        <!-- Game Time and Action -->
+                        <div class="live-statistic-center flex-1 text-center">
+                            <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
+                            <span class="block text-gray-700 text-sm mt-1">
+                                ${action} ${pointsText}
+                            </span>
+                        </div>
+                        <!-- Individual Scores -->
+                        <div class="live-statistic-right flex-1 text-right">
+                            <span class="text-lg font-bold text-gray-900">${team_A_score || '0'}</span> - 
+                            <span class="text-lg font-bold text-gray-900">${team_B_score || '0'}</span>
+                        </div>
+                    </div>
+                    `;
 
-                        // Prepend the new statistic entry to the list
-                        $('#live-statistics').prepend(statisticEntry);
-                    });
+                    // Prepend the new statistic entry to the list
+                    $('#live-statistics').prepend(statisticEntry);
+                });
+
                 } else {
                     console.error('Response is not in the expected format:', response);
                 }

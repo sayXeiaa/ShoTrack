@@ -39,6 +39,12 @@ class PlayByPlayController extends Controller
                 return 'Committed a foul';
             case 'assist':
                 return 'MADE an assist';
+            case 'technical_foul':
+                return 'Committed a Technical Foul';
+            case 'unsportsmanlike_foul':
+                return 'Committed an Unsportsmanlike Foul';
+            case 'disqualifying_foul':
+                return 'Committed a Disqualifying Foul';
             default:
                 return 'Unknown action';
         }
@@ -61,7 +67,7 @@ class PlayByPlayController extends Controller
             case 'technical_foul':
             case 'unsportsmanlike_foul':
             case 'disqualifying_foul':
-                return 0; // These do not contribute to the score
+                return 0; 
             default:
                 return 0;
         }
@@ -71,7 +77,7 @@ class PlayByPlayController extends Controller
     {
         // Fetch the play-by-play data from the play_by_play table
         $entries = PlayByPlay::where('schedule_id', $scheduleId)
-                            ->orderBy('created_at', 'asc') // Order by ascending to reflect the game flow
+                            ->orderBy('created_at', 'asc')
                             ->get();
 
         // Debug the retrieved entries
@@ -81,15 +87,16 @@ class PlayByPlayController extends Controller
         $formattedEntries = $entries->map(function ($stat) {
             $formattedName = $this->formatPlayerName($stat->player); 
             $action = $this->getActionText($stat->type_of_stat, $stat->result);
-            $points = $this->getPoints($stat->type_of_stat, $stat->result); // Get points for the stat
+            $points = $this->getPoints($stat->type_of_stat, $stat->result); 
             return [
+                'player_number' => $stat->player->number,
                 'game_time' => $stat->game_time,
                 'player_name' => $formattedName,
                 'type_of_stat' => $stat->type_of_stat, 
                 'action' => $action,
                 'points' => $points,
-                'team_A_score' => $stat->team_A_score, // Individual score for Team A
-                'team_B_score' => $stat->team_B_score, // Individual score for Team B
+                'team_A_score' => $stat->team_A_score, 
+                'team_B_score' => $stat->team_B_score, 
             ];
         });
 

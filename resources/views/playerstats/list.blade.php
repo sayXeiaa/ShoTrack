@@ -366,11 +366,13 @@
                 <div id="play-by-play-list">
                     @foreach($playByPlayData as $play)
                         @php
-                            // Check if the player exists and format the name
+                            // Check if the player exists and format the 
+                            $playerNumber = $play->player ? $play->player->number : 'N/A';
                             $playerName = $play->player ? strtoupper(substr($play->player->first_name, 0, 1)) . '. ' . $play->player->last_name : 'Unknown Player';
                         @endphp
                         <div class="play-entry flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-400 transition-colors duration-200" data-quarter="{{ $play->quarter }}">
                             <div class="flex-1 text-left">
+                                <span class="text-gray-500 text-sm block">#{{ $playerNumber }}</span>
                                 <span class="font-semibold text-gray-800">{{ $playerName }}</span>:
                             </div>
                             <div class="flex-1 text-center">

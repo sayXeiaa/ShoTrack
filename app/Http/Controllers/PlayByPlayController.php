@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PlayerStat;
 use App\Models\PlayByPlay;
+use App\Models\Players;
 use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\DB;
 class PlayByPlayController extends Controller
 {
 
@@ -56,6 +58,9 @@ class PlayByPlayController extends Controller
             case 'steal':
             case 'block':
             case 'foul':
+            case 'technical_foul':
+            case 'unsportsmanlike_foul':
+            case 'disqualifying_foul':
                 return 0; // These do not contribute to the score
             default:
                 return 0;
@@ -94,4 +99,36 @@ class PlayByPlayController extends Controller
         ]);
     }
 
+    public function getTeamFouls($scheduleId, $quarter)
+    {
+        // Fetch players for the given schedule and group them by team
+        $teamFouls = PlayByPlay::where('schedule_id', $scheduleId)
+            ->where('quarter', $quarter)
+            ->whereIn('type_of_stat', ['foul', 'technical_foul', 'unsportsmanlike_foul', 'disqualifying_foul'])
+            ->join('players', 'play_by_plays.player_id', '=', 'players.id') // Assuming PlayByPlay has player_id
+            ->select('players.team_id', DB::raw('COUNT(play_by_plays.id) as fouls'))
+            ->groupBy('players.team_id')
+            ->get();
+
+        // Response data
+        $response = [
+            'team_1' => null,
+            'team_1_fouls' => 0,
+            'team_2' => null,
+            'team_2_fouls' => 0,
+        ];
+
+        // Assign team IDs and fouls to the response
+        if ($teamFouls->count() >= 2) {
+            $response['team_1'] = $teamFouls[0]->team_id;
+            $response['team_1_fouls'] = $teamFouls[0]->fouls;
+            $response['team_2'] = $teamFouls[1]->team_id;
+            $response['team_2_fouls'] = $teamFouls[1]->fouls;
+        } elseif ($teamFouls->count() === 1) {
+            $response['team_1'] = $teamFouls[0]->team_id;
+            $response['team_1_fouls'] = $teamFouls[0]->fouls;
+        }
+
+        return response()->json($response);
+    }
 }

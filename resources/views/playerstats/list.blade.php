@@ -36,7 +36,7 @@
                 </h2>
             </div>
             
-            <div class="text-lg font-bold ml-2 flex flex-wrap gap-2">
+            <div class="text-lg font-bold ml-2 flex flex-wrap gap-2 sm:gap-4 flex-col sm:flex-row">
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300 active-btn" data-type="boxScore">
                     Box Score
                 </button>
@@ -49,7 +49,7 @@
                 <button class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300" data-type="gameChart">
                     Game Chart
                 </button>
-            </div>            
+            </div>               
             
             <!-- Team 1 Player Statistics -->
             <div id="boxScore" class="content-section">
@@ -216,16 +216,16 @@
                                             <th class="border px-4 py-2 w-12 sm:16">MIN</th>
                                             <th class="border px-4 py-2 w-12 sm:16">FGM</th>
                                             <th class="border px-4 py-2 w-12 sm:16">FGA</th> 
-                                            <th class="border px-4 py-2 w-12 sm:16">FG%</th>
+                                            <th class="border px-4 py-2 w-14 sm:16">FG%</th>
                                             <th class="border px-4 py-2 w-12 sm:16">2PM</th>
                                             <th class="border px-4 py-2 w-12 sm:16">2PA</th>
-                                            <th class="border px-4 py-2 w-12 sm:16">2P%</th>
+                                            <th class="border px-4 py-2 w-14 sm:16">2P%</th>
                                             <th class="border px-4 py-2 w-12 sm:16">3PM</th>
                                             <th class="border px-4 py-2 w-12 sm:16">3PA</th>
-                                            <th class="border px-4 py-2 w-12 sm:16">3P%</th>
+                                            <th class="border px-4 py-2 w-14 sm:16">3P%</th>
                                             <th class="border px-4 py-2 w-12 sm:16">FTM</th>
                                             <th class="border px-4 py-2 w-12 sm:16">FTA</th>
-                                            <th class="border px-4 py-2 w-12 sm:16">FT%</th>
+                                            <th class="border px-4 py-2 w-14 sm:16">FT%</th>
                                             <th class="border px-4 py-2 w-12 sm:16">OREB</th>
                                             <th class="border px-4 py-2 w-12 sm:16">DREB</th>
                                             <th class="border px-4 py-2 w-12 sm:16">REB</th>
@@ -356,7 +356,7 @@
             </div>
 
             <div id="playByPlay" class="content-section hidden bg-gray-50 p-6 rounded-lg shadow-md my-6">
-                <h3 class="font-semibold text-xl text-gray-800 mb-4">Play-by-Play</h3>
+                <h2 class="text-2xl font-bold mb-6 text-center text-black">Play-by-Play</h2>
                 <div class="flex space-x-2 mb-6 justify-center">
                     <button class="quarter-button nav-btn bg-gray-400 text-white font-semibold py-2 px-4 rounded hover:bg-[#314795] transition duration-200" data-quarter="1">Q1</button>
                     <button class="quarter-button nav-btn bg-gray-400 text-white font-semibold py-2 px-4 rounded hover:bg-[#314795] transition duration-200" data-quarter="2">Q2</button>
@@ -369,7 +369,7 @@
                             // Check if the player exists and format the name
                             $playerName = $play->player ? strtoupper(substr($play->player->first_name, 0, 1)) . '. ' . $play->player->last_name : 'Unknown Player';
                         @endphp
-                        <div class="play-entry flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200" data-quarter="{{ $play->quarter }}">
+                        <div class="play-entry flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-400 transition-colors duration-200" data-quarter="{{ $play->quarter }}">
                             <div class="flex-1 text-left">
                                 <span class="font-semibold text-gray-800">{{ $playerName }}</span>:
                             </div>
@@ -461,7 +461,7 @@
                 $totalFreeThrowPercentageTeam2 = ($totalFTAttemptTeam2 > 0) ? number_format(($totalFTMadeTeam2 / $totalFTAttemptTeam2) * 100, 1) : 0.0;
             @endphp
 
-            <div id="teamComparison" class="content-section hidden bg-gray-100 p-6 rounded-md shadow-lg">
+            <div id="teamComparison" class="content-section hidden bg-gray-50 p-6 rounded-lg shadow-md my-6">
                 <h2 class="text-2xl font-bold mb-6 text-center text-black">Team Comparison</h2>
                 
                 <!-- Team Names -->
@@ -472,121 +472,121 @@
                 </div>
 
                 <!-- Data Rows -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-xl text-black">{{ $totalPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Score</div>
                     <div class="font-medium text-xl text-black">{{ $totalPointsTeam2 }}</div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $total2ptTeam1 }} / {{ $total2PATeam1 }}</div>
                     <div class="font-semibold text-black">2-Point Field Goals</div>
                     <div class="font-medium text-black">{{ $total2ptTeam2 }} / {{ $total2PATeam2 }}</div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $total2ptPercentageTeam1 }}%</div>
                     <div class="font-semibold text-black">2-Point Percentage</div>
                     <div class="font-medium text-black">{{ $total2ptPercentageTeam2 }}%</div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $total3PMTeam1 }} / {{ $total3PATeam1 }}</div>
                     <div class="font-semibold text-black">3-Point Shots</div>
                     <div class="font-medium text-black">{{ $total3PMTeam2 }} / {{ $total3PATeam2 }}</div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $total3ptPercentageTeam1 }}%</div>
                     <div class="font-semibold text-black">3-Point Percentage</div>
                     <div class="font-medium text-black">{{ $total3ptPercentageTeam2 }}%</div>
                 </div>
 
                 <!-- Additional Statistics -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalFGMTeam1 }} / {{ $totalFGATeam1 }}</div>
                     <div class="font-semibold text-black">Field Goals</div>
                     <div class="font-medium text-black">{{ $totalFGMTeam2 }} / {{ $totalFGATeam2 }}</div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalFGPercentageTeam1 }}%</div>
                     <div class="font-semibold text-black">Field Goal Percentage</div>
                     <div class="font-medium text-black">{{ $totalFGPercentageTeam2 }}%</div>
                 </div>
 
                 <!-- Defensive Rebounds -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalDefensiveReboundsTeam1 }}</div>
                     <div class="font-semibold text-black">Defensive Rebounds</div>
                     <div class="font-medium text-black">{{ $totalDefensiveReboundsTeam2 }}</div>
                 </div>
 
                 <!-- Offensive Rebounds -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalOffensiveReboundsTeam1 }}</div>
                     <div class="font-semibold text-black">Offensive Rebounds</div>
                     <div class="font-medium text-black">{{ $totalOffensiveReboundsTeam2 }}</div>
                 </div>
 
                 <!-- Assists -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalAssistsTeam1 }}</div>
                     <div class="font-semibold text-black">Assists</div>
                     <div class="font-medium text-black">{{ $totalAssistsTeam2 }}</div>
                 </div>
 
                 <!-- Steals -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalStealsTeam1 }}</div>
                     <div class="font-semibold text-black">Steals</div>
                     <div class="font-medium text-black">{{ $totalStealsTeam2 }}</div>
                 </div>
 
                 <!-- Blocks -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalBlocksTeam1 }}</div>
                     <div class="font-semibold text-black">Blocks</div>
                     <div class="font-medium text-black">{{ $totalBlocksTeam2 }}</div>
                 </div>
 
                 <!-- Turnovers -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalTurnoversTeam1 }}</div>
                     <div class="font-semibold text-black">Turnovers</div>
                     <div class="font-medium text-black">{{ $totalTurnoversTeam2 }}</div>
                 </div>
 
                 <!-- Points Off Turnover -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalPointsOffTurnoverTeam1 }}</div>
                     <div class="font-semibold text-black">Points Off Turnover</div>
                     <div class="font-medium text-black">{{ $totalPointsOffTurnoverTeam2}}</div>
                 </div>
 
                 <!-- Fastbreak Points -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalFastBreakPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Fast Break Points</div>
                     <div class="font-medium text-black">{{ $totalFastBreakPointsTeam2 }}</div>
                 </div>
 
                 <!-- 2nd Chance Points -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalSecondChancePointsTeam1 }}</div>
                     <div class="font-semibold text-black">2nd Chance Points</div>
                     <div class="font-medium text-black">{{ $totalSecondChancePointsTeam2 }}</div>
                 </div>
 
                 <!-- Starter Points -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalStarterPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Starter Points</div>
                     <div class="font-medium text-black">{{ $totalStarterPointsTeam2 }}</div>
                 </div>
 
                 <!-- Bench Points -->
-                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b">
+                <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
                     <div class="font-medium text-black">{{ $totalBenchPointsTeam1 }}</div>
                     <div class="font-semibold text-black">Bench Points</div>
                     <div class="font-medium text-black">{{ $totalBenchPointsTeam2 }}</div>

@@ -11,12 +11,18 @@
                     <input type="hidden" id="currentScheduleId" value="{{ $schedule_id }}">
                     <div class="mb-6">
                         <div class="flex bg-gray-100 py-4 px-6 rounded-lg shadow-md border border-gray-400 space-x-4 items-center">
+                            <!-- Team 1 Section -->
                             <div class="flex-1 bg-white p-2 rounded-lg shadow text-center">
                                 <h3 class="font-bold text-lg text-black">{{ $team1Name }}</h3>
+                                <p class="font-semibold mt-2" id="team-1-fouls-display">Fouls (Quarter 1): 0</p>
                             </div>
+                    
+                            <!-- Team A Score -->
                             <div class="bg-white p-4 rounded-lg shadow text-center">
-                                    <p id="team-a-score" class="text-4xl font-semibold text-black">{{$teamAScore}}</p>
+                                <p id="team-a-score" class="text-4xl font-semibold text-black">{{$teamAScore}}</p>
                             </div>
+                    
+                            <!-- Timer and Start/Pause Buttons -->
                             <div class="flex flex-col items-center space-y-2">
                                 <div class="bg-white p-4 rounded-lg shadow text-center">
                                     <p id="gameTime" class="text-4xl font-semibold text-black">10:00</p>
@@ -29,14 +35,20 @@
                                     </div>
                                 </div>
                             </div>
+                    
+                            <!-- Team B Score -->
                             <div class="bg-white p-4 rounded-lg shadow text-center">
-                                    <p id="team-b-score" class="text-4xl font-semibold text-black">{{$teamBScore}}</p>
+                                <p id="team-b-score" class="text-4xl font-semibold text-black">{{$teamBScore}}</p>
                             </div>
+                    
+                            <!-- Team 2 Section -->
                             <div class="flex-1 bg-white p-2 rounded-lg shadow text-center">
                                 <h3 class="font-bold text-lg text-black">{{ $team2Name }}</h3>
+                                <p class="font-semibold mt-2" id="team-2-fouls-display">Fouls (Quarter 1): 0</p>
                             </div>
                         </div>
                     </div>
+                    
 
                     <div class="flex flex-col items-center space-y-4 mb-4">
                         <div class="flex flex-row space-x-8 w-full">
@@ -327,16 +339,18 @@
     }
 
     function nextQuarter() {
+        const scheduleId = getCurrentScheduleId();
         if (currentQuarter < 4) {
             totalElapsedTime += (600 - timeLeft); // Update total elapsed time
             currentQuarter++;
-            resetTimer(); // Reset the timer to 10 minutes for the next quarter
-            stopTimer(); // Stop the timer
-            updateDisplay(); // Update the display
-            sendElapsedTimeDataToBackend(); // Send data for the previous quarter
+            resetTimer(); /
+            stopTimer(); 
+            updateDisplay(); 
+            sendElapsedTimeDataToBackend(); 
         } else {
             alert('Already in the final quarter');
         }
+        updateTeamFouls(scheduleId, currentQuarter, true);
     }
 
     function startGameTimeTracking() {
@@ -661,6 +675,7 @@
                 console.error('Error recording event:', status, error);
             }
         });
+        updateTeamFouls(scheduleId, quarter);
     }
 
     function recordTeamMetric(result, type_of_stat) {
@@ -979,5 +994,56 @@
             console.error('Error:', error);
         });
     }
+
+    function updateTeamFouls(scheduleId, currentQuarter, reset = false) {
+        // Get the elements for displaying fouls
+        const team1Element = document.getElementById('team-1-fouls-display');
+        const team2Element = document.getElementById('team-2-fouls-display');
+
+        // Reset fouls and update the quarter in the display
+        if (reset) {
+            if (team1Element) {
+                team1Element.innerText = `Fouls (Quarter ${currentQuarter}): 0`;
+            } else {
+                console.warn('Team 1 element not found during reset.');
+            }
+
+            if (team2Element) {
+                team2Element.innerText = `Fouls (Quarter ${currentQuarter}): 0`;
+            } else {
+                console.warn('Team 2 element not found during reset.');
+            }
+
+            return;
+        }
+
+        // Fetch updated fouls data via AJAX
+        $.ajax({
+            url: `/team-fouls/${scheduleId}/${currentQuarter}`,
+            method: 'GET',
+            success: function (response) {
+                if (response.team_1) {
+                    console.log(`Resetting fouls for Quarter ${currentQuarter}`);
+                    if (team1Element) {
+                        team1Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_1_fouls}`;
+                    } else {
+                        console.log('Team 1 element not found during data fetch.');
+                    }
+                }
+
+                if (response.team_2) {
+                    if (team2Element) {
+                        team2Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_2_fouls}`;
+                    } else {
+                        console.log('Team 2 element not found during data fetch.');
+                    }
+                }
+            },
+            error: function (xhr) {
+                console.error('Error fetching team fouls:', xhr.responseJSON);
+            }
+        });
+    }
+
     </script>
 </x-app-layout>

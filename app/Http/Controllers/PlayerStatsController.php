@@ -738,5 +738,66 @@ class PlayerStatsController extends Controller
     
         return view('leaderboards.players', compact('tournaments', 'topPlayersByStats'));
     }
+
+    public function checkPlayerFouls($playerId, $scheduleId)
+    {
+        $playerStat = PlayerStat::where('player_id', $playerId)
+                                ->where('schedule_id', $scheduleId)
+                                ->first();  
+
+        if (!$playerStat) {
+            return response()->json(['message' => 'Player has no statistics for this schedule.'], 404);
+        }
+
+        $maxFouls = 5;
+        $maxTechnicalFouls = 2;
+        $maxUnsportsmanlikeFouls = 2; 
+        $maxDisqualifyingFouls = 1; 
+        $totalFouls = $playerStat->technical_fouls + 
+            $playerStat->unsportsmanlike_fouls + 
+            $playerStat->disqualifying_fouls;
+
+        if ($playerStat->personal_fouls >= $maxFouls || $totalFouls >= $maxFouls) {
+            return response()->json([
+                'message' => 'This player has exceeded the maximum number of fouls.',
+                'code' => 'FOUL_LIMIT_EXCEEDED',
+            ], 400);
+        }
+
+        if ($playerStat->technical_fouls >= $maxTechnicalFouls) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This player has exceeded the maximum number of technical fouls.',
+                'code' => 'FOUL_LIMIT_EXCEEDED',
+            ], 400);
+        }
+
+        if ($playerStat->unsportsmanlike_fouls >= $maxUnsportsmanlikeFouls) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This player has exceeded the maximum number of unsportsmanlike fouls.',
+                'code' => 'FOUL_LIMIT_EXCEEDED',
+            ], 400);
+        }
+
+        if ($playerStat->disqualifying_fouls >= $maxDisqualifyingFouls) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This player has received a disqualifying foul and cannot be substituted.',
+                'code' => 'FOUL_LIMIT_EXCEEDED',
+            ], 400);
+        }
+
+        Log::info('Player ID: ' . $playerId . ' - Fouls:', [
+            'personal_fouls' => $playerStat->personal_fouls,
+            'technical_fouls' => $playerStat->technical_fouls,
+            'unsportsmanlike_fouls' => $playerStat->unsportsmanlike_fouls,
+            'disqualifying_fouls' => $playerStat->disqualifying_fouls,
+        ]);
+
+        return response()->json([
+            'message' => 'Player can be substituted.',
+        ], 200);    }
+
     
 }

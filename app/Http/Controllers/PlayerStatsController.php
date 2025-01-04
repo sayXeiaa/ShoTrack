@@ -663,6 +663,12 @@ class PlayerStatsController extends Controller
                 return 'Committed a foul';
             case 'assist':
                 return 'MADE an assist';
+            case 'technical_foul':
+                return 'Committed a Technical Foul';
+            case 'unsportsmanlike_foul':
+                return 'Committed an Unsportsmanlike Foul';
+            case 'disqualifying_foul':
+                return 'Committed a Disqualifying Foul';
             default:
                 return 'Unknown action';
         }
@@ -733,6 +739,4 @@ class PlayerStatsController extends Controller
         return view('leaderboards.players', compact('tournaments', 'topPlayersByStats'));
     }
     
-
-
 }

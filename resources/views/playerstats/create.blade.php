@@ -447,6 +447,7 @@
                 
                 // Update the display immediately
                 updateDisplay();
+                updateTeamFouls(scheduleId, currentQuarter);
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching game details:', error);
@@ -1024,47 +1025,40 @@
     }
 
     function updateTeamFouls(scheduleId, currentQuarter, reset = false) {
-        // Get the elements for displaying fouls
         const team1Element = document.getElementById('team-1-fouls-display');
         const team2Element = document.getElementById('team-2-fouls-display');
 
-        // Reset fouls and update the quarter in the display
         if (reset) {
             if (team1Element) {
                 team1Element.innerText = `Fouls (Quarter ${currentQuarter}): 0`;
-            } else {
-                console.warn('Team 1 element not found during reset.');
             }
 
             if (team2Element) {
                 team2Element.innerText = `Fouls (Quarter ${currentQuarter}): 0`;
-            } else {
-                console.warn('Team 2 element not found during reset.');
             }
 
             return;
         }
 
-        // Fetch updated fouls data via AJAX
+        // Fetch updated fouls 
         $.ajax({
             url: `/team-fouls/${scheduleId}/${currentQuarter}`,
             method: 'GET',
             success: function (response) {
-                if (response.team_1) {
-                    console.log(`Resetting fouls for Quarter ${currentQuarter}`);
-                    if (team1Element) {
-                        team1Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_1_fouls}`;
-                    } else {
-                        console.log('Team 1 element not found during data fetch.');
+                if (response) {
+                    if (response.team_1_fouls !== undefined) {
+                        if (team1Element) {
+                            team1Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_1_fouls}`;
+                        }
                     }
-                }
 
-                if (response.team_2) {
-                    if (team2Element) {
-                        team2Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_2_fouls}`;
-                    } else {
-                        console.log('Team 2 element not found during data fetch.');
+                    if (response.team_2_fouls !== undefined) {
+                        if (team2Element) {
+                            team2Element.innerText = `Fouls (Quarter ${currentQuarter}): ${response.team_2_fouls}`;
+                        }
                     }
+                } else {
+                    console.error('Invalid response received:', response);
                 }
             },
             error: function (xhr) {

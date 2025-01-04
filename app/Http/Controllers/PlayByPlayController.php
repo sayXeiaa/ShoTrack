@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Console\Scheduling\ScheduleTestCommand;
 use Illuminate\Http\Request;
 use App\Models\PlayerStat;
 use App\Models\PlayByPlay;
 use App\Models\Players;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\DB;
 class PlayByPlayController extends Controller
@@ -108,32 +110,30 @@ class PlayByPlayController extends Controller
 
     public function getTeamFouls($scheduleId, $quarter)
     {
-        // Fetch players for the given schedule and group them by team
         $teamFouls = PlayByPlay::where('schedule_id', $scheduleId)
             ->where('quarter', $quarter)
             ->whereIn('type_of_stat', ['foul', 'technical_foul', 'unsportsmanlike_foul', 'disqualifying_foul'])
-            ->join('players', 'play_by_plays.player_id', '=', 'players.id') // Assuming PlayByPlay has player_id
+            ->join('players', 'play_by_plays.player_id', '=', 'players.id')
             ->select('players.team_id', DB::raw('COUNT(play_by_plays.id) as fouls'))
             ->groupBy('players.team_id')
             ->get();
 
-        // Response data
+        $schedule = Schedule::with(['team1', 'team2'])->find($scheduleId);
+
+        // Initialize response with 0 fouls for both teams
         $response = [
-            'team_1' => null,
+            'team_1' => $schedule->team1_id ?? null,
             'team_1_fouls' => 0,
-            'team_2' => null,
+            'team_2' => $schedule->team2_id ?? null,
             'team_2_fouls' => 0,
         ];
 
-        // Assign team IDs and fouls to the response
-        if ($teamFouls->count() >= 2) {
-            $response['team_1'] = $teamFouls[0]->team_id;
-            $response['team_1_fouls'] = $teamFouls[0]->fouls;
-            $response['team_2'] = $teamFouls[1]->team_id;
-            $response['team_2_fouls'] = $teamFouls[1]->fouls;
-        } elseif ($teamFouls->count() === 1) {
-            $response['team_1'] = $teamFouls[0]->team_id;
-            $response['team_1_fouls'] = $teamFouls[0]->fouls;
+        foreach ($teamFouls as $foul) {
+            if ($foul->team_id == $response['team_1']) {
+                $response['team_1_fouls'] = $foul->fouls;
+            } elseif ($foul->team_id == $response['team_2']) {
+                $response['team_2_fouls'] = $foul->fouls;
+            }
         }
 
         return response()->json($response);

@@ -74,7 +74,7 @@
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamA">
                                     @foreach ($benchPlayersTeamA as $player)
                                         <div class="player-box bg-gray-500 hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
-                                            data-team="teamA" data-position="bench" data-player-number="{{ $player->number }}"
+                                            data-team="teamA" data-position="bench" data-player-number="{{ $player->number }}" data-player-id="{{ $player->id }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
                                         </div>
@@ -118,7 +118,9 @@
                                 <div class="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2" id="benchPlayersTeamB">
                                     @foreach ($benchPlayersTeamB as $player)
                                         <div class="player-box bg-gray-500  hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none text-center cursor-pointer text-white rounded p-2 w-16 h-16 flex items-center justify-center"
-                                            data-team="teamB" data-position="bench" data-player-number="{{ $player->number }}"
+                                            data-team="teamB" data-position="bench" 
+                                            data-player-number="{{ $player->number }}"
+                                            data-player-id="{{ $player->id }}"
                                             onclick="selectPlayer(this)">
                                             <p>{{ $player->number }}</p>
                                         </div>
@@ -469,14 +471,18 @@
     let selectedStartingPosition = null;
 
     function selectPlayer(playerBox) {
+        // Retrieve necessary data from the playerBox element
         const teamPlaceholder = playerBox.dataset.team; 
         const position = playerBox.dataset.position;
         const index = position === 'starting' ? parseInt(playerBox.dataset.index, 10) : null;
         const playerNumber = playerBox.dataset.playerNumber || '';
+        const playerId = playerBox.dataset.playerId || null; 
         const scheduleId = getCurrentScheduleId();
 
+        // Initialize the selectedPlayer object
         const selectedPlayer = {
             playerNumber: playerNumber,
+            playerId: playerId, 
             team: teamPlaceholder,
             index: index,
             box: playerBox,
@@ -484,22 +490,24 @@
             scheduleId: scheduleId
         };
 
+        // Update the global variables based on the player's position
         if (position === 'bench') {
-            selectedBenchPlayer = selectedPlayer;
+            selectedBenchPlayer = selectedPlayer; 
             highlightSelected(playerBox, 'bench');
         } else if (position === 'starting') {
-            selectedStartingPosition = selectedPlayer;
+            selectedStartingPosition = selectedPlayer; 
             highlightSelected(playerBox, 'starting');
         }
 
+        // Debugging output
         console.log('Selected Player Data:', {
             playerNumber: selectedPlayer.playerNumber,
+            playerId: selectedPlayer.playerId,
             team: selectedPlayer.team,
             index: selectedPlayer.index,
             teamId: selectedPlayer.teamId,
             scheduleId: selectedPlayer.scheduleId
         });
-        console.log(getCurrentQuarter());
     }
 
     function removeSelectedPlayer(position) {
@@ -538,6 +546,32 @@
         playerBox.classList.add('border-4', 'border-green-500');
     }
 
+    function checkFouls(playerId, scheduleId) {
+        return $.ajax({
+            url: `/check-fouls/${playerId}/${scheduleId}`,
+            type: 'GET',
+            success: function(response) {
+                console.log('Fouls check successful:', response.message);
+
+                if (response.playerData) {
+                    selectedBenchPlayer = response.playerData;
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 400) {
+                    // player exceeded the foul limit
+                    alert(xhr.responseJSON.message || 'Player cannot be substituted due to foul limits.');
+                } else if (xhr.status === 404) {
+                    // player stats are not found
+                    alert(xhr.responseJSON.message || 'Player statistics not found for this schedule.');
+                } else {
+                    // other errors
+                    alert('An unexpected error occurred. Please try again.');
+                }
+            },
+        });
+    }
+
     function performSubstitution() {
         // Check if both players are selected
         if (!selectedBenchPlayer || selectedStartingPosition === null) {
@@ -557,47 +591,51 @@
             return;
         }
 
-        // Get the team and position-related selectors
+        // Log the selector to debug
         const startingSelector = `#starting${selectedStartingPosition.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box:nth-child(${selectedStartingPosition.index + 1})`;
         const benchSelector = `#benchPlayers${selectedBenchPlayer.team === 'teamA' ? 'TeamA' : 'TeamB'} .player-box[data-player-number="${selectedBenchPlayer.playerNumber}"]`;
 
-        // Find the starting and bench boxes
-        const startingBox = document.querySelector(startingSelector);
-        const benchBox = document.querySelector(benchSelector);
+        // Check fouls for the selected bench player before substitution
+        checkFouls(selectedBenchPlayer.playerId, getCurrentScheduleId())
+            .then(() => {
+                // Find the starting and bench boxes
+                const startingBox = document.querySelector(startingSelector);
+                const benchBox = document.querySelector(benchSelector);
 
-        // Check if the boxes are found
-        if (startingBox && benchBox) {
-            // Get the player number currently in the starting position
-            const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
+                // Check if the boxes are found
+                if (startingBox && benchBox) {
+                    // Get the player number currently in the starting position
+                    const startingPlayerNumber = startingBox.querySelector('p').innerText.trim();
 
-            // Swap player numbers
-            startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
-            benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
+                    // Swap player numbers
+                    startingBox.innerHTML = `<p>${selectedBenchPlayer.playerNumber}</p>`;
+                    benchBox.innerHTML = `<p>${startingPlayerNumber}</p>`;
 
-            // Update data attributes
-            startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
-            benchBox.dataset.playerNumber = startingPlayerNumber;
+                    // Update data attributes
+                    startingBox.dataset.playerNumber = selectedBenchPlayer.playerNumber;
+                    benchBox.dataset.playerNumber = startingPlayerNumber;
 
-            // Change background color for substituted players
-            startingBox.classList.remove('bg-gray-500');
-            startingBox.classList.add('bg-blue-700');
+                    // Change background color for substituted players
+                    startingBox.classList.remove('bg-gray-500');
+                    startingBox.classList.add('bg-blue-700');
 
-            benchBox.classList.remove('bg-green-500', 'bg-blue-700'); 
-            benchBox.classList.add('bg-gray-500');
+                    benchBox.classList.remove('bg-green-500', 'bg-blue-700');
+                    benchBox.classList.add('bg-gray-500');
 
-            // Reset selections
-            selectedBenchPlayer = null;
-            selectedStartingPosition = null;
+                    // Reset selections
+                    selectedBenchPlayer = null;
+                    selectedStartingPosition = null;
 
-            // Remove highlights from all player boxes
-            document.querySelectorAll('.player-box').forEach(box => {
-                box.classList.remove('border-4', 'border-green-500');
-            });
-        } else {
-            alert('Error: Could not find the necessary player boxes.');
-        }
+                    // Remove highlights from all player boxes
+                    document.querySelectorAll('.player-box').forEach(box => {
+                        box.classList.remove('border-4', 'border-green-500');
+                    });
+                } else {
+                    alert('Error: Could not find the necessary player boxes.');
+                }
+            })
     }
-    
+
     function getStartingPlayers() {
         const startingPlayers = {
             teamA: [],
@@ -626,11 +664,11 @@
     }
 
     function recordShot(result, type_of_stat) {
-        const selectedPlayer = selectedBenchPlayer || selectedStartingPosition;
+        const selectedPlayer = selectedStartingPosition; 
         let currentGameTime = document.getElementById('gameTime').textContent;
 
         if (!selectedPlayer) {
-            alert('Please select a player first.');
+            alert('Please select a player that is on the court.');
             return;
         }
 
@@ -645,9 +683,18 @@
             return;
         }
 
+        const startingPlayers = getStartingPlayers();
+
+        // Check if the player is in the starting lineup of their team
+        const isInStartingLineup = startingPlayers[teamPlaceholder]?.includes(playerNumber);
+
+        if (!isInStartingLineup) {
+            alert('Only players in the court can have their stat recorded.');
+            return;
+        }
+
         let points = 0;
 
-        // Check points,result, and type of shot
         if (result === 'made') {
             if (type_of_stat === 'two_point') points = 2;
             else if (type_of_stat === 'three_point') points = 3;
@@ -658,7 +705,6 @@
             // Update the score based on points
             recordScore(teamPlaceholder, points, scheduleId, quarter, currentGameTime);
         }
-        const startingPlayers = getStartingPlayers();
 
         console.log('Data being sent:', {
             playerNumber: playerNumber,
@@ -931,7 +977,7 @@
             url: url,
             method: 'GET',
             success: function(response) {
-                console.log('Play-by-play data:', response); // Debug
+                console.log('Play-by-play data:', response); 
 
                 // Check data in response
                 if (response && response.play_by_play && Array.isArray(response.play_by_play)) {

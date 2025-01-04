@@ -224,5 +224,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/team-metrics/store', [TeamMetricController::class, 'store'])->name('team-metrics.store');
 
     Route::get('/team-fouls/{scheduleId}/{quarter}', [PlayByPlayController::class, 'getTeamFouls']);
+    Route::get('/check-fouls/{playerId}/{scheduleId}', [PlayerStatsController::class, 'checkPlayerFouls']);     
 });
 require __DIR__.'/auth.php';

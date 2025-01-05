@@ -581,4 +581,40 @@ class ScheduleController extends Controller
         return Excel::download(new ArrayExport($headers), 'Non_School_Tournament_Schedule_template.xlsx');
     }
     
+    public function updateGameTime(Request $request)
+    {
+        $request->validate([
+            'schedule_id' => 'required|exists:schedules,id',
+            'new_time' => ['required', 'regex:/^\d{1,2}:\d{2}$/'],
+        ]);
+
+        // Convert `new_time` to seconds 
+        $timeParts = explode(':', $request->input('new_time'));
+        $minutes = (int) $timeParts[0];
+        $seconds = (int) $timeParts[1];
+        $remainingQuarterTime = ($minutes * 60) + $seconds;
+
+        $secondsInQuarter = 600; 
+        $totalGameTime = 2400; 
+
+        // Calculate elapsed time in the quarter
+        $newQuarterElapsedTime = $secondsInQuarter - $remainingQuarterTime;
+
+        $schedule = Schedule::findOrFail($request->input('schedule_id'));
+
+        // Calculate the difference between current and new elapsed time
+        $timeAdjustment = $newQuarterElapsedTime - $schedule->quarter_elapsed_time;
+
+        $newRemainingGameTime = $schedule->remaining_game_time - $timeAdjustment;
+
+        $newRemainingGameTime = max(0, min($newRemainingGameTime, $totalGameTime));
+
+        $schedule->remaining_game_time = $newRemainingGameTime;
+        $schedule->total_elapsed_time = $totalGameTime - $newRemainingGameTime;
+        $schedule->quarter_elapsed_time = $newQuarterElapsedTime;
+
+        $schedule->save();
+
+        return response()->json(['message' => 'Time updated successfully.']);
+    }
 }

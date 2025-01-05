@@ -26,7 +26,44 @@
                             <div class="flex flex-col items-center space-y-2">
                                 <div class="bg-white p-4 rounded-lg shadow text-center">
                                     <p id="gameTime" class="text-4xl font-semibold text-black">10:00</p>
+                                    <div class="flex items-center space-x-4">
+                                        <!-- Game Time Input -->
+                                        <input 
+                                            id="gameTimeInput" 
+                                            class="text-2xl font-semibold text-black border border-gray-400 p-2 rounded-lg hidden focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                            type="text" 
+                                            value="10:00"
+                                            placeholder="MM:SS"
+                                            aria-label="Edit game time"
+                                        />
+                                    
+                                        <button 
+                                            id="editTime" 
+                                            class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 focus:ring-2 focus:ring-blue-300 focus:outline-none flex items-center space-x-2">
+                                            <span>Edit</span>
+                                        </button>
+                                    
+                                        <button 
+                                            id="saveTime" 
+                                            class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 focus:ring-2 focus:ring-green-300 focus:outline-none hidden flex items-center space-x-2">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            <span>Save</span>
+                                        </button>
+                        
+                                        <button 
+                                            id="cancelEdit" 
+                                            class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 focus:ring-2 focus:ring-gray-300 focus:outline-none hidden flex items-center space-x-2">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                            <span>Cancel</span>
+                                        </button>
+                                    </div>
+                                    
                                 </div>
+                                
                                 <div class="bg-white p-4 rounded-lg shadow text-center">
                                     <h3 class="font-bold text-lg text-black">Pause/Start Time</h3>
                                     <div class="flex justify-center space-x-4 mt-2">
@@ -1113,5 +1150,92 @@
         });
     }
 
+    document.addEventListener('DOMContentLoaded', () => {
+        const gameTimeElement = document.getElementById('gameTime');
+        const gameTimeInput = document.getElementById('gameTimeInput');
+        const editButton = document.getElementById('editTime');
+        const saveButton = document.getElementById('saveTime');
+        const cancelButton = document.getElementById('cancelEdit');
+
+        // Show the input field for editing
+        editButton.addEventListener('click', () => {
+            gameTimeInput.value = gameTimeElement.textContent.trim();
+            gameTimeElement.classList.add('hidden');
+            gameTimeInput.classList.remove('hidden');
+            editButton.classList.add('hidden');
+            saveButton.classList.remove('hidden');
+            cancelButton.classList.remove('hidden');
+        });
+
+        // Save the updated time
+        saveButton.addEventListener('click', () => {
+            const newTime = gameTimeInput.value.trim();
+
+            if (isValidTimeFormat(newTime)) {
+                saveButton.disabled = true;
+
+                saveTimeToBackend(newTime)
+                    .then(() => {
+                        gameTimeElement.textContent = newTime;
+                        gameTimeElement.classList.remove('hidden');
+                        gameTimeInput.classList.add('hidden');
+                        editButton.classList.remove('hidden');
+                        saveButton.classList.add('hidden');
+                        cancelButton.classList.add('hidden');
+                    })
+                    .catch((error) => {
+                        alert('Failed to save the new time. Please check your connection and try again.');
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        saveButton.disabled = false;
+                    });
+            } else {
+                alert('Please enter a valid time format (e.g., 10:00).');
+            }
+        });
+
+        // Cancel the edit
+        cancelButton.addEventListener('click', () => {
+            gameTimeInput.classList.add('hidden');
+            gameTimeElement.classList.remove('hidden');
+            editButton.classList.remove('hidden');
+            saveButton.classList.add('hidden');
+            cancelButton.classList.add('hidden');
+        });
+
+        // Validate time format mm:Ss
+        function isValidTimeFormat(time) {
+            return /^\d{1,2}:\d{2}$/.test(time);
+        }
+
+        function saveTimeToBackend(newTime) {
+            const scheduleId = getCurrentScheduleId(); 
+
+            if (!scheduleId) {
+                return Promise.reject('No schedule ID found.');
+            }
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '{{ route('schedules.updateGameTime') }}', 
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}', 
+                        schedule_id: scheduleId,
+                        new_time: newTime,
+                    },
+                    success: function (response) {
+                        console.log('Time updated successfully:', response);
+                        resolve();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating time:', status, error);
+                        reject(error);
+                    },
+                });
+            });
+        }
+    });
     </script>
 </x-app-layout>

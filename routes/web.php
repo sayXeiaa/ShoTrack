@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getGameDetails/{scheduleId}', [ScheduleController::class, 'getGameDetails']);
     Route::get('/scores/{scheduleId}', [ScoreController::class, 'getScores'])->name('scores.get');
     Route::post('/schedules/{id}/complete', [ScheduleController::class, 'markAsCompleted']);
+    Route::post('/schedules/update-game-time', [ScheduleController::class, 'updateGameTime'])->name('schedules.updateGameTime');
 
      // Route to display the bulk upload form
     Route::get('/schedules/upload', [ScheduleController::class, 'bulkUploadForm'])->name('schedules.bulkUploadForm');

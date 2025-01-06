@@ -301,7 +301,6 @@
     let timeLeft = 600; // 10 minutes in seconds
     const teamAId = {{ $teams[0]->id }};
     const teamBId = {{ $teams[1]->id }};
-    let totalElapsedTime = 0; 
     let quarterElapsedTime = 0;
     let teamAScore = 0;
     let teamBScore = 0;
@@ -340,6 +339,7 @@
     }
 
     function updateDisplay() {
+        console.log("Current timeLeft:", timeLeft); // Debug log
         document.getElementById('gameTime').textContent = formatTime(timeLeft);
         document.getElementById('quarterButton').innerText = `Q${currentQuarter}`;
     }
@@ -352,7 +352,6 @@
         }
         
         timeLeft--;
-        totalElapsedTime++; // Update total elapsed time
         updateDisplay();
         sendElapsedTimeDataToBackend(); // Send elapsed time data to backend
     }
@@ -369,7 +368,6 @@
             clearInterval(timer); // Clear the timer interval
             timer = null; // Reset the timer variable
         }
-        stopGameTimeTracking() 
     }
 
     function resetTimer() {
@@ -380,11 +378,10 @@
     function nextQuarter() {
         const scheduleId = getCurrentScheduleId();
         if (currentQuarter < 4) {
-            totalElapsedTime += (600 - timeLeft); // Update total elapsed time
             currentQuarter++;
-            resetTimer();
-            stopTimer(); 
-            updateDisplay(); 
+            resetTimer(); 
+            stopTimer();
+            updateDisplay();
             sendElapsedTimeDataToBackend(); 
         } else {
             alert('Already in the final quarter');
@@ -416,10 +413,6 @@
             // Log current player times after updating
             console.log('Current player times:', playerTimes); 
         }, 1000); 
-    }
-
-    function stopGameTimeTracking() {
-        clearInterval(gameTimeInterval); // Stop the game time tracking when needed
     }
 
     function sendElapsedTimeDataToBackend() {
@@ -454,7 +447,6 @@
             schedule_id: scheduleId,
             current_quarter: quarter,
             game_time: gameTimeInSeconds,
-            total_elapsed_time: totalElapsedTime,
             quarter_elapsed_time: quarterElapsedTime,
             player_minutes: transformedPlayerTimes 
         };
@@ -479,12 +471,12 @@
             url: `/getGameDetails/${scheduleId}`,
             method: 'GET',
             success: function(data) {
-                console.log('Fetched game details:', data); // Debug log
+                console.log('Fetched game details:', data); 
                 currentQuarter = data.current_quarter || 1; // Default to Q1 if not provided
-                totalElapsedTime = data.total_elapsed_time || 0; // Set total elapsed time from fetched data
-                timeLeft = Math.max(600 - totalElapsedTime, 0); // Ensure timeLeft doesn't go negative
-                
-                // Update the display immediately
+                quarterElapsedTime = data.quarter_elapsed_time || 0; // Time elapsed in the current quarter
+
+                const quarterLength = 600;
+                timeLeft = Math.max(quarterLength - quarterElapsedTime, 0); 
                 updateDisplay();
                 updateTeamFouls(scheduleId, currentQuarter);
             },
@@ -864,9 +856,6 @@
             success: function(response) {
                 console.log('Score recorded successfully:', response);
             },
-            // error: function(xhr, status, error) {
-            //     console.error('Error recording score:', status, error);
-            // }
         });
     }
 

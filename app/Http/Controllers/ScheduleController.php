@@ -300,7 +300,6 @@ class ScheduleController extends Controller
             'schedule_id' => 'required|integer|exists:schedules,id',
             'current_quarter' => 'required|integer',
             'game_time' => 'required|string',
-            'total_elapsed_time' => 'required|integer',
             'quarter_elapsed_time' => 'required|integer',
             'player_minutes' => 'sometimes|array',
         ]);
@@ -350,12 +349,12 @@ class ScheduleController extends Controller
         }
 
         $schedule->current_quarter = $request->current_quarter;
-        $schedule->total_elapsed_time = $request->total_elapsed_time;
+        // $schedule->total_elapsed_time = $request->total_elapsed_time;
         $schedule->quarter_elapsed_time = $request->quarter_elapsed_time;
 
         $totalGameTime = 2400; 
-        $remaining_game_time = max(0, $totalGameTime - $schedule->total_elapsed_time);
-        $schedule->remaining_game_time = $remaining_game_time;
+        // $remaining_game_time = max(0, $totalGameTime - $schedule->total_elapsed_time);
+        // $schedule->remaining_game_time = $remaining_game_time;
 
         $schedule->save();
 
@@ -367,28 +366,30 @@ class ScheduleController extends Controller
         
         if ($schedule) {
             $quarterLength = 600; 
-
-            // Calculate the remaining time based on the current quarter
+    
+            // Retrieve the current quarter and elapsed time
             $currentQuarter = $schedule->current_quarter;
+            $quarterElapsedTime = $schedule->quarter_elapsed_time; // This should come directly from the DB
             $totalElapsedTime = $schedule->total_elapsed_time;
-
+    
             // Calculate time spent in the current quarter
             $timeSpentInCurrentQuarter = $totalElapsedTime - (($currentQuarter - 1) * $quarterLength);
             $timeSpentInCurrentQuarter = max(0, min($timeSpentInCurrentQuarter, $quarterLength));
-
+    
             // Calculate remaining game time in the current quarter
             $remaining_game_time = max(0, $quarterLength - $timeSpentInCurrentQuarter);
-
+    
+            // Return essential items: current quarter and quarter elapsed time
             return response()->json([
                 'remaining_game_time' => $remaining_game_time,
-                'total_elapsed_time' => $schedule->total_elapsed_time,
+                'quarter_elapsed_time' => $quarterElapsedTime,  // Corrected to actual quarter elapsed time
                 'current_quarter' => $currentQuarter,
-                'quarter_elapsed_time' => $timeSpentInCurrentQuarter // Return the quarter's elapsed time
             ]);
         } else {
             return response()->json(['error' => 'Schedule not found.'], 404);
         }
     }
+    
 
     public function getScores($scheduleId)
     {
@@ -595,22 +596,12 @@ class ScheduleController extends Controller
         $remainingQuarterTime = ($minutes * 60) + $seconds;
 
         $secondsInQuarter = 600; 
-        $totalGameTime = 2400; 
 
         // Calculate elapsed time in the quarter
         $newQuarterElapsedTime = $secondsInQuarter - $remainingQuarterTime;
 
         $schedule = Schedule::findOrFail($request->input('schedule_id'));
 
-        // Calculate the difference between current and new elapsed time
-        $timeAdjustment = $newQuarterElapsedTime - $schedule->quarter_elapsed_time;
-
-        $newRemainingGameTime = $schedule->remaining_game_time - $timeAdjustment;
-
-        $newRemainingGameTime = max(0, min($newRemainingGameTime, $totalGameTime));
-
-        $schedule->remaining_game_time = $newRemainingGameTime;
-        $schedule->total_elapsed_time = $totalGameTime - $newRemainingGameTime;
         $schedule->quarter_elapsed_time = $newQuarterElapsedTime;
 
         $schedule->save();

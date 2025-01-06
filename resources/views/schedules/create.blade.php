@@ -25,6 +25,7 @@
                                     @foreach($tournaments as $tournament)
                                         <option value="{{ $tournament->id }}" 
                                                 data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}"
+                                                data-tournament-type="{{ $tournament->tournament_type }}"
                                                 {{ old('tournament_id') == $tournament->id ? 'selected' : '' }}>
                                             {{ $tournament->name }}
                                         </option>
@@ -91,17 +92,16 @@
                             @enderror
                         </div>
 
-                        <label for="team1Color" class="text-lg font-medium">Team 1 Color</label>
-                        <div class="my-3">
-                            <select name="team1_color" id="team1Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                <option value="">Select Color</option>
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                            </select>                            
-                            @error('team1_color')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
-                        </div>                    
+                        <div id="team1ColorField" style="display: none;">
+                            <label for="team1Color" class="text-lg font-medium">Team 1 Color</label>
+                            <div class="my-3">
+                                <select name="team1_color" id="team1Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    <option value="">Select Color</option>
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
+                        </div> 
 
                         <label for="team2" class="text-lg font-medium">Team 2</label>
                         <div class="my-3">
@@ -118,16 +118,15 @@
                             @enderror
                         </div>
 
-                        <label for="team2Color" class="text-lg font-medium">Team 2 Color</label>
-                        <div class="my-3">
-                            <select name="team2_color" id="team2Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
-                                <option value="">Select Color</option>
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                            </select>                            
-                            @error('team2_color')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                            @enderror
+                        <div id="team2ColorField" style="display: none;">
+                            <label for="team2Color" class="text-lg font-medium">Team 2 Color</label>
+                            <div class="my-3">
+                                <select name="team2_color" id="team2Color" class="team-color-dropdown border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
+                                    <option value="">Select Color</option>
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
                         </div>
 
                         <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3 mt-5">Submit</button>
@@ -147,6 +146,17 @@
         const team2Select = document.getElementById('team2');
         const team1ColorSelect = document.getElementById("team1Color");
         const team2ColorSelect = document.getElementById("team2Color");
+        const schoolFields = document.querySelectorAll('#team1ColorField, #team2ColorField');
+
+        function updateSchoolFieldsVisibility() {
+            const selectedOption = tournamentSelect.selectedOptions[0];
+            const tournamentType = selectedOption ? selectedOption.getAttribute('data-tournament-type') : null;
+
+            const displayStyle = tournamentType === 'school' ? 'block' : 'none';
+            schoolFields.forEach((field) => {
+                field.style.display = displayStyle;
+            });
+        }
 
         function updateCategoryVisibility() {
             const selectedOption = tournamentSelect.selectedOptions[0];
@@ -269,6 +279,7 @@
         tournamentSelect.addEventListener('change', function() {
             updateCategoryVisibility();
             updateTeams();
+            updateSchoolFieldsVisibility();
         });
 
         categorySelect.addEventListener('change', function() {
@@ -282,6 +293,7 @@
         updateCategoryVisibility();
         updateTeams();
         filterColors();
+        updateSchoolFieldsVisibility();
     });
     </script>
     </x-slot>

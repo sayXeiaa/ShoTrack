@@ -372,7 +372,7 @@ class PlayerStatsController extends Controller
         $shootingTeamId = $validated['team'];
 
         // Determine the actual shooting team ID
-        $actualShootingTeamId = ($shootingTeamId == "1") ? $teamAId : (($shootingTeamId == "2") ? $teamBId : null);
+        $actualShootingTeamId = ($shootingTeamId == (string) $teamAId) ? $teamAId : (($shootingTeamId == (string) $teamBId) ? $teamBId : null);
         
         if ($actualShootingTeamId === null) {
             return response()->json(['error' => 'Invalid team ID provided.'], 400);

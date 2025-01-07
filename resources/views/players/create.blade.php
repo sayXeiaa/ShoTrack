@@ -41,8 +41,8 @@
                             <div class="my-3">
                                 <select id="category" name="category" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                                     <option value="">Select a Category</option>
-                                    <option value="juniors">Juniors</option>
-                                    <option value="seniors">Seniors</option>
+                                    <option value="juniors" {{ old('category') == 'juniors' ? 'selected' : '' }}>Juniors</option>
+                                    <option value="seniors" {{ old('category') == 'seniors' ? 'selected' : '' }}>Seniors</option>                                
                                 </select>
                                 @error('category')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
@@ -236,6 +236,7 @@
 
                 // Initialize visibility and teams on page load
                 updateCategoryVisibility();
+                updateSchoolFieldsVisibility();
                 updateTeams();
             });
         </script>

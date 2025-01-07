@@ -32,7 +32,7 @@ class TeamsImport implements ToModel, WithHeadingRow, WithValidation
     {
         return [
             '*.team_name' => 'required|string|min:5', 
-            '*.head_coach_name' => 'required|string|max:255',
+            '*.head_coach_name' => 'nullable|string|max:255',
             '*.address' => 'required|string|min:5',
             '*.category' => 'nullable|string|in:Juniors,Seniors', 
             '*.team_acronym' => 'nullable|string|max:7',

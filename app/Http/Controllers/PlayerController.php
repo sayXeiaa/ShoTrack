@@ -83,59 +83,76 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
-        // Define initial validation rules
+        // Base rules
         $rules = [
             'tournament_id' => ['required', 'integer', Rule::exists('tournaments', 'id')],
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'number' => 'required|integer|min:0|max:99',
-            'years_playing_in_bucal' => 'nullable|integer|min:0|max:6',
-            'position' => 'nullable|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
-            'date_of_birth' => 'required|date',
-            'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
-            'weight' => 'required|integer|min:0',
             'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
         ];
-
-        // Retrieve the tournament ID to determine if categories are required
+    
         $tournamentId = $request->input('tournament_id');
+    
         if ($tournamentId) {
             $tournament = Tournaments::findOrFail($tournamentId);
+    
+            if ($tournament->tournament_type === 'school') {
+                // Rules for school tournaments
+                $rules = array_merge($rules, [
+                    'years_playing_in_bucal' => 'required|integer|min:0|max:6',
+                    'position' => 'required|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
+                    'date_of_birth' => 'required|date',
+                    'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
+                    'weight' => 'required|integer|min:0',
+                ]);
+            } else {
+                // Rules for non-school tournaments
+                $rules = array_merge($rules, [
+                    'date_of_birth' => 'nullable|date',
+                    'height' => ['nullable', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
+                    'weight' => 'nullable|integer|min:0',
+                ]);
+            }
+
             if ($tournament->has_categories) {
                 $rules['category'] = 'required|string';
             } else {
                 $rules['category'] = 'nullable';
             }
         }
-
+    
         // Validate the request
         $validator = Validator::make($request->all(), $rules);
-
+    
         if ($validator->fails()) {
             return redirect()->route('players.create')
                             ->withInput()
                             ->withErrors($validator);
         }
-
-        // Create and save the player
-        $player = new Players(); // Ensure this matches your model name
+    
+        $player = new Players(); 
         $player->first_name = $request->input('first_name');
         $player->last_name = $request->input('last_name');
         $player->number = $request->input('number');
-        $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
-        $player->position = $request->input('position');
+        $player->team_id = $request->input('team_id');
         $player->date_of_birth = $request->input('date_of_birth');
         $player->height = $request->input('height');
         $player->weight = $request->input('weight');
-        $player->team_id = $request->input('team_id');
-
+    
+        // fields for school tournament
+        if ($tournament->type === 'school') {
+            $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
+            $player->position = $request->input('position');
+        }
+    
         // Only set category if tournament has categories
         if (isset($tournament) && $tournament->has_categories) {
             $player->category = $request->input('category');
         }
-
+    
         $player->save();
-
+    
         return redirect()->route('players.index')
                         ->with('success', 'Player added successfully.');
     }

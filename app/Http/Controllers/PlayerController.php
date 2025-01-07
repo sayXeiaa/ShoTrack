@@ -54,7 +54,7 @@ class PlayerController extends Controller
                     ->orWhere('last_name', 'like', '%' . $search . '%');
             });
         }
-        $players = $playersQuery->paginate(25); 
+        $players = $playersQuery->paginate(35); 
     
         // Fetch all tournaments for filtering options
         $tournaments = Tournaments::all();

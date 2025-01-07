@@ -395,6 +395,12 @@
                 $totalStealsTeam1 = $playerStatsTeam1->sum('steals');
                 $totalBlocksTeam1 = $playerStatsTeam1->sum('blocks');
                 $totalTurnoversTeam1 = $playerStatsTeam1->sum('turnovers');
+                $totalFreeThrowsMadeTeam1 = $playerStatsTeam1->sum('free_throw_made');
+                $totalFreeThrowsMadeTeam1 = $playerStatsTeam1->sum('free_throw_made');
+                $totalFoulsTeam1 = $playerStatsTeam1->sum('personal_fouls') 
+                                + $playerStatsTeam1->sum('technical_fouls') 
+                                + $playerStatsTeam1->sum('unsportsmanlike_fouls') 
+                                + $playerStatsTeam1->sum('disqualifying_fouls');
                 $totalDefensiveReboundsTeam1 = $playerStatsTeam1->sum('defensive_rebounds');
                 $totalOffensiveReboundsTeam1 = $playerStatsTeam1->sum('offensive_rebounds');
 
@@ -432,6 +438,12 @@
                 $totalStealsTeam2 = $playerStatsTeam2->sum('steals');
                 $totalBlocksTeam2 = $playerStatsTeam2->sum('blocks');
                 $totalTurnoversTeam2 = $playerStatsTeam2->sum('turnovers');
+                $totalFreeThrowsMadeTeam2 = $playerStatsTeam2->sum('free_throw_made');          
+                $totalFreeThrowsMadeTeam1 = $playerStatsTeam1->sum('free_throw_made');
+                $totalFoulsTeam2 = $playerStatsTeam2->sum('personal_fouls') 
+                                + $playerStatsTeam2->sum('technical_fouls') 
+                                + $playerStatsTeam2->sum('unsportsmanlike_fouls') 
+                                + $playerStatsTeam2->sum('disqualifying_fouls');
                 $totalDefensiveReboundsTeam2 = $playerStatsTeam2->sum('defensive_rebounds');
                 $totalOffensiveReboundsTeam2 = $playerStatsTeam2->sum('offensive_rebounds');
 
@@ -596,10 +608,25 @@
             </div>
 
             <div id="gameChart" class="content-section hidden">
-                <canvas id="teamComparisonChart" width="400" height="200"></canvas>
+                <div class="flex justify-center my-6">
+                    <button id="toggleComparisonChart" class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Show Team Comparison
+                    </button>
+                    <button id="togglePercentagesChart" class="nav-btn px-4 py-2 bg-gray-400 text-white rounded hover:bg-[#314795] focus:outline-none focus:ring-2 focus:ring-gray-300 ml-4">
+                        Show Percentages
+                    </button>
+                </div>  
+            
+                <!-- Team Comparison Chart -->
+                <div id="teamComparisonChartContainer">
+                    <canvas id="teamComparisonChart" width="400" height="200"></canvas>
+                </div>
+            
+                <!-- Percentages Chart -->
+                <div id="percentagesChartContainer" class="hidden">
+                    <canvas id="percentagesChart" width="400" height="200"></canvas>
+                </div>
             </div>
-        
-
         </div>
     </div>
 
@@ -637,6 +664,9 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script >
+    let teamComparisonChartInstance = null;
+    let percentagesChartInstance = null;
+
     document.addEventListener('DOMContentLoaded', function() {
         // Click the box score button by default
         const boxScoreButton = document.querySelector('.nav-btn[data-type="boxScore"]');
@@ -686,6 +716,15 @@
             }
 
             if (selectedType === 'gameChart') {
+                document.getElementById("gameChart").classList.remove("hidden");
+
+                // Set default button active (Show Team Comparison)
+                document.getElementById("toggleComparisonChart").classList.remove('bg-gray-400');
+                document.getElementById("toggleComparisonChart").classList.add('bg-[#314795]');
+                document.getElementById("togglePercentagesChart").classList.remove('bg-[#314795]');
+                document.getElementById("togglePercentagesChart").classList.add('bg-gray-400');
+
+                // Show the team comparison chart by default
                 loadTeamComparisonChart();
             }
 
@@ -736,6 +775,13 @@
     }
 
     function loadTeamComparisonChart() {
+        const canvas = document.getElementById('teamComparisonChart').getContext('2d');
+        
+        // Destroy the previous chart instance if it exists
+        if (teamComparisonChartInstance) {
+            teamComparisonChartInstance.destroy();
+        }
+
         // Fetch actual data
         const teamStats = {
             "{{ $schedule->team1->name }}": {
@@ -745,9 +791,11 @@
                 stl: {{ $totalStealsTeam1 }},
                 blk: {{ $totalBlocksTeam1 }},
                 to: {{ $totalTurnoversTeam1 }},
-                fg: {{ $totalFGPercentageTeam1 }},
-                threeP: {{ $total3ptPercentageTeam1 }},
-                ft: {{ $totalFreeThrowPercentageTeam1 }}
+                ftm: {{ $totalFreeThrowsMadeTeam1 }},
+                fouls: {{ $totalFoulsTeam1 }},
+                twoPm: {{ $total2PMTeam1 }},
+                threePm: {{ $total3PMTeam1 }},
+                fgm: {{ $totalFGMTeam1 }},
             },
             "{{ $schedule->team2->name }}": {
                 pts: {{ $totalPointsTeam2 }},
@@ -756,13 +804,15 @@
                 stl: {{ $totalStealsTeam2 }},
                 blk: {{ $totalBlocksTeam2 }},
                 to: {{ $totalTurnoversTeam2 }},
-                fg: {{ $totalFGPercentageTeam2 }},
-                threeP: {{ $total3ptPercentageTeam2 }},
-                ft: {{ $totalFreeThrowPercentageTeam2 }}
+                ftm: {{ $totalFreeThrowsMadeTeam2 }},
+                fouls: {{ $totalFoulsTeam2 }},
+                twoPm: {{ $total2PMTeam2 }},
+                threePm: {{ $total3PMTeam2 }},
+                fgm: {{ $totalFGMTeam2 }},
             }
         };
 
-        const statsLabels = ['pts', 'rebs', 'assists', 'stl', 'blk', 'to', 'fg', 'threeP', 'ft'];
+        const statsLabels = ['pts', 'fgm', 'twoPm', 'threePm', 'rebs', 'assists', 'stl', 'blk', 'to', 'ftm', 'fouls',];
         const teamAData = [];
         const teamBData = [];
         const teamAColors = [];
@@ -785,13 +835,12 @@
             teamBColors.push(teamBValue > teamAValue ? 'rgba(49, 71, 149, 1)' : 'rgba(156, 163, 175, 1)'); // bg-[#314795] or bg-gray-400
         });
 
-        const ctx = document.getElementById('teamComparisonChart').getContext('2d');
-
+        
         // Create the chart
-        new Chart(ctx, {
+        teamComparisonChartInstance = new Chart(canvas,{
             type: 'bar',
             data: {
-                labels: ['PTS', 'REBS', 'ASSISTS', 'STEALS', 'BLOCKS', 'TURNOVERS', 'FG%', '3P%', 'FT%'], // Stats labels
+                labels: ['PTS','FG MADE', '2PTS', '3PTS', 'REBS', 'ASSISTS', 'STEALS', 'BLOCKS', 'TURNOVERS', 'FREE THROWS','FOULS',], // Stats labels
                 datasets: [
                     {
                         label: teamAName, // Use actual team name
@@ -818,7 +867,7 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Statistics'
+                            text: 'Type of Stat'
                         },
                         stacked: false // Ensure bars are side by side
                     }
@@ -835,6 +884,106 @@
                 indexAxis: 'x', // Keep for horizontal layout if desired
             }
         });
+    }
+
+    function loadPercentagesChart() {
+        const canvas = document.getElementById('percentagesChart').getContext('2d');
+        
+        // Destroy the previous chart instance if it exists
+        if (percentagesChartInstance) {
+            percentagesChartInstance.destroy();
+        }
+
+        // Fetch actual data
+        const teamStats = {
+            "{{ $schedule->team1->name }}": {
+                twoPt: {{ $total2ptPercentageTeam1 }},
+                fg: {{ $totalFGPercentageTeam1 }},
+                threeP: {{ $total3ptPercentageTeam1 }},
+                ft: {{ $totalFreeThrowPercentageTeam1 }}
+            },
+            "{{ $schedule->team2->name }}": {
+                twoPt: {{ $total2ptPercentageTeam2 }},
+                fg: {{ $totalFGPercentageTeam2 }},
+                threeP: {{ $total3ptPercentageTeam2 }},
+                ft: {{ $totalFreeThrowPercentageTeam2 }}
+            }
+        };
+
+        const statsLabels = ['fg', 'twoPt', 'threeP', 'ft'];
+        const teamAData = [];
+        const teamBData = [];
+        const teamAColors = [];
+        const teamBColors = [];
+        const teamAName = "{{ $schedule->team1->name }}"; 
+        const teamBName = "{{ $schedule->team2->name }}"; 
+
+        // Populate data and determine colors based on comparisons
+        statsLabels.forEach(stat => {
+            const teamAValue = teamStats[teamAName][stat];
+            const teamBValue = teamStats[teamBName][stat];
+
+            teamAData.push(teamAValue);
+            teamBData.push(teamBValue);
+
+            // Set Team A color based on comparison with Team B
+            teamAColors.push(teamAValue > teamBValue ? 'rgba(49, 71, 149, 1)' : 'rgba(156, 163, 175, 1)'); // bg-[#314795] or bg-gray-400
+            
+            // Set Team B color based on comparison with Team A
+            teamBColors.push(teamBValue > teamAValue ? 'rgba(49, 71, 149, 1)' : 'rgba(156, 163, 175, 1)'); // bg-[#314795] or bg-gray-400
+        });
+
+        // Create the chart
+        percentagesChartInstance = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: ['FG%', '2PT%', '3PT%', 'FT%'], // Stats labels
+                datasets: [
+                    {
+                        label: teamAName, // Use actual team name
+                        data: teamAData,
+                        backgroundColor: teamAColors,
+                    },
+                    {
+                        label: teamBName, // Use actual team name
+                        data: teamBData,
+                        backgroundColor: teamBColors,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Statistics'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Type of Stat'
+                        },
+                        stacked: false // Ensure bars are side by side
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Percentages Statistics'
+                    }
+                },
+                indexAxis: 'y', // Keep for vertical layout if desired
+            }
+        });
+
+        // Make the canvas visible after rendering the chart
+        document.getElementById('percentagesChart').classList.remove('hidden');
     }
 
     function deletePlayerStat(id) {
@@ -859,5 +1008,37 @@
             });
         }
     }
+
+    // Event listeners for the chart toggle buttons
+    document.querySelector("#toggleComparisonChart").addEventListener("click", function () {
+        // Load team comparison chart
+        loadTeamComparisonChart();
+
+        // Toggle button styles
+        this.classList.add("bg-[#314795]");
+        this.classList.remove("bg-gray-400");
+        document.getElementById("togglePercentagesChart").classList.add("bg-gray-400");
+        document.getElementById("togglePercentagesChart").classList.remove("bg-[#314795]");
+
+        // Show team comparison chart and hide percentages chart
+        document.getElementById("teamComparisonChartContainer").classList.remove("hidden");
+        document.getElementById("percentagesChartContainer").classList.add("hidden");
+    });
+
+    document.querySelector("#togglePercentagesChart").addEventListener("click", function () {
+        // Load percentages chart
+        loadPercentagesChart();
+
+        // Toggle button styles
+        this.classList.add("bg-[#314795]");
+        this.classList.remove("bg-gray-400");
+        document.getElementById("toggleComparisonChart").classList.add("bg-gray-400");
+        document.getElementById("toggleComparisonChart").classList.remove("bg-[#314795]");
+
+        // Show percentages chart and hide team comparison chart
+        document.getElementById("percentagesChartContainer").classList.remove("hidden");
+        document.getElementById("teamComparisonChartContainer").classList.add("hidden");
+    });
+
 </script>
 </x-app-layout>

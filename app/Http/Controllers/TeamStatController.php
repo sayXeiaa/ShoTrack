@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\tournaments;
 use App\Models\Teams;
 use App\Models\TeamStat; 
+use App\Models\Schedule;
 
 class TeamStatController extends Controller
 {
@@ -16,21 +17,59 @@ class TeamStatController extends Controller
     {
         $tournamentId = $request->input('tournament_id');
         $category = $request->query('category');
+        
+        $teams = Teams::with(['teamStats'])
+            ->when($tournamentId, function ($query) use ($tournamentId) {
+                return $query->where('tournament_id', $tournamentId);
+            })
+            ->when($category, function ($query) use ($category) {
+                return $query->where('category', $category);
+            })
+            ->get();
     
-        $teams = Teams::with(['teamStats']) 
-        ->when($tournamentId, function ($query) use ($tournamentId) {
-            return $query->where('tournament_id', $tournamentId);
-        })
-        ->when($category, function ($query) use ($category) {
-            return $query->where('category', $category);
-        })
-        ->get();
+        // Get unique schedules for the selected tournament
+        $schedules = Schedule::where('tournament_id', $tournamentId)
+            ->when($category, function ($query) use ($category) {
+                return $query->where('category', $category);
+            })
+            ->get();
     
-        $teamstats = TeamStat::all(); // Fetch all team statistics
+        // Calculate averages for each team
+        $averages = [];
     
-        $tournaments = Tournaments::all(); // Fetch all tournaments
+        foreach ($teams as $team) {
+            // Filter team statistics based on unique schedules
+            $teamStats = $team->teamStats->whereIn('schedule_id', $schedules->pluck('id'))->unique('schedule_id');
     
-        return view('leaderboards.list', compact('teams', 'tournaments', 'teamstats'));
+            $totalGames = $teamStats->count();
+            $totalMinutes = 0;
+            $totalPoints = 0;
+            $totalFGM = 0;
+            $totalFGA = 0;
+    
+            // Accumulate values
+            foreach ($teamStats as $stats) {
+                $totalMinutes += $stats->minutes;
+                $totalPoints += $stats->points;
+                $totalFGM += $stats->two_pt_fg_made + $stats->three_pt_fg_made;
+                $totalFGA += $stats->two_pt_fg_attempt + $stats->three_pt_fg_attempt;
+            }
+    
+            // Calculate averages
+            $avgFGP = $totalFGA > 0 ? ($totalFGM / $totalFGA) * 100 : 0;
+            $avgMinutes = $totalGames > 0 ? $totalMinutes / $totalGames : 0;
+            $avgPoints = $totalGames > 0 ? $totalPoints / $totalGames : 0;
+    
+            $averages[$team->id] = [
+                'avg_fgp' => $avgFGP,
+                'avg_minutes' => $avgMinutes,
+                'avg_points' => $avgPoints,
+            ];
+        }
+    
+        $tournaments = Tournaments::all();
+        
+        return view('leaderboards.list', compact('teams', 'tournaments', 'averages'));
     }
     
     /**

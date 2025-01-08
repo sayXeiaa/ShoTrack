@@ -1217,6 +1217,8 @@
                     success: function (response) {
                         console.log('Time updated successfully:', response);
                         resolve();
+                        fetchGameDetails(scheduleId);
+                        updateDisplay();
                     },
                     error: function (xhr, status, error) {
                         console.error('Error updating time:', status, error);

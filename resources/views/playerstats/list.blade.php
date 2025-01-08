@@ -413,10 +413,6 @@
                     return $stat->two_pt_fg_attempt + $stat->three_pt_fg_attempt;
                 });
 
-                $total2ptTeam1 = $playerStatsTeam1->sum(function($stat) {
-                    return $stat->two_pt_fg_made;
-                });
-
                 $totalFGPercentageTeam1 = ($totalFGATeam1 > 0) ? number_format(($totalFGMTeam1 / $totalFGATeam1) * 100, 1) : 0.0;
 
                 $total2PMTeam1 = $playerStatsTeam1->sum('two_pt_fg_made');
@@ -462,9 +458,9 @@
 
                 $totalFGPercentageTeam2 = ($totalFGATeam2 > 0) ? number_format(($totalFGMTeam2 / $totalFGATeam2) * 100, 1) : 0.0;
 
-                $total2PMTeam2 = $playerStatsTeam1->sum('two_pt_fg_made');
-                $total2PATeam2 = $playerStatsTeam1->sum('two_pt_fg_attempt');
-                $total2ptPercentageTeam2 = ($total2PATeam2 > 0) ? number_format(($total2PMTeam1 / $total2PATeam1) * 100, 1) : 0.0;
+                $total2PMTeam2 = $playerStatsTeam2->sum('two_pt_fg_made');
+                $total2PATeam2 = $playerStatsTeam2->sum('two_pt_fg_attempt');
+                $total2ptPercentageTeam2 = ($total2PATeam2 > 0) ? number_format(($total2PMTeam2 / $total2PATeam2) * 100, 1) : 0.0;
 
                 $total3PMTeam2 = $playerStatsTeam2->sum('three_pt_fg_made');
                 $total3PATeam2 = $playerStatsTeam2->sum('three_pt_fg_attempt');
@@ -493,9 +489,9 @@
                 </div>
 
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
-                    <div class="font-medium text-black">{{ $total2ptTeam1 }} / {{ $total2PATeam1 }}</div>
+                    <div class="font-medium text-black">{{  $total2PMTeam1 }} / {{ $total2PATeam1 }}</div>
                     <div class="font-semibold text-black">2-Point Field Goals</div>
-                    <div class="font-medium text-black">{{ $total2ptTeam2 }} / {{ $total2PATeam2 }}</div>
+                    <div class="font-medium text-black">{{ $total2PMTeam2}} / {{ $total2PATeam2 }}</div>
                 </div>
 
                 <div class="grid grid-cols-3 gap-4 text-center py-3 border-b hover:bg-gray-400">
@@ -806,7 +802,7 @@
                 to: {{ $totalTurnoversTeam2 }},
                 ftm: {{ $totalFreeThrowsMadeTeam2 }},
                 fouls: {{ $totalFoulsTeam2 }},
-                twoPm: {{ $total2PMTeam2 }},
+                twoPm: {{  $total2PMTeam2 }},
                 threePm: {{ $total3PMTeam2 }},
                 fgm: {{ $totalFGMTeam2 }},
             }
@@ -958,13 +954,13 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Statistics'
+                            text: 'Type of Stat'
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Type of Stat'
+                            text: 'Percentage'
                         },
                         stacked: false // Ensure bars are side by side
                     }

@@ -43,13 +43,14 @@
                         <table class="min-w-full stats-table border-collapse border border-gray-300">
                             <thead class="bg-[#314795]">
                                 <tr class="text-white">
+                                    <!-- Table headers here -->
                                     <th class="border px-4 py-2">TEAM</th>
                                     <th class="border px-4 py-2">GP</th>
                                     <th class="border px-4 py-2">W</th>
                                     <th class="border px-4 py-2">L</th>
                                     <th class="border px-4 py-2">MIN</th>
                                     <th class="border px-4 py-2">FGM</th>
-                                    <th class="border px-4 py-2">FGA</th> 
+                                    <th class="border px-4 py-2">FGA</th>
                                     <th class="border px-4 py-2">FG%</th>
                                     <th class="border px-4 py-2">2PM</th>
                                     <th class="border px-4 py-2">2PA</th>
@@ -80,48 +81,62 @@
                                 @forelse ($teams as $team)
                                     @if ($team->teamStats->isNotEmpty())  <!-- Check if the team has stats -->
                                         @php
-                                            $latestStats = $team->teamStats->last(); // or use $team->teamStats->first() if you want the earliest
-                                            $totalFGM = ($latestStats->two_pt_fg_made ?? 0) + ($latestStats->three_pt_fg_made ?? 0);
-                                            $totalFGA = ($latestStats->two_pt_fg_attempt ?? 0) + ($latestStats->three_pt_fg_attempt ?? 0);
-                                            $totalFGP = $totalFGA > 0 ? ($totalFGM / $totalFGA) * 100 : 0;
+                                            $totalFGM = 0;
+                                            $totalFGA = 0;
+                                            $totalMinutes = 0;
+                                            $totalPoints = 0;
+                                            $totalGames = $team->teamStats->count();  // Unique schedules count
+            
+                                            // Accumulate the stats
+                                            foreach ($team->teamStats as $stat) {
+                                                $totalFGM += ($stat->two_pt_fg_made ?? 0) + ($stat->three_pt_fg_made ?? 0);
+                                                $totalFGA += ($stat->two_pt_fg_attempt ?? 0) + ($stat->three_pt_fg_attempt ?? 0);
+                                                $totalMinutes += $stat->minutes ?? 0;
+                                                $totalPoints += $stat->points ?? 0;
+                                            }
+            
+                                            // Calculate averages
+                                            $avgFGP = $totalFGA > 0 ? ($totalFGM / $totalFGA) * 100 : 0;
+                                            $avgMinutes = $totalGames > 0 ? $totalMinutes / $totalGames : 0;
+                                            $avgPoints = $totalGames > 0 ? $totalPoints / $totalGames : 0;
                                         @endphp
                                         <tr class="hover:bg-gray-400">
                                             <td class="flex items-center space-x-4">
                                                 <img src="{{ asset('storage/' . $team->logo) }}" alt="Team Logo" class="w-12 h-12 object-contain">
                                                 <span>{{ $team->name }}</span>
                                             </td>                                            
-                                            <td>{{ $latestStats->games_played ?? 0 }}</td>
-                                            <td>{{ $latestStats->wins ?? 0 }}</td>
-                                            <td>{{ $latestStats->losses ?? 0 }}</td>
+                                            <td>{{ $totalGames }}</td>
+                                            <td>{{ $team->wins ?? 0 }}</td>
+                                            <td>{{ $team->losses ?? 0 }}</td>
                                             <td class="border px-4 py-2">
-                                                {{ floor($latestStats->minutes / 60) }}:{{ str_pad($latestStats->minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                                {{ floor($avgMinutes / 60) }}:{{ str_pad($avgMinutes % 60, 2, '0', STR_PAD_LEFT) }}
                                             </td>                                            
                                             <td class="border px-4 py-2">{{ $totalFGM }}</td>
                                             <td class="border px-4 py-2">{{ $totalFGA }}</td>
-                                            <td class="border px-4 py-2">{{ number_format($totalFGP, 1) }}%</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->two_pt_fg_made ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->two_pt_fg_attempt ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->two_pt_percentage ?? '0.0%' }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->three_pt_fg_made ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->three_pt_fg_attempt ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->three_pt_percentage ?? '0.0%' }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->free_throw_made ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->free_throw_attempt ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->free_throw_percentage ?? '0.0%' }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->offensive_rebounds ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->defensive_rebounds ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->rebounds ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->assists ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->steals ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->blocks ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->turnovers ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->personal_fouls ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ $latestStats->points ?? 0 }}</td>
-                                            <td class="border px-4 py-2">{{ number_format($latestStats->offensive_rebound_percentage ?? 0, 1) }}%</td>
-                                            <td class="border px-4 py-2">{{ number_format($latestStats->defensive_rebound_percentage ?? 0, 1) }}%</td>
-                                            <td class="border px-4 py-2">{{ number_format($latestStats->turnover_ratio ?? 0, 2) }}</td>
-                                            <td class="border px-4 py-2">{{ number_format($latestStats->free_throw_attempt_rate ?? 0, 2) }}</td>
-                                            <td class="border px-4 py-2">{{ number_format($latestStats->plus_minus ?? 0, 2) }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($avgFGP, 1) }}%</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('two_pt_fg_made') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('two_pt_fg_attempt') }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('two_pt_percentage'), 1) }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('three_pt_fg_made') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('three_pt_fg_attempt') }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('three_pt_percentage'), 1) }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('free_throw_made') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('free_throw_attempt') }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('free_throw_percentage'), 1) }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('offensive_rebounds') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('defensive_rebounds') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('rebounds') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('assists') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('steals') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('blocks') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('turnovers') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('personal_fouls') }}</td>
+                                            <td class="border px-4 py-2">{{ $team->teamStats->sum('points') }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('offensive_rebound_percentage'), 1) }}%</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('defensive_rebound_percentage'), 1) }}%</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('turnover_ratio'), 2) }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('free_throw_attempt_rate'), 2) }}</td>
+                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('plus_minus'), 2) }}</td>
                                         </tr>
                                     @endif
                                 @empty
@@ -133,7 +148,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div>           
         </div>
     </div>
     

@@ -364,8 +364,6 @@ class PlayerStatsController extends Controller
             'team_B_score' => $teamBScore
         ]);
 
-        TeamStat::updateStatsForTeam($player->team_id, $schedule->id);
-
         $teamAId = $schedule->team1_id; 
         $teamBId = $schedule->team2_id;
 

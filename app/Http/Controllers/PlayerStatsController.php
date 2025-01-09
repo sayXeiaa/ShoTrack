@@ -684,7 +684,8 @@ class PlayerStatsController extends Controller
         // Define the stats 
         $stats = [
             'points', 'assists', 'rebounds', 'blocks', 'steals', 
-            'personal_fouls', 'turnovers', 'free_throw_percentage', 
+            'personal_fouls', 'turnovers', 'two_pt_percentage', 'three_pt_percentage',
+            'free_throw_percentage', 'free_throw_made',
             'turnover_ratio', 'free_throw_attempt_rate', 
             'effective_field_goal_percentage', 'plus_minus', 
             'two_pt_fg_attempt', 'two_pt_fg_made', 
@@ -730,7 +731,6 @@ class PlayerStatsController extends Controller
             // Fetch top 5 players for each stat
             $topPlayersByStats[$stat] = $query
                 ->orderBy("average_$stat", 'desc')
-                ->take(5)
                 ->get();
         }
     

@@ -4,9 +4,6 @@
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
                 {{ __('Game Results') }}
             </h2>
-            {{-- @can('edit schedules')
-                <a href="{{ route('schedules.create') }}" class="bg-slate-700 text-base rounded-md text-white px-3 py-2">Create</a>
-            @endcan --}}
         </div>
     </x-slot>
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('category')->nullable(); 
             $table->string('name');
-            $table->string('head_coach_name');
+            $table->string('head_coach_name')->nullable();
 
             $table->string('team_acronym')->nullable();
             $table->string('school_president')->nullable();

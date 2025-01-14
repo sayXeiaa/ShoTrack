@@ -115,13 +115,14 @@ function getInitials($teamName) {
                             @endif
                             @endcan
                         </div>
-                
+                    
                         <!-- View Box Score -->
-                        <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" class="text-blue-500 hover:underline mr-52">
+                        <a href="{{ route('playerstats.index', ['schedule_id' => $schedule->id, 'team1_id' => $schedule->team1_id, 'team2_id' => $schedule->team2_id]) }}" 
+                            class="bg-blue-600 text-white text-sm font-medium rounded-md px-4 py-2 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:mr-48 sm:text-right inline-block text-left mt-2 sm:mt-0 transition">
                             View Box Score
-                        </a>
+                        </a>             
                     </div>
-
+                
                 </div>
                 
                 @endforeach
@@ -137,16 +138,16 @@ function getInitials($teamName) {
 
     <style>
         .team-initials {
-            width: 3rem; /* Set a fixed width */
-            height: 2rem; /* Set a fixed height */
+            width: 3rem; 
+            height: 2rem; 
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             font-weight: bold;
-            background-color: #f0f0f0; /* Optional: background for better visibility */
-            border: 1px solid #ccc; /* Optional: border for styling */
-            border-radius: 0.25rem; /* Optional: rounded corners */
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem; 
         }
     </style>
     

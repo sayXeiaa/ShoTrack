@@ -72,8 +72,8 @@
                             <th class="px-6 py-3 text-left school-field">Position</th>
                             <th class="px-6 py-3 text-left">Date of Birth</th>
                             <th class="px-6 py-3 text-left">Age</th>
-                            <th class="px-6 py-3 text-left">Height</th>
-                            <th class="px-6 py-3 text-left">Weight</th>
+                            <th class="px-6 py-3 text-left school-field">Height</th>
+                            <th class="px-6 py-3 text-left school-field">Weight</th>
                             <th class="px-6 py-3 text-left school-field">Years Playing</th> 
                             {{-- <th class="px-6 py-3 text-left">Created</th> --}}
                             @can('edit players')
@@ -92,8 +92,12 @@
                                     <td class="px-6 py-3 text-left school-field">{{ $player->position }}</td>
                                     <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') }}</td>
                                     <td class="px-6 py-3 text-left">{{ $player->age }} </td>
-                                    <td class="px-6 py-3 text-left">{{ $player->height }} ft</td>
-                                    <td class="px-6 py-3 text-left">{{ $player->weight }} kg</td>
+                                    <td class="px-6 py-3 text-left school-field">
+                                        {{ $player->height ? $player->height . ' ft' : '' }}
+                                    </td>
+                                    <td class="px-6 py-3 text-left school-field">
+                                        {{ $player->weight ? $player->weight . ' kg' : '' }}
+                                    </td>                                    
                                     <td class="px-6 py-3 text-left school-field">{{ $player->years_playing_in_bucal }}</td>
                                     {{-- <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->created_at)->format('d M, Y') }}</td> --}}
                                     @can ('edit players')

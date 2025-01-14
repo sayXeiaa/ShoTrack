@@ -9,7 +9,7 @@
 
     <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div>
-            <label for="tournament" class="block text-sm font-medium text-gray-700">Select Tournament</label>
+            <label for="tournament" class="block text-sm font-medium text-gray-700 mb-2">Select Tournament</label>
             <select id="tournament" name="tournament_id"
                 class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                 <option value="">All Tournaments</option>
@@ -20,9 +20,9 @@
                     </option>
                 @endforeach
             </select>
-
-            <div class="mb-4" id="category-selection" style="display:none;">
-                <label for="category" class="block text-sm font-medium text-gray-700">Select Category</label>
+        
+            <div class="mb-4 mt-2" id="category-selection" style="display:none;">
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Select Category</label>
                 <select id="category" name="category"
                     class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                     <option value="">All Categories</option>
@@ -31,14 +31,15 @@
                 </select>
             </div>
         </div>
-
-        <div class="mb-4">
-            <label for="scheduleSelect" class="block text-sm font-medium text-gray-700">Select Game:</label>
+        
+        <div class="mb-4 mt-2">
+            <label for="scheduleSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Game:</label>
             <select id="scheduleSelect"
                 class="mt-1 block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                 <option value="">Choose a Game</option>
             </select>
         </div>
+        
         <div class="space-y-4">
         <div class="text-lg font-bold ml-2 flex space-x-4">
             <button
@@ -54,265 +55,155 @@
         </div>
 
         <div class="space-y-4">
-            <div id="basicstatsA"
-                class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
-                <div id="team1NameDisplayA" class="text-gray-900 text-2xl leading-none font-bold">No team
-                    selected</div>
-                <!-- Add overflow-x-auto here for horizontal scrolling -->
+            <div id="basicstatsA" class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
+                <div id="team1NameDisplayA" class="text-gray-900 text-2xl leading-none font-bold">No team selected</div>
+                <!-- Add horizontal scrolling -->
                 <div class="overflow-x-auto mt-4">
-                    <div class="flex space-x-4 w-max mb-4">
+                    <div class="flex space-x-4 w-max">
                         <!-- Points Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Points
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Points</h3>
                             </div>
                             <div id="point-chart-a"></div>
                         </div>
 
                         <!-- Assists Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Assists
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Assists</h3>
                             </div>
                             <div id="assist-chart-a"></div>
                         </div>
 
                         <!-- Rebounds Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Rebounds
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Rebounds</h3>
                             </div>
                             <div id="rebound-chart-a"></div>
                         </div>
 
                         <!-- Steals Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Steals
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Steals</h3>
                             </div>
                             <div id="steal-chart-a"></div>
                         </div>
 
                         <!-- Blocks Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Blocks
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Blocks</h3>
                             </div>
                             <div id="block-chart-a"></div>
                         </div>
 
+                        <!-- Turnovers Box -->
+                        <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Turnovers</h3>
+                            </div>
+                            <div id="turnover-chart-a"></div>
+                        </div>  
+
                         <!-- Personal Fouls Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Personal
-                                            Fouls
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Personal Fouls</h3>
                             </div>
                             <div id="perfoul-chart-a"></div>
                         </div>
 
-                        <!-- Turnovers Box -->
-                        <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Turnovers
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="turnover-chart-a"></div>
-                        </div>
-
                         <!-- Offensive Rebounds Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Offensive
-                                            Rebounds</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Offensive Rebounds</h3>
                             </div>
                             <div id="offensive_rebounds-chart-a"></div>
                         </div>
 
                         <!-- Defensive Rebounds Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Defensive
-                                            Rebounds</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Defensive Rebounds</h3>
                             </div>
                             <div id="defensive_rebounds-chart-a"></div>
                         </div>
 
                         <!-- Two Point FG Attempt Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two
-                                            Point
-                                            FG
-                                            Attempt</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point FG Attempt</h3>
                             </div>
                             <div id="two_pt_fg_attempt-chart-a"></div>
                         </div>
 
                         <!-- Two Point FG Made Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two
-                                            Point
-                                            FG
-                                            Made</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point FG Made</h3>
                             </div>
                             <div id="two_pt_fg_made-chart-a"></div>
                         </div>
 
+                        <!-- Two Point Percentage Box -->
+                        <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point Percentage</h3>
+                            </div>
+                            <div id="two_pt_percentage-chart-a"></div>
+                        </div>
+
                         <!-- Three Point FG Attempt Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three
-                                            Point
-                                            FG
-                                            Attempt</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point FG Attempt</h3>
                             </div>
                             <div id="three_pt_fg_attempt-chart-a"></div>
                         </div>
 
                         <!-- Three Point FG Made Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three
-                                            Point
-                                            FG
-                                            Made</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point FG Made</h3>
                             </div>
                             <div id="three_pt_fg_made-chart-a"></div>
                         </div>
 
-                        <!-- Two Point Percentage Box -->
-                        <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Two
-                                            Point
-                                            Percentage</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="two_pt_percentage-chart-a"></div>
-                        </div>
-
                         <!-- Three Point Percentage Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Three
-                                            Point
-                                            Percentage</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point Percentage</h3>
                             </div>
                             <div id="three_pt_percentage-chart-a"></div>
                         </div>
 
                         <!-- Free Throw Attempt Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free
-                                            Throw
-                                            Attempt</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free Throw Attempt</h3>
                             </div>
                             <div id="free_throw_attempt-chart-a"></div>
                         </div>
 
                         <!-- Free Throw Made Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free
-                                            Throw
-                                            Made</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free Throw Made</h3>
                             </div>
                             <div id="free_throw_made-chart-a"></div>
                         </div>
 
                         <!-- Free Throw Percentage Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free
-                                            Throw
-                                            Percentage</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free Throw Percentage</h3>
                             </div>
                             <div id="free_throw_percentage-chart-a"></div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -324,84 +215,51 @@
                     team
                     selected</div>
 
-
-
-
                 <!-- Add overflow-x-auto here for horizontal scrolling -->
                 <div class="overflow-x-auto mt-4">
                     <div class="flex space-x-4 w-max mb-4">
 
                         <!-- Free Throw Attempt Rate Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Free
-                                            Throw
-                                            Attempt Rate</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free Throw Attempt Rate</h3>
                             </div>
                             <div id="free_throw_attempt_rate-chart-a"></div>
                         </div>
 
                         <!-- Plus-Minus Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Plus-Minus
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Plus-Minus</h3>
                             </div>
                             <div id="plus_minus-chart-a"></div>
                         </div>
 
                         <!-- Effective FG Percentage Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Effective
-                                            FG
-                                            Percentage</p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Effective FG Percentage</h3>
                             </div>
                             <div id="effective_field_goal_percentage-chart-a"></div>
                         </div>
 
                         <!-- Turnover Ratio Box -->
                         <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                            <div class="flex justify-between mb-5">
-                                <div class="grid gap-4 grid-cols-2">
-                                    <div>
-                                        <p class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                            Turnover
-                                            Ratio
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center mb-5">
+                                <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Turnover Ratio</h3>
                             </div>
                             <div id="turnover_ratio-chart-a"></div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
-
 
             <div id="basicstatsB"
                 class="content-section space-y-4 bg-white-400 border-2 border-gray-300 rounded-lg shadow-xl p-4">
                 <div id="team2NameDisplayA" class="text-gray-900 text-2xl leading-none font-bold">No
                     team
                     selected</div>
-
-
-
 
                 <!-- Add overflow-x-auto here for horizontal scrolling -->
                 <div class="overflow-x-auto mt-4">
@@ -412,273 +270,144 @@
                             <div class="flex space-x-4 w-max">
                                 <!-- Points Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Points</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Points</h3>
                                     </div>
                                     <div id="point-chart-b"></div>
                                 </div>
 
                                 <!-- Assists Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Assists
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Assists</h3>
                                     </div>
                                     <div id="assist-chart-b"></div>
                                 </div>
 
                                 <!-- Rebounds Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Rebounds
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Rebounds</h3>
                                     </div>
                                     <div id="rebound-chart-b"></div>
                                 </div>
 
                                 <!-- Steals Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Steals</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Steals</h3>
                                     </div>
                                     <div id="steal-chart-b"></div>
                                 </div>
 
                                 <!-- Blocks Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Blocks</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Blocks</h3>
                                     </div>
                                     <div id="block-chart-b"></div>
                                 </div>
 
-                                <!-- Personal Fouls Box -->
-                                <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Personal
-                                                    Fouls
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="perfoul-chart-b"></div>
-                                </div>
-
                                 <!-- Turnovers Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Turnovers
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Turnovers</h3>
                                     </div>
                                     <div id="turnover-chart-b"></div>
                                 </div>
 
+                                <!-- Personal Fouls Box -->
+                                <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Personal Fouls</h3>
+                                    </div>
+                                    <div id="perfoul-chart-b"></div>
+                                </div>
+
                                 <!-- Offensive Rebounds Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Offensive
-                                                    Rebounds</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Offensive Rebounds</h3>
                                     </div>
                                     <div id="offensive_rebounds-chart-b"></div>
                                 </div>
 
                                 <!-- Defensive Rebounds Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Defensive
-                                                    Rebounds</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Defensive Rebounds</h3>
                                     </div>
                                     <div id="defensive_rebounds-chart-b"></div>
                                 </div>
 
                                 <!-- Two Point FG Attempt Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Two Point
-                                                    FG
-                                                    Attempt</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point FG Attempt</h3>
                                     </div>
                                     <div id="two_pt_fg_attempt-chart-b"></div>
                                 </div>
 
                                 <!-- Two Point FG Made Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Two Point
-                                                    FG
-                                                    Made</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point FG Made</h3>
                                     </div>
                                     <div id="two_pt_fg_made-chart-b"></div>
                                 </div>
 
+                                <!-- Two Point Percentage Box -->
+                                <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Two-Point FG Percentage</h3>
+                                    </div>
+                                    <div id="two_pt_percentage-chart-b"></div>
+                                </div>
+
                                 <!-- Three Point FG Attempt Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Three
-                                                    Point FG
-                                                    Attempt</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point FG Attempt</h3>
                                     </div>
                                     <div id="three_pt_fg_attempt-chart-b"></div>
                                 </div>
 
                                 <!-- Three Point FG Made Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Three
-                                                    Point FG
-                                                    Made</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point FG Made</h3>
                                     </div>
                                     <div id="three_pt_fg_made-chart-b"></div>
                                 </div>
 
-                                <!-- Two Point Percentage Box -->
-                                <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Two Point
-                                                    Percentage</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="two_pt_percentage-chart-b"></div>
-                                </div>
-
                                 <!-- Three Point Percentage Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Three
-                                                    Point
-                                                    Percentage</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Three-Point FG Percentage</h3>
                                     </div>
                                     <div id="three_pt_percentage-chart-b"></div>
                                 </div>
 
                                 <!-- Free Throw Attempt Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Free Throw
-                                                    Attempt</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free-Throw Attempt</h3>
                                     </div>
                                     <div id="free_throw_attempt-chart-b"></div>
                                 </div>
 
                                 <!-- Free Throw Made Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Free Throw
-                                                    Made</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free-Throw Made</h3>
                                     </div>
                                     <div id="free_throw_made-chart-b"></div>
                                 </div>
 
                                 <!-- Free Throw Percentage Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Free Throw
-                                                    Percentage</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free-Throw Percentage</h3>
                                     </div>
                                     <div id="free_throw_percentage-chart-b"></div>
                                 </div>
@@ -695,9 +424,6 @@
                     team
                     selected</div>
 
-
-
-
                 <!-- Add overflow-x-auto here for horizontal scrolling -->
                 <div class="overflow-x-auto mt-4">
                     <div class="flex space-x-4 w-max mb-4">
@@ -708,62 +434,32 @@
 
                                 <!-- Free Throw Attempt Rate Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Free Throw
-                                                    Attempt Rate</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Free Throw Attempt Rate</h3>
                                     </div>
                                     <div id="free_throw_attempt_rate-chart-b"></div>
                                 </div>
 
                                 <!-- Plus-Minus Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Plus-Minus
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Plus-Minus</h3>
                                     </div>
                                     <div id="plus_minus-chart-b"></div>
                                 </div>
 
                                 <!-- Effective FG Percentage Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Effective
-                                                    FG
-                                                    Percentage</p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Effective FG Percentage</h3>
                                     </div>
                                     <div id="effective_field_goal_percentage-chart-b"></div>
                                 </div>
 
                                 <!-- Turnover Ratio Box -->
                                 <div class="max-w-sm w-full bg-white rounded-lg shadow p-4 md:p-6">
-                                    <div class="flex justify-between mb-5">
-                                        <div class="grid gap-4 grid-cols-2">
-                                            <div>
-                                                <p
-                                                    class="text-gray-900 dark:text-white text-2xl leading-none font-bold">
-                                                    Turnover
-                                                    Ratio
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center mb-5">
+                                        <h3 class="text-center text-xl font-bold text-gray-700 mb-2">Turnover Ratio</h3>
                                     </div>
                                     <div id="turnover_ratio-chart-b"></div>
                                 </div>
@@ -866,14 +562,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const points = data.points;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero points
+                                const filteredNames = [];
+                                const filteredPoints = [];
+
+                                points.forEach((point, index) => {
+                                    if (point > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPoints.push(point);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
-                                        width: "100%", // You can use percentage for width if the container is responsive
-                                        type: "line",
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -884,11 +590,11 @@
                                     },
                                     series: [{
                                         name: "Points",
-                                        data: points,
-                                        color: "#1A56DB",
+                                        data: filteredPoints,
                                     }],
+                                    colors: ["#1A56DB"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -898,8 +604,14 @@
                                             text: 'Points',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000, // Add responsive behavior for smaller screens
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
                                                 height: 250, // Adjust height for smaller devices
@@ -908,26 +620,34 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("point-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("point-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching data for Team A:', error));
-
+                            .catch(error => console.error('Error fetching points data for Team A:', error));
 
                         // Fetch and update Team A Assists chart
                         fetch(`/assists-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const assists = data.assists;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero assists
+                                const filteredNames = [];
+                                const filteredAssists = [];
+
+                                assists.forEach((assist, index) => {
+                                    if (assist > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAssists.push(assist);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -938,11 +658,11 @@
                                     },
                                     series: [{
                                         name: "Assists",
-                                        data: assists,
-                                        color: "#1A56DB", // Custom color for assists
+                                        data: filteredAssists,
                                     }],
+                                    colors: ["#1A56DB"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -952,36 +672,51 @@
                                             text: 'Assists',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
                                         breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("assist-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("assist-chart-a"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching assists data for Team A:', error));
 
-
+                        
                         // Fetch and update Team A Rebounds chart
                         fetch(`/rebounds-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const rebounds = data.rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+
+                                rebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -992,11 +727,11 @@
                                     },
                                     series: [{
                                         name: "Rebounds",
-                                        data: rebounds,
-                                        color: "#1A56DB", // Custom color for rebounds
+                                        data: filteredRebounds,
                                     }],
+                                    colors: ["#1A56DB"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -1006,18 +741,23 @@
                                             text: 'Rebounds',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
                                         breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("rebound-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("rebound-chart-a"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching rebounds data for Team A:', error));
@@ -1028,14 +768,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const steals = data.steals;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero steals
+                                const filteredNames = [];
+                                const filteredSteals = [];
+
+                                steals.forEach((steal, index) => {
+                                    if (steal > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredSteals.push(steal);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1046,11 +796,11 @@
                                     },
                                     series: [{
                                         name: "Steals",
-                                        data: steals,
-                                        color: "#1A56DB", // Custom color for steals
+                                        data: filteredSteals,
                                     }],
+                                    colors: ["#1A56DB"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -1060,18 +810,23 @@
                                             text: 'Steals',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
                                         breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("steal-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("steal-chart-a"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching steals data for Team A:', error));
@@ -1081,14 +836,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const blocks = data.blocks;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero blocks
+                                const filteredNames = [];
+                                const filteredBlocks = [];
+
+                                blocks.forEach((block, index) => {
+                                    if (block > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredBlocks.push(block);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1099,32 +864,37 @@
                                     },
                                     series: [{
                                         name: "Blocks",
-                                        data: blocks,
-                                        color: "#1A56DB", // Custom color for blocks
+                                        data: filteredBlocks,
                                     }],
+                                    colors: ["#1A56DB"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'blocks',
+                                            text: 'Blocks',
+                                        },
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
                                         },
                                     },
                                     responsive: [{
                                         breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("block-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("block-chart-a"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching blocks data for Team A:', error));
@@ -1133,15 +903,31 @@
                         fetch(`/perfoul-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const personal_fouls = data.personal_fouls;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const personalFouls = data.personal_fouls;
+                                const playerNames = data.playerNames; // Use playerNames instead of playerIds
 
+                                // Filter out players with zero personal fouls
+                                const filteredNames = [];
+                                const filteredFouls = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                personalFouls.forEach((foul, index) => {
+                                    if (foul > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredFouls.push(foul);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generates a random hex color
+                                        colors.push(randomColor); // Assign random color
+                                    }
+                                });
+
+                                // Donut chart options
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "donut", // Donut chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1150,52 +936,50 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Personal Fouls",
-                                        data: personal_fouls,
-                                        color: "#1A56DB", // Custom color for personal fouls
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'personal_fouls',
-                                        },
+                                    series: filteredFouls, // Data for the donut chart (personal fouls)
+                                    labels: filteredNames, // Player names who have personal fouls
+                                    colors: colors, // Custom colors for each slice (random colors)
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
                                         breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("perfoul-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("perfoul-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching personal fouls data for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching personal fouls data for Team A:', error));
 
                         // Fetch and update Team A Turnovers chart
                         fetch(`/turnovers-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const turnovers = data.turnovers;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero turnovers
+                                const filteredNames = [];
+                                const filteredTurnovers = [];
+
+                                turnovers.forEach((turnover, index) => {
+                                    if (turnover > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredTurnovers.push(turnover);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1206,18 +990,24 @@
                                     },
                                     series: [{
                                         name: "Turnovers",
-                                        data: turnovers,
-                                        color: "#1A56DB", // Custom color for turnovers
+                                        data: filteredTurnovers,
                                     }],
+                                    colors: ["#1A56DB"], // Use only the specified color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'turnovers',
+                                            text: 'Turnovers',
+                                        },
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
                                         },
                                     },
                                     responsive: [{
@@ -1225,30 +1015,44 @@
                                         options: {
                                             chart: {
                                                 height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("turnover-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("turnover-chart-a"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching turnovers data for Team A:', error));
 
-                        // Fetch and update Team A Offensive Rebounds chart
+                       // Fetch and update Team A Offensive Rebounds chart
                         fetch(`/offensive_rebounds-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const offensive_rebounds = data.offensive_rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const offensiveRebounds = data.offensive_rebounds;
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero offensive rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+                                const colors = [];
+
+                                offensiveRebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                                        colors.push(randomColor);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300, // Set a fixed height in pixels
-                                        width: "100%", // Responsive width
-                                        type: "line",
+                                        height: 300,
+                                        width: "100%",
+                                        type: "donut",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1257,53 +1061,55 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Offensive Rebounds",
-                                        data: offensive_rebounds,
-                                        color: "#1A56DB", // Custom color for offensive rebounds
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Offensive Rebounds',
-                                        },
+                                    series: filteredRebounds, // Data for the donut chart
+                                    labels: filteredNames, // Player names who have rebounds
+                                    colors: colors, // Random colors for each slice
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
-                                        breakpoint: 1000, // Responsive behavior for smaller screens
+                                        breakpoint: 1000,
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250,
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "offensive_rebounds-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("offensive_rebounds-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching offensive rebounds data for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching offensive rebounds data for Team A:', error));
 
                         // Fetch and update Team A Defensive Rebounds chart
                         fetch(`/defensive_rebounds-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const defensive_rebounds = data.defensive_rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const defensiveRebounds = data.defensive_rebounds;
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero defensive rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+                                const colors = [];
+
+                                defensiveRebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                                        colors.push(randomColor);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300, // Set a fixed height in pixels
-                                        width: "100%", // Responsive width
-                                        type: "line",
+                                        height: 300,
+                                        width: "100%",
+                                        type: "donut",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1312,53 +1118,50 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Defensive Rebounds",
-                                        data: defensive_rebounds,
-                                        color: "#1A56DB", // Custom color for defensive rebounds
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Defensive Rebounds',
-                                        },
+                                    series: filteredRebounds, // Data for the donut chart
+                                    labels: filteredNames, // Player names who have rebounds
+                                    colors: colors, // Random colors for each slice
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
-                                        breakpoint: 1000, // Responsive behavior for smaller screens
+                                        breakpoint: 1000,
                                         options: {
                                             chart: {
-                                                height: 250, // Adjust height for smaller screens
-                                            }
-                                        }
+                                                height: 250,
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "defensive_rebounds-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("defensive_rebounds-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching defensive rebounds data for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching defensive rebounds data for Team A:', error));
 
                         // Fetch and update Team A 2 Point FG Attempt chart
                         fetch(`/two_pt_fg_attempt-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const two_pt_fg_attempt = data.two_pt_fg_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames; // Use playerNames instead of playerIds
+
+                                // Filter out players with zero 2 Point FG Attempts
+                                const filteredNames = [];
+                                const filteredAttempts = [];
+
+                                two_pt_fg_attempt.forEach((attempt, index) => {
+                                    if (attempt > 0) { // Only include players with attempts
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAttempts.push(attempt);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "line", // Bar chart for 2 Point FG Attempt
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1369,11 +1172,11 @@
                                     },
                                     series: [{
                                         name: "2 Point FG Attempt",
-                                        data: two_pt_fg_attempt,
+                                        data: filteredAttempts,
                                         color: "#1A56DB", // Custom color for 2 Point FG Attempt
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Filtered player names for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -1393,27 +1196,34 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_fg_attempt-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_fg_attempt-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching 2 Point FG Attempt data for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching 2 Point FG Attempt data for Team A:', error));
 
                         // Fetch and update Team A 2 Point FG Made chart
                         fetch(`/two_pt_fg_made-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const two_pt_fg_made = data.two_pt_fg_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames; // Use playerNames instead of playerIds
+
+                                // Filter out players with zero 2 Point FG Made
+                                const filteredNames = [];
+                                const filteredMades = [];
+
+                                two_pt_fg_made.forEach((made, index) => {
+                                    if (made > 0) { // Only include players with made shots
+                                        filteredNames.push(playerNames[index]);
+                                        filteredMades.push(made);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300, // Set a fixed height in pixels
                                         width: "100%", // Responsive width
-                                        type: "line",
+                                        type: "bar", // Bar chart for 2 Point FG Made
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1424,11 +1234,11 @@
                                     },
                                     series: [{
                                         name: "2 Point FG Made",
-                                        data: two_pt_fg_made,
-                                        color: "#1A56DB", // Custom color for 2 Point FG Made
+                                        data: filteredMades,
+                                        color: "#1A56DB", 
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Filtered player names for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -1448,21 +1258,28 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_fg_made-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_fg_made-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching 2 Point FG Made data for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching 2 Point FG Made data for Team A:', error));
 
-                        // Fetch and update Team A three Point FG Attempt chart
+                        /// Fetch and update Team A Three Point FG Attempt chart
                         fetch(`/three_pt_fg_attempt-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const three_pt_fg_attempt = data.three_pt_fg_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero attempts
+                                const filteredNames = [];
+                                const filteredThreePtFgAttempt = [];
+
+                                three_pt_fg_attempt.forEach((attempt, index) => {
+                                    if (attempt > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredThreePtFgAttempt.push(attempt);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
@@ -1478,19 +1295,19 @@
                                         },
                                     },
                                     series: [{
-                                        name: "three Point FG Attempt",
-                                        data: three_pt_fg_attempt,
+                                        name: "Three Point FG Attempt",
+                                        data: filteredThreePtFgAttempt,
                                         color: "#1A56DB",
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'three Point FG Attempt',
+                                            text: 'Three Point FG Attempt',
                                         },
                                     },
                                     responsive: [{
@@ -1503,82 +1320,101 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_fg_attempt-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("three_pt_fg_attempt-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching three Point FG Attempt for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Three Point FG Attempt data for Team A:', error));
 
-                        // Fetch and update Team A three Point FG Made chart
+                        // Fetch and update Team A Three Point FG Made chart
                         fetch(`/three_pt_fg_made-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const three_pt_fg_made = data.three_pt_fg_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
 
-                                const options = {
-                                    chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
-                                        fontFamily: "Inter, sans-serif",
-                                        dropShadow: {
-                                            enabled: false,
-                                        },
-                                        toolbar: {
-                                            show: false,
-                                        },
-                                    },
-                                    series: [{
-                                        name: "three Point FG Made",
-                                        data: three_pt_fg_made,
-                                        color: "#1A56DB",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'three Point FG Made',
-                                        },
-                                    },
-                                    responsive: [{
-                                        breakpoint: 1000,
-                                        options: {
-                                            chart: {
-                                                height: 250,
-                                            }
-                                        }
-                                    }],
-                                };
+                                // Filter out players with zero made FG
+                                const filteredNames = [];
+                                const filteredThreePtFgMade = [];
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_fg_made-chart-a"),
-                                    options);
-                                chart.render();
-                            })
-                            .catch(error => console.error('Error fetching three Point FG Made for Team A:',
-                                error));
-
-                        // Fetch and update Team A Two Point Percentage chart
-                        fetch(`/two_pt_percentage-chart-data-a/${scheduleId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const two_pt_percentage = data.two_pt_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                three_pt_fg_made.forEach((made, index) => {
+                                    if (made > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredThreePtFgMade.push(made);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
                                         type: "bar",
+                                        fontFamily: "Inter, sans-serif",
+                                        dropShadow: {
+                                            enabled: false,
+                                        },
+                                        toolbar: {
+                                            show: false,
+                                        },
+                                    },
+                                    series: [{
+                                        name: "Three Point FG Made",
+                                        data: filteredThreePtFgMade,
+                                        color: "#1A56DB",
+                                    }],
+                                    xaxis: {
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
+                                        title: {
+                                            text: 'Players',
+                                        },
+                                    },
+                                    yaxis: {
+                                        title: {
+                                            text: 'Three Point FG Made',
+                                        },
+                                    },
+                                    responsive: [{
+                                        breakpoint: 1000,
+                                        options: {
+                                            chart: {
+                                                height: 250,
+                                            }
+                                        }
+                                    }],
+                                };
+
+                                const chart = new ApexCharts(document.getElementById("three_pt_fg_made-chart-a"), options);
+                                chart.render();
+                            })
+
+                        // Fetch and update Team A Two Point Percentage chart
+                        fetch(`/two_pt_percentage-chart-data-a/${scheduleId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const twoPtPercentages = data.two_pt_percentage; // Two point percentages for players
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero two-point percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                twoPtPercentages.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
+                                const options = {
+                                    chart: {
+                                        height: 300, // Fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1589,51 +1425,64 @@
                                     },
                                     series: [{
                                         name: "Two Point Percentage",
-                                        data: two_pt_percentage,
-                                        color: "#1A56DB",
+                                        data: filteredPercentages, // Filtered data for two point percentages
+                                        color: "#1A56DB", // Static color for the bar chart
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Two Point Percentage',
+                                            text: 'Two Point Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_percentage-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_percentage-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Two Point Percentage for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Two Point Percentage data for Team A:', error));
 
                         // Fetch and update Team A Three Point Percentage chart
                         fetch(`/three_pt_percentage-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const three_pt_percentage = data.three_pt_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const threePtPercentages = data.three_pt_percentage; // Three-point percentages
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero three-point percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
 
+                                threePtPercentages.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "bar",
+                                        height: 300, // Fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1644,51 +1493,64 @@
                                     },
                                     series: [{
                                         name: "Three Point Percentage",
-                                        data: three_pt_percentage,
-                                        color: "#1A56DB",
+                                        data: filteredPercentages, // Filtered data for three-point percentages
+                                        color: "#1A56DB", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Three Point Percentage',
+                                            text: 'Three Point Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_percentage-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("three_pt_percentage-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Three Point Percentage for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Three Point Percentage data for Team A:', error));
 
                         // Fetch and update Team A Free Throw Attempt chart
                         fetch(`/free_throw_attempt-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_attempt = data.free_throw_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowAttempts = data.free_throw_attempt; // Free throw attempts
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero free throw attempts
+                                const filteredNames = [];
+                                const filteredAttempts = [];
+                                const colors = []; // Array to store custom colors for each slice
 
+                                freeThrowAttempts.forEach((attempt, index) => {
+                                    if (attempt > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAttempts.push(attempt);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Line chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "line", // Line chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1699,101 +1561,59 @@
                                     },
                                     series: [{
                                         name: "Free Throw Attempt",
-                                        data: free_throw_attempt,
-                                        color: "#1A56DB",
+                                        data: filteredAttempts, // Filtered data for free throw attempts
+                                        color: "#1A56DB", // Static color for the line
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Free Throw Attempt',
+                                            text: 'Free Throw Attempts',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_attempt-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_attempt-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Attempt for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Attempt data for Team A:', error));
 
                         // Fetch and update Team A Free Throw Made chart
                         fetch(`/free_throw_made-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_made = data.free_throw_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowMade = data.free_throw_made; // Free throw made data
+                                const playerNames = data.playerNames; // Player names
 
-                                const options = {
-                                    chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
-                                        fontFamily: "Inter, sans-serif",
-                                        dropShadow: {
-                                            enabled: false,
-                                        },
-                                        toolbar: {
-                                            show: false,
-                                        },
-                                    },
-                                    series: [{
-                                        name: "Free Throw Made",
-                                        data: free_throw_made,
-                                        color: "#1A56DB",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Free Throw Made',
-                                        },
-                                    },
-                                    responsive: [{
-                                        breakpoint: 1000,
-                                        options: {
-                                            chart: {
-                                                height: 250,
-                                            }
-                                        }
-                                    }],
-                                };
+                                // Filter out players with zero free throw made
+                                const filteredNames = [];
+                                const filteredMade = [];
+                                const colors = []; // Array to store custom colors for each slice
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_made-chart-a"),
-                                    options);
-                                chart.render();
-                            })
-                            .catch(error => console.error('Error fetching Free Throw Made for Team A:',
-                                error));
+                                freeThrowMade.forEach((made, index) => {
+                                    if (made > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredMade.push(made);
 
-                        // Fetch and update Team A Free Throw Percentage chart
-                        fetch(`/free_throw_percentage-chart-data-a/${scheduleId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const free_throw_percentage = data.free_throw_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
 
+                                // Line chart options
                                 const options = {
                                     chart: {
                                         height: 300,
@@ -1808,52 +1628,66 @@
                                         },
                                     },
                                     series: [{
-                                        name: "Free Throw Percentage",
-                                        data: free_throw_percentage,
-                                        color: "#1A56DB",
+                                        name: "Free Throw Made",
+                                        data: filteredMade, // Filtered data for free throw made
+                                        color: "#1A56DB", // Static color for the line
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Free Throw Percentage',
+                                            text: 'Free Throw Made',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_percentage-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_made-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Percentage for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Made data for Team A:', error));
 
-                        // Fetch and update Team A Free Throw Attempt Rate chart
-                        fetch(`/free_throw_attempt_rate-chart-data-a/${scheduleId}`)
+
+                        // Fetch and update Team A Free Throw Percentage chart
+                        fetch(`/free_throw_percentage-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_attempt_rate = data.free_throw_attempt_rate;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowPercentage = data.free_throw_percentage; // Free throw percentage data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero free throw percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                freeThrowPercentage.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1863,38 +1697,104 @@
                                         },
                                     },
                                     series: [{
-                                        name: "Free Throw Attempt Rate",
-                                        data: free_throw_attempt_rate,
-                                        color: "#1A56DB",
+                                        name: "Free Throw Percentage",
+                                        data: filteredPercentages, // Filtered data for free throw percentages
+                                        color: "#1A56DB", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Free Throw Attempt Rate',
+                                            text: 'Free Throw Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_attempt_rate-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_percentage-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Attempt Rate for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Percentage data for Team A:', error));
+
+                        // Fetch and update Team A Free throw attempt rate
+                        fetch(`/free_throw_attempt_rate-chart-data-a/${scheduleId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const freeThrowAttemptRate = data.free_throw_attempt_rate; // Free throw attempt rate data
+                                    const playerNames = data.playerNames; // Player names
+
+                                    // Filter out players with zero free throw attempt rate
+                                    const filteredNames = [];
+                                    const filteredAttemptRate = [];
+                                    const colors = []; // Array to store custom colors for each slice
+
+                                    freeThrowAttemptRate.forEach((attemptRate, index) => {
+                                        if (attemptRate > 0) {
+                                            filteredNames.push(playerNames[index]);
+                                            filteredAttemptRate.push(attemptRate);
+
+                                            // Generate random color for each player
+                                            const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                            colors.push(randomColor);
+                                        }
+                                    });
+
+                                    // Line chart options
+                                    const options = {
+                                        chart: {
+                                            height: 300,
+                                            width: "100%",
+                                            type: "line", // Line chart type
+                                            fontFamily: "Inter, sans-serif",
+                                            dropShadow: {
+                                                enabled: false,
+                                            },
+                                            toolbar: {
+                                                show: false,
+                                            },
+                                        },
+                                        series: [{
+                                            name: "Free Throw Attempt Rate",
+                                            data: filteredAttemptRate, // Filtered data for free throw attempt rate
+                                            color: "#1A56DB", // Static color for the line
+                                        }],
+                                        xaxis: {
+                                            categories: filteredNames, // Player names on the X-axis
+                                            title: {
+                                                text: 'Players',
+                                            },
+                                        },
+                                        yaxis: {
+                                            title: {
+                                                text: 'Free Throw Attempt Rate',
+                                            },
+                                        },
+                                        responsive: [{
+                                            breakpoint: 1000, // Responsive behavior for smaller devices
+                                            options: {
+                                                chart: {
+                                                    height: 250, // Adjust height for smaller devices
+                                                },
+                                            },
+                                        }],
+                                    };
+
+                                    const chart = new ApexCharts(document.getElementById("free_throw_attempt_rate-chart-a"), options);
+                                    chart.render();
+                                })
+                                .catch(error => console.error('Error fetching Free Throw Attempt Rate data for Team A:', error));
+
 
                         // Fetch and update Team A Plus Minus chart
                         fetch(`/plus_minus-chart-data-a/${scheduleId}`)
@@ -1955,16 +1855,31 @@
                         fetch(`/effective_field_goal_percentage-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const effective_field_goal_percentage = data
-                                    .effective_field_goal_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const effectiveFieldGoalPercentage = data.effective_field_goal_percentage; // Effective field goal percentage data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero effective field goal percentage
+                                const filteredNames = [];
+                                const filteredEffectiveFieldGoalPercentage = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                effectiveFieldGoalPercentage.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredEffectiveFieldGoalPercentage.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "bar",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -1975,11 +1890,11 @@
                                     },
                                     series: [{
                                         name: "Effective Field Goal Percentage",
-                                        data: effective_field_goal_percentage,
-                                        color: "#1A56DB",
+                                        data: filteredEffectiveFieldGoalPercentage, // Filtered data for effective field goal percentage
+                                        color: "#1A56DB", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -1990,37 +1905,49 @@
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "effective_field_goal_percentage-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("effective_field_goal_percentage-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error(
-                                'Error fetching Effective Field Goal Percentage for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Effective Field Goal Percentage data for Team A:', error));
 
                         // Fetch and update Team A Turnover Ratio chart
                         fetch(`/turnover_ratio-chart-data-a/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const turnover_ratio = data.turnover_ratio;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const turnoverRatio = data.turnover_ratio; // Turnover ratio data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero turnover ratio
+                                const filteredNames = [];
+                                const filteredTurnoverRatio = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                turnoverRatio.forEach((ratio, index) => {
+                                    if (ratio > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredTurnoverRatio.push(ratio);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", // Change chart type to bar
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2031,11 +1958,11 @@
                                     },
                                     series: [{
                                         name: "Turnover Ratio",
-                                        data: turnover_ratio,
-                                        color: "#1A56DB",
+                                        data: filteredTurnoverRatio, // Filtered data for turnover ratio
+                                        color: "#1A56DB", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -2046,38 +1973,46 @@
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "turnover_ratio-chart-a"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("turnover_ratio-chart-a"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Turnover Ratio for Team A:',
-                                error));
+                            .catch(error => console.error('Error fetching Turnover Ratio data for Team A:', error));
 
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                         // Fetch and update Team B Points chart
                         fetch(`/chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const points = data.points;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero points
+                                const filteredNames = [];
+                                const filteredPoints = [];
+
+                                points.forEach((point, index) => {
+                                    if (point > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPoints.push(point);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300, // Set a fixed height
-                                        width: "100%", // Set to full width
-                                        type: "line",
+                                        height: 300, // Set a fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2088,11 +2023,11 @@
                                     },
                                     series: [{
                                         name: "Points",
-                                        data: points,
-                                        color: "#FF5733", // Custom color for points
+                                        data: filteredPoints,
                                     }],
+                                    colors: ["#FF5733"], 
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -2102,35 +2037,50 @@
                                             text: 'Points',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000, // Adjust chart height for smaller screens
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250,
+                                                height: 250, // Adjust height for smaller devices
                                             }
                                         }
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("point-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("point-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching data for Team B:', error));
+                            .catch(error => console.error('Error fetching points data for Team B:', error));
 
                         // Fetch and update Team B Assists chart
                         fetch(`/assists-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const assists = data.assists;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero assists
+                                const filteredNames = [];
+                                const filteredAssists = [];
+
+                                assists.forEach((assist, index) => {
+                                    if (assist > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAssists.push(assist);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, // Set a fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2141,11 +2091,11 @@
                                     },
                                     series: [{
                                         name: "Assists",
-                                        data: assists,
-                                        color: "#FF5733",
+                                        data: filteredAssists,
                                     }],
+                                    colors: ["#FF5733"], // Use a single color for all bars
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -2155,18 +2105,23 @@
                                             text: 'Assists',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, // Vertical bars
+                                            columnWidth: '50%', // Adjust the width of bars
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("assist-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("assist-chart-b"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching assists data for Team B:', error));
@@ -2176,14 +2131,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const rebounds = data.rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+
+                                rebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
+                                        height: 300, 
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", 
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2194,11 +2159,11 @@
                                     },
                                     series: [{
                                         name: "Rebounds",
-                                        data: rebounds,
-                                        color: "#FF5733",
+                                        data: filteredRebounds,
                                     }],
+                                    colors: ["#FF5733"], 
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, 
                                         title: {
                                             text: 'Players',
                                         },
@@ -2208,18 +2173,23 @@
                                             text: 'Rebounds',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, 
+                                            columnWidth: '50%',
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, 
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, 
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("rebound-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("rebound-chart-b"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching rebounds data for Team B:', error));
@@ -2229,14 +2199,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const steals = data.steals;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero steals
+                                const filteredNames = [];
+                                const filteredSteals = [];
+
+                                steals.forEach((steal, index) => {
+                                    if (steal > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredSteals.push(steal);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, 
+                                        width: "100%", 
+                                        type: "bar",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2247,11 +2227,11 @@
                                     },
                                     series: [{
                                         name: "Steals",
-                                        data: steals,
-                                        color: "#FF5733",
+                                        data: filteredSteals,
                                     }],
+                                    colors: ["#FF5733"], 
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, 
                                         title: {
                                             text: 'Players',
                                         },
@@ -2261,18 +2241,23 @@
                                             text: 'Steals',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, 
+                                            columnWidth: '50%', 
+                                        },
+                                    },
                                     responsive: [{
                                         breakpoint: 1000,
                                         options: {
                                             chart: {
                                                 height: 250,
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("steal-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("steal-chart-b"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching steals data for Team B:', error));
@@ -2282,14 +2267,24 @@
                             .then(response => response.json())
                             .then(data => {
                                 const blocks = data.blocks;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero blocks
+                                const filteredNames = [];
+                                const filteredBlocks = [];
+
+                                blocks.forEach((block, index) => {
+                                    if (block > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredBlocks.push(block);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, 
+                                        width: "100%", 
+                                        type: "bar",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2300,11 +2295,11 @@
                                     },
                                     series: [{
                                         name: "Blocks",
-                                        data: blocks,
-                                        color: "#FF5733",
+                                        data: filteredBlocks,
                                     }],
+                                    colors: ["#FF5733"],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames,
                                         title: {
                                             text: 'Players',
                                         },
@@ -2314,18 +2309,23 @@
                                             text: 'Blocks',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, 
+                                            columnWidth: '50%', 
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, 
                                         options: {
                                             chart: {
                                                 height: 250,
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("block-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("block-chart-b"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching blocks data for Team B:', error));
@@ -2334,15 +2334,31 @@
                         fetch(`/perfoul-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const personal_fouls = data.personal_fouls;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const personalFouls = data.personal_fouls;
+                                const playerNames = data.playerNames;
 
+                                // Filter out players with zero personal fouls
+                                const filteredNames = [];
+                                const filteredFouls = [];
+                                const colors = [];
+
+                                personalFouls.forEach((foul, index) => {
+                                    if (foul > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredFouls.push(foul);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`; 
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Donut chart options
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, // Set a fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "donut", 
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2351,52 +2367,51 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Personal Fouls",
-                                        data: personal_fouls,
-                                        color: "#FF5733",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'personal_fouls',
-                                        },
+                                    series: filteredFouls, // Data for the donut chart (personal fouls)
+                                    labels: filteredNames, // Player names who have personal fouls
+                                    colors: colors, // Custom colors for each slice (random colors)
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("perfoul-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("perfoul-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Personal Fouls data for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching personal fouls data for Team B:', error));
+
 
                         // Fetch and update Team B Turnovers chart
                         fetch(`/turnovers-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const turnovers = data.turnovers;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero turnovers
+                                const filteredNames = [];
+                                const filteredTurnovers = [];
+
+                                turnovers.forEach((turnover, index) => {
+                                    if (turnover > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredTurnovers.push(turnover);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
+                                        height: 300, 
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", 
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2407,11 +2422,11 @@
                                     },
                                     series: [{
                                         name: "Turnovers",
-                                        data: turnovers,
-                                        color: "#FF5733",
+                                        data: filteredTurnovers,
                                     }],
+                                    colors: ["#FF5733"], 
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames,
                                         title: {
                                             text: 'Players',
                                         },
@@ -2421,18 +2436,23 @@
                                             text: 'Turnovers',
                                         },
                                     },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: false, 
+                                            columnWidth: '50%', 
+                                        },
+                                    },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, 
                                         options: {
                                             chart: {
                                                 height: 250,
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById("turnover-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("turnover-chart-b"), options);
                                 chart.render();
                             })
                             .catch(error => console.error('Error fetching turnovers data for Team B:', error));
@@ -2441,15 +2461,30 @@
                         fetch(`/offensive_rebounds-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const offensive_rebounds = data.offensive_rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const offensiveRebounds = data.offensive_rebounds;
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero offensive rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+                                const colors = [];
+
+                                offensiveRebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                                        colors.push(randomColor);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "donut",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2458,53 +2493,56 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Offensive Rebounds",
-                                        data: offensive_rebounds,
-                                        color: "#FF5733",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Offensive Rebounds',
-                                        },
+                                    series: filteredRebounds,
+                                    labels: filteredNames, 
+                                    colors: colors, 
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
                                         breakpoint: 1000,
                                         options: {
                                             chart: {
                                                 height: 250,
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "offensive_rebounds-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("offensive_rebounds-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching offensive rebounds data for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching offensive rebounds data for Team B:', error));
+
 
                         // Fetch and update Team B Defensive Rebounds chart
                         fetch(`/defensive_rebounds-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const defensive_rebounds = data.defensive_rebounds;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const defensiveRebounds = data.defensive_rebounds;
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero defensive rebounds
+                                const filteredNames = [];
+                                const filteredRebounds = [];
+                                const colors = [];
+
+                                defensiveRebounds.forEach((rebound, index) => {
+                                    if (rebound > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredRebounds.push(rebound);
+
+                                        // Generate random color
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                                        colors.push(randomColor);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "donut",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2513,53 +2551,51 @@
                                             show: false,
                                         },
                                     },
-                                    series: [{
-                                        name: "Defensive Rebounds",
-                                        data: defensive_rebounds,
-                                        color: "#FF5733",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Defensive Rebounds',
-                                        },
+                                    series: filteredRebounds, 
+                                    labels: filteredNames,
+                                    colors: colors, 
+                                    legend: {
+                                        position: "bottom",
                                     },
                                     responsive: [{
                                         breakpoint: 1000,
                                         options: {
                                             chart: {
                                                 height: 250,
-                                            }
-                                        }
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "defensive_rebounds-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("defensive_rebounds-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching defensive rebounds data for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching defensive rebounds data for Team B:', error));
+
 
                         // Fetch and update Team B two Point FG Attempt chart
                         fetch(`/two_pt_fg_attempt-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const two_pt_fg_attempt = data.two_pt_fg_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames; // Use playerNames instead of playerIds
+
+                                // Filter out players with zero 2 Point FG Attempts
+                                const filteredNames = [];
+                                const filteredAttempts = [];
+
+                                two_pt_fg_attempt.forEach((attempt, index) => {
+                                    if (attempt > 0) { // Only include players with attempts
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAttempts.push(attempt);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, // Set a fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "line", // Bar chart for 2 Point FG Attempt
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2569,52 +2605,59 @@
                                         },
                                     },
                                     series: [{
-                                        name: "two Point FG Attempt",
-                                        data: two_pt_fg_attempt,
-                                        color: "#FF5733",
+                                        name: "2 Point FG Attempt",
+                                        data: filteredAttempts,
+                                        color: "#FF5733", // Custom color for 2 Point FG Attempt
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Filtered player names for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'two Point FG Attempt',
+                                            text: '2 Point FG Attempt',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250,
+                                                height: 250, // Adjust height for smaller screens
                                             }
                                         }
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_fg_attempt-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_fg_attempt-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching 2 Point FG Attempt data for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching 2 Point FG Attempt data for Team B:', error));
 
                         // Fetch and update Team B two Point FG Made chart
                         fetch(`/two_pt_fg_made-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const two_pt_fg_made = data.two_pt_fg_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames; // Use playerNames instead of playerIds
+
+                                // Filter out players with zero 2 Point FG Made
+                                const filteredNames = [];
+                                const filteredMades = [];
+
+                                two_pt_fg_made.forEach((made, index) => {
+                                    if (made > 0) { // Only include players with made shots
+                                        filteredNames.push(playerNames[index]);
+                                        filteredMades.push(made);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
+                                        height: 300, // Set a fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart for 2 Point FG Made
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2624,46 +2667,54 @@
                                         },
                                     },
                                     series: [{
-                                        name: "two Point FG Made",
-                                        data: two_pt_fg_made,
-                                        color: "#FF5733",
+                                        name: "2 Point FG Made",
+                                        data: filteredMades,
+                                        color: "#FF5733", 
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Filtered player names for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'two Point FG Made',
+                                            text: '2 Point FG Made',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller screens
                                         options: {
                                             chart: {
-                                                height: 250,
+                                                height: 250, // Adjust height for smaller screens
                                             }
                                         }
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_fg_made-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_fg_made-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching two Point FG Made data for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching 2 Point FG Made data for Team B:', error));
+
 
                         // Fetch and update Team B three Point FG Attempt chart
                         fetch(`/three_pt_fg_attempt-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const three_pt_fg_attempt = data.three_pt_fg_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero attempts
+                                const filteredNames = [];
+                                const filteredThreePtFgAttempt = [];
+
+                                three_pt_fg_attempt.forEach((attempt, index) => {
+                                    if (attempt > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredThreePtFgAttempt.push(attempt);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
@@ -2679,19 +2730,19 @@
                                         },
                                     },
                                     series: [{
-                                        name: "three Point FG Attempt",
-                                        data: three_pt_fg_attempt,
+                                        name: "Three Point FG Attempt",
+                                        data: filteredThreePtFgAttempt,
                                         color: "#FF5733",
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'three Point FG Attempt',
+                                            text: 'Three Point FG Attempt',
                                         },
                                     },
                                     responsive: [{
@@ -2704,27 +2755,34 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_fg_attempt-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("three_pt_fg_attempt-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching three Point FG Attempt for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Three Point FG Attempt data for Team B:', error));
 
                         // Fetch and update Team B three Point FG Made chart
                         fetch(`/three_pt_fg_made-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
                                 const three_pt_fg_made = data.three_pt_fg_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const playerNames = data.playerNames;
+
+                                // Filter out players with zero made FG
+                                const filteredNames = [];
+                                const filteredThreePtFgMade = [];
+
+                                three_pt_fg_made.forEach((made, index) => {
+                                    if (made > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredThreePtFgMade.push(made);
+                                    }
+                                });
 
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar",
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2734,19 +2792,19 @@
                                         },
                                     },
                                     series: [{
-                                        name: "three Point FG Made",
-                                        data: three_pt_fg_made,
+                                        name: "Three Point FG Made",
+                                        data: filteredThreePtFgMade,
                                         color: "#FF5733",
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Use filtered playerNames as categories for X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'three Point FG Made',
+                                            text: 'Three Point FG Made',
                                         },
                                     },
                                     responsive: [{
@@ -2759,27 +2817,39 @@
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_fg_made-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("three_pt_fg_made-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching three Point FG Made for Team B:',
-                                error));
 
                         // Fetch and update Team B Two Point Percentage chart
                         fetch(`/two_pt_percentage-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const two_pt_percentage = data.two_pt_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const twoPtPercentages = data.two_pt_percentage; // Two point percentages for players
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero two-point percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
 
+                                twoPtPercentages.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "bar",
+                                        height: 300, // Fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2790,51 +2860,64 @@
                                     },
                                     series: [{
                                         name: "Two Point Percentage",
-                                        data: two_pt_percentage,
-                                        color: "#FF5733",
+                                        data: filteredPercentages, // Filtered data for two point percentages
+                                        color: "#FF5733", // Static color for the bar chart
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Two Point Percentage',
+                                            text: 'Two Point Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "two_pt_percentage-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("two_pt_percentage-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Two Point Percentage for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Two Point Percentage data for Team B:', error));
 
                         // Fetch and update Team B Three Point Percentage chart
                         fetch(`/three_pt_percentage-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const three_pt_percentage = data.three_pt_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const threePtPercentages = data.three_pt_percentage; // Three-point percentages
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero three-point percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
 
+                                threePtPercentages.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "bar",
+                                        height: 300, // Fixed height in pixels
+                                        width: "100%", // Responsive width
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2845,51 +2928,65 @@
                                     },
                                     series: [{
                                         name: "Three Point Percentage",
-                                        data: three_pt_percentage,
-                                        color: "#FF5733",
+                                        data: filteredPercentages, // Filtered data for three-point percentages
+                                        color: "#FF5733", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Three Point Percentage',
+                                            text: 'Three Point Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "three_pt_percentage-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("three_pt_percentage-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Three Point Percentage for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Three Point Percentage data for Team B:', error));
+
 
                         // Fetch and update Team B Free Throw Attempt chart
                         fetch(`/free_throw_attempt-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_attempt = data.free_throw_attempt;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowAttempts = data.free_throw_attempt; // Free throw attempts
+                                const playerNames = data.playerNames; // Player names
+                                
+                                // Filter out players with zero free throw attempts
+                                const filteredNames = [];
+                                const filteredAttempts = [];
+                                const colors = []; // Array to store custom colors for each slice
 
+                                freeThrowAttempts.forEach((attempt, index) => {
+                                    if (attempt > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredAttempts.push(attempt);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Line chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "line", // Line chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2900,51 +2997,65 @@
                                     },
                                     series: [{
                                         name: "Free Throw Attempt",
-                                        data: free_throw_attempt,
-                                        color: "#FF5733",
+                                        data: filteredAttempts, // Filtered data for free throw attempts
+                                        color: "#FF5733", // Static color for the line
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Free Throw Attempt',
+                                            text: 'Free Throw Attempts',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_attempt-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_attempt-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Attempt for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Attempt data for Team B:', error));
+
 
                         // Fetch and update Team B Free Throw Made chart
                         fetch(`/free_throw_made-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_made = data.free_throw_made;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowMade = data.free_throw_made; // Free throw made data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero free throw made
+                                const filteredNames = [];
+                                const filteredMade = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                freeThrowMade.forEach((made, index) => {
+                                    if (made > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredMade.push(made);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Line chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", 
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -2955,11 +3066,11 @@
                                     },
                                     series: [{
                                         name: "Free Throw Made",
-                                        data: free_throw_made,
-                                        color: "#FF5733",
+                                        data: filteredMade, // Filtered data for free throw made
+                                        color: "#FF5733", // Static color for the line
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -2970,36 +3081,50 @@
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_made-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_made-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Made for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Made data for Team B:', error));
+
 
                         // Fetch and update Team B Free Throw Percentage chart
                         fetch(`/free_throw_percentage-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const free_throw_percentage = data.free_throw_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const freeThrowPercentage = data.free_throw_percentage; // Free throw percentage data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero free throw percentage
+                                const filteredNames = [];
+                                const filteredPercentages = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                freeThrowPercentage.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredPercentages.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "bar",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -3010,92 +3135,103 @@
                                     },
                                     series: [{
                                         name: "Free Throw Percentage",
-                                        data: free_throw_percentage,
-                                        color: "#FF5733",
+                                        data: filteredPercentages, // Filtered data for free throw percentages
+                                        color: "#FF5733", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
                                     },
                                     yaxis: {
                                         title: {
-                                            text: 'Free Throw Percentage',
+                                            text: 'Free Throw Percentage (%)',
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_percentage-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("free_throw_percentage-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Free Throw Percentage for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Free Throw Percentage data for Team B:', error));
 
                         // Fetch and update Team B Free Throw Attempt Rate chart
                         fetch(`/free_throw_attempt_rate-chart-data-b/${scheduleId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const free_throw_attempt_rate = data.free_throw_attempt_rate;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                .then(response => response.json())
+                                .then(data => {
+                                    const freeThrowAttemptRate = data.free_throw_attempt_rate; // Free throw attempt rate data
+                                    const playerNames = data.playerNames; // Player names
 
-                                const options = {
-                                    chart: {
-                                        height: 300,
-                                        width: "100%",
-                                        type: "line",
-                                        fontFamily: "Inter, sans-serif",
-                                        dropShadow: {
-                                            enabled: false,
-                                        },
-                                        toolbar: {
-                                            show: false,
-                                        },
-                                    },
-                                    series: [{
-                                        name: "Free Throw Attempt Rate",
-                                        data: free_throw_attempt_rate,
-                                        color: "#FF5733",
-                                    }],
-                                    xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
-                                        title: {
-                                            text: 'Players',
-                                        },
-                                    },
-                                    yaxis: {
-                                        title: {
-                                            text: 'Free Throw Attempt Rate',
-                                        },
-                                    },
-                                    responsive: [{
-                                        breakpoint: 1000,
-                                        options: {
-                                            chart: {
-                                                height: 250,
-                                            }
+                                    // Filter out players with zero free throw attempt rate
+                                    const filteredNames = [];
+                                    const filteredAttemptRate = [];
+                                    const colors = []; // Array to store custom colors for each slice
+
+                                    freeThrowAttemptRate.forEach((attemptRate, index) => {
+                                        if (attemptRate > 0) {
+                                            filteredNames.push(playerNames[index]);
+                                            filteredAttemptRate.push(attemptRate);
+
+                                            // Generate random color for each player
+                                            const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                            colors.push(randomColor);
                                         }
-                                    }],
-                                };
+                                    });
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "free_throw_attempt_rate-chart-b"),
-                                    options);
-                                chart.render();
-                            })
-                            .catch(error => console.error('Error fetching Free Throw Attempt Rate for Team B:',
-                                error));
+                                    // Line chart options
+                                    const options = {
+                                        chart: {
+                                            height: 300,
+                                            width: "100%",
+                                            type: "line", // Line chart type
+                                            fontFamily: "Inter, sans-serif",
+                                            dropShadow: {
+                                                enabled: false,
+                                            },
+                                            toolbar: {
+                                                show: false,
+                                            },
+                                        },
+                                        series: [{
+                                            name: "Free Throw Attempt Rate",
+                                            data: filteredAttemptRate, // Filtered data for free throw attempt rate
+                                            color: "#FF5733", // Static color for the line
+                                        }],
+                                        xaxis: {
+                                            categories: filteredNames, // Player names on the X-axis
+                                            title: {
+                                                text: 'Players',
+                                            },
+                                        },
+                                        yaxis: {
+                                            title: {
+                                                text: 'Free Throw Attempt Rate',
+                                            },
+                                        },
+                                        responsive: [{
+                                            breakpoint: 1000, // Responsive behavior for smaller devices
+                                            options: {
+                                                chart: {
+                                                    height: 250, // Adjust height for smaller devices
+                                                },
+                                            },
+                                        }],
+                                    };
+
+                                    const chart = new ApexCharts(document.getElementById("free_throw_attempt_rate-chart-b"), options);
+                                    chart.render();
+                                })
+                                .catch(error => console.error('Error fetching Free Throw Attempt Rate data for Team B:', error));
+
 
                         // Fetch and update Team B Plus Minus chart
                         fetch(`/plus_minus-chart-data-b/${scheduleId}`)
@@ -3156,16 +3292,31 @@
                         fetch(`/effective_field_goal_percentage-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const effective_field_goal_percentage = data
-                                    .effective_field_goal_percentage;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const effectiveFieldGoalPercentage = data.effective_field_goal_percentage; // Effective field goal percentage data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero effective field goal percentage
+                                const filteredNames = [];
+                                const filteredEffectiveFieldGoalPercentage = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                effectiveFieldGoalPercentage.forEach((percentage, index) => {
+                                    if (percentage > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredEffectiveFieldGoalPercentage.push(percentage);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "bar",
+                                        type: "bar", // Bar chart type
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -3176,11 +3327,11 @@
                                     },
                                     series: [{
                                         name: "Effective Field Goal Percentage",
-                                        data: effective_field_goal_percentage,
-                                        color: "#FF5733",
+                                        data: filteredEffectiveFieldGoalPercentage, // Filtered data for effective field goal percentage
+                                        color: "#FF5733", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -3191,37 +3342,50 @@
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "effective_field_goal_percentage-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("effective_field_goal_percentage-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error(
-                                'Error fetching Effective Field Goal Percentage for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Effective Field Goal Percentage data for Team B:', error));
+
 
                         // Fetch and update Team B Turnover Ratio chart
                         fetch(`/turnover_ratio-chart-data-b/${scheduleId}`)
                             .then(response => response.json())
                             .then(data => {
-                                const turnover_ratio = data.turnover_ratio;
-                                const playerNames = data
-                                    .playerNames; // Use playerNames instead of playerIds
+                                const turnoverRatio = data.turnover_ratio; // Turnover ratio data
+                                const playerNames = data.playerNames; // Player names
 
+                                // Filter out players with zero turnover ratio
+                                const filteredNames = [];
+                                const filteredTurnoverRatio = [];
+                                const colors = []; // Array to store custom colors for each slice
+
+                                turnoverRatio.forEach((ratio, index) => {
+                                    if (ratio > 0) {
+                                        filteredNames.push(playerNames[index]);
+                                        filteredTurnoverRatio.push(ratio);
+
+                                        // Generate random color for each player
+                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Random color
+                                        colors.push(randomColor);
+                                    }
+                                });
+
+                                // Bar chart options
                                 const options = {
                                     chart: {
                                         height: 300,
                                         width: "100%",
-                                        type: "line",
+                                        type: "bar", // Change chart type to bar
                                         fontFamily: "Inter, sans-serif",
                                         dropShadow: {
                                             enabled: false,
@@ -3232,11 +3396,11 @@
                                     },
                                     series: [{
                                         name: "Turnover Ratio",
-                                        data: turnover_ratio,
-                                        color: "#FF5733",
+                                        data: filteredTurnoverRatio, // Filtered data for turnover ratio
+                                        color: "#FF5733", // Static color for the bars
                                     }],
                                     xaxis: {
-                                        categories: playerNames, // Use playerNames as categories for X-axis
+                                        categories: filteredNames, // Player names on the X-axis
                                         title: {
                                             text: 'Players',
                                         },
@@ -3247,22 +3411,19 @@
                                         },
                                     },
                                     responsive: [{
-                                        breakpoint: 1000,
+                                        breakpoint: 1000, // Responsive behavior for smaller devices
                                         options: {
                                             chart: {
-                                                height: 250,
-                                            }
-                                        }
+                                                height: 250, // Adjust height for smaller devices
+                                            },
+                                        },
                                     }],
                                 };
 
-                                const chart = new ApexCharts(document.getElementById(
-                                        "turnover_ratio-chart-b"),
-                                    options);
+                                const chart = new ApexCharts(document.getElementById("turnover_ratio-chart-b"), options);
                                 chart.render();
                             })
-                            .catch(error => console.error('Error fetching Turnover Ratio for Team B:',
-                                error));
+                            .catch(error => console.error('Error fetching Turnover Ratio data for Team B:', error));
 
 
                     }
@@ -3270,10 +3431,10 @@
             });
 
             document.addEventListener('DOMContentLoaded', function() {
-    // Click the basic stats button by default
-    const basicStatsButton = document.querySelector('.nav-btn[data-type="basicstatsA,basicstatsB"]');
-    basicStatsButton.click();
-});
+                // Click the basic stats button by default
+                const basicStatsButton = document.querySelector('.nav-btn[data-type="basicstatsA,basicstatsB"]');
+                basicStatsButton.click();
+            });
 
             document.querySelectorAll('.nav-btn').forEach(button => {
                 button.addEventListener('click', function() {

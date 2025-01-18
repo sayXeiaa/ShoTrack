@@ -769,6 +769,9 @@
 
                 const position = selectedPlayer.box.dataset.position;
                 removeSelectedPlayer(position);
+                if (response.message) {
+                    alert(response.message); 
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error recording event:', status, error);

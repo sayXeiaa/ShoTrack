@@ -204,6 +204,9 @@ class PlayerStatsController extends Controller
             $stat->setAttribute('steals', 0);
             $stat->setAttribute('turnovers', 0);
             $stat->setAttribute('personal_fouls', 0);
+            $stat->setAttribute('technical_fouls', 0);
+            $stat->setAttribute('unsportsmanlike_fouls', 0);
+            $stat->setAttribute('disqualifying_fouls', 0);
             $stat->setAttribute('effective_field_goal_percentage', 0);
             $stat->setAttribute('turnover_ratio', 0);
             $stat->setAttribute('minutes', 0);
@@ -211,6 +214,7 @@ class PlayerStatsController extends Controller
         
         // Use helper methods to determine points and action
         $points = $this->getPoints($validated['type_of_stat'], $validated['result']);
+        $message = '';
 
         // Update the stat based on the type of stat
         switch ($validated['type_of_stat']) {
@@ -300,19 +304,39 @@ class PlayerStatsController extends Controller
                 $stat->turnovers++;
                 break;
             case 'foul':
-                $stat->personal_fouls++;
+                $stat->personal_fouls++; // Increment the foul count first
+            
+                if ($stat->personal_fouls == 5) { // Check after incrementing
+                    $stat->save(); // Save the stat after reaching 5 fouls
+                    $message = 'Player has now reached the maximum number of Personal Fouls. Please Substitute Now.';
+                }
                 break;
             case 'assist':
                 $stat->assists++;
                 break;
             case 'technical_foul':
                 $stat->technical_fouls++;
+
+                if ($stat->technical_fouls == 2) { 
+                    $stat->save(); 
+                    $message = 'Player has now reached the maximum number of Technical Fouls. Please Substitute Now.';
+                }
                 break;
             case 'unsportsmanlike_foul':
                 $stat->unsportsmanlike_fouls++;
+
+                if ($stat->unsportsmanlike_fouls == 2) { 
+                    $stat->save(); 
+                    $message = 'Player has now reached the maximum number of Unsportsmanlike Fouls. Please Substitute Now.';
+                }
                 break;
             case 'disqualifying_foul':
                 $stat->disqualifying_fouls++;
+
+                if ($stat->disqualifying_fouls == 1) { 
+                    $stat->save();
+                    $message = 'Player commited a Disqualifying Foul. Please Substitute Now.';
+                }
                 break;
         }
 
@@ -501,7 +525,7 @@ class PlayerStatsController extends Controller
         }
 
         return response()->json([
-            'message' => 'Shot recorded successfully',
+            'message' => $message,
             'teamAScore' => $teamAScore,
             'teamBScore' => $teamBScore
         ]);

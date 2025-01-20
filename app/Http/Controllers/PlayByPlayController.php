@@ -8,6 +8,7 @@ use App\Models\PlayerStat;
 use App\Models\PlayByPlay;
 use App\Models\Players;
 use App\Models\Schedule;
+use App\Models\Score;
 use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\DB;
 class PlayByPlayController extends Controller
@@ -75,6 +76,301 @@ class PlayByPlayController extends Controller
         }
     }
 
+    public function deletePlayByPlay($id)
+    {
+
+        $playByPlay = PlayByPlay::with('schedule')->findOrFail($id);
+
+        $schedule = $playByPlay->schedule;
+
+        $deletedQuarter = $playByPlay->quarter; 
+        $playerId = $playByPlay->player_id;
+        $deletedTimestamp = $playByPlay->created_at;
+
+        $player = Players::find($playerId);
+        $deletedTeamId = $player ? $player->team_id : null;
+
+        if ($playByPlay->result === 'missed') {
+            $playerStat = PlayerStat::where('player_id', $playByPlay->player_id)
+                                    ->where('schedule_id', $playByPlay->schedule_id)
+                                    ->first();
+
+            if ($playerStat) {
+                switch ($playByPlay->type_of_stat) {
+                    case 'two_point':
+                        $playerStat->two_pt_fg_attempt -= 1;
+                        break;
+                    case 'three_point':
+                        $playerStat->three_point_fg_attempt -= 1;
+                        break;
+                    case 'free_throw':
+                        $playerStat->free_throw_attempt -= 1;
+                        break;
+                    default:
+                        break;
+                }
+
+                $playerStat->save();
+            }
+
+            $playByPlay->delete();
+        }
+    
+        if ($playByPlay->result === 'made') {
+            $playerStat = PlayerStat::where('player_id', $playByPlay->player_id)
+                                    ->where('schedule_id', $playByPlay->schedule_id)
+                                    ->first();
+
+            if (!$playerStat) {
+                return response()->json(['error' => 'Player stats not found for the given schedule.'], 404);
+            }
+
+            switch ($playByPlay->type_of_stat) {
+                case 'two_point':
+                    $playerStat->points -= 2;
+                    $playerStat->two_pt_fg_attempt -= 1;
+                    $playerStat->two_pt_fg_made -= 1;
+
+                    $attempts = $playerStat->two_pt_fg_attempt;
+                    $makes = $playerStat->two_pt_fg_made;
+
+                    $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
+
+                    $playerStat->two_pt_percentage = $percentage;
+                    $playerStat->plus_minus -=2;
+                    $playerStat->save(); 
+
+                    $schedule = Schedule::find($playByPlay->schedule_id);
+                    
+                    $subsequentPlays = PlayByPlay::where('schedule_id', $playByPlay->schedule_id)
+                        ->where('created_at', '>', $deletedTimestamp)
+                        ->orderBy('created_at', 'asc')
+                        ->get();
+
+                    foreach ($subsequentPlays as $play) {
+                        
+                        if ($deletedTeamId == $schedule->team1_id) {
+                            $play->team_A_score = (int)$play->team_A_score - 2;
+                        } 
+                        else if ($deletedTeamId == $schedule->team2_id) {
+                            $play->team_B_score = (int)$play->team_B_score - 2;
+                        }
+
+                        $play->save();
+                    }
+
+                    if ($deletedTeamId) {
+                        Log::info('Updating scores table with:', [
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ]);
+                
+                        $scoreEntry = DB::table('scores')->where([
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ])->first();
+                
+                        if ($scoreEntry) {
+                            
+                            DB::table('scores')->where([
+                                'schedule_id' => $schedule->id,
+                                'team_id' => $deletedTeamId,
+                                'quarter' => $deletedQuarter
+                            ])->update([
+                                'score' => $scoreEntry->score - 2
+                            ]);
+                        }
+                    }
+
+                    break;
+
+                case 'three_point':
+                    $playerStat->points -= 3;
+                    $playerStat->three_pt_fg_attempt -= 1;
+                    $playerStat->three_pt_fg_made -= 1;
+
+                    $attempts = $playerStat->three_pt_fg_attempt;
+                    $makes = $playerStat->three_pt_fg_made;
+
+                    $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
+
+                    $playerStat->three_pt_percentage = $percentage;
+                    $playerStat->plus_minus -=3;
+                    $playerStat->save(); 
+
+                    Log::info('Deleted Team ID: ' . $deletedTeamId);
+
+                    $schedule = Schedule::find($playByPlay->schedule_id);
+                    
+                    $subsequentPlays = PlayByPlay::where('schedule_id', $playByPlay->schedule_id)
+                        ->where('created_at', '>', $deletedTimestamp)
+                        ->orderBy('created_at', 'asc')
+                        ->get();
+
+                    foreach ($subsequentPlays as $play) {
+                        
+                        if ($deletedTeamId == $schedule->team1_id) {
+                            $play->team_A_score = (int)$play->team_A_score - 3;
+                        } 
+                        else if ($deletedTeamId == $schedule->team2_id) {
+                            $play->team_B_score = (int)$play->team_B_score - 3;
+                        }
+
+                        $play->save();
+                    }
+
+                    if ($deletedTeamId) {
+                        Log::info('Updating scores table with:', [
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ]);
+                
+                        $scoreEntry = DB::table('scores')->where([
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ])->first();
+                
+                        if ($scoreEntry) {
+                            
+                            DB::table('scores')->where([
+                                'schedule_id' => $schedule->id,
+                                'team_id' => $deletedTeamId,
+                                'quarter' => $deletedQuarter
+                            ])->update([
+                                'score' => $scoreEntry->score - 3
+                            ]);
+                        }
+                    }
+
+                    break;
+                case 'free_throw':
+                    $playerStat->points -= 1;
+                    $playerStat->free_throw_attempt -= 1;
+                    $playerStat->free_throw_made -= 1;
+
+                    $attempts = $playerStat->free_throw_attempt;
+                    $makes = $playerStat->free_throw_made;
+
+                    $percentage = ($attempts > 0) ? ($makes / $attempts) * 100 : 0;
+
+                    $playerStat->free_throw_percentage = $percentage;
+                    $playerStat->plus_minus -=1;
+
+                    Log::info('Deleted Team ID: ' . $deletedTeamId);
+
+                    $schedule = Schedule::find($playByPlay->schedule_id);
+                    
+                    $subsequentPlays = PlayByPlay::where('schedule_id', $playByPlay->schedule_id)
+                        ->where('created_at', '>', $deletedTimestamp)
+                        ->orderBy('created_at', 'asc')
+                        ->get();
+
+                    foreach ($subsequentPlays as $play) {
+                        
+                        if ($deletedTeamId == $schedule->team1_id) {
+                            $play->team_A_score = (int)$play->team_A_score - 1;
+                        } 
+                        // If the deleted play was from Team 2
+                        else if ($deletedTeamId == $schedule->team2_id) {
+                            $play->team_B_score = (int)$play->team_B_score - 1;
+                        }
+
+                        $play->save();
+                    }
+
+                    if ($deletedTeamId) {
+                        Log::info('Updating scores table with:', [
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ]);
+                
+                        $scoreEntry = DB::table('scores')->where([
+                            'schedule_id' => $schedule->id,
+                            'team_id' => $deletedTeamId,
+                            'quarter' => $deletedQuarter
+                        ])->first();
+                
+                        if ($scoreEntry) {
+                            
+                            DB::table('scores')->where([
+                                'schedule_id' => $schedule->id,
+                                'team_id' => $deletedTeamId,
+                                'quarter' => $deletedQuarter
+                            ])->update([
+                                'score' => $scoreEntry->score - 1
+                            ]);
+                        }
+                    }
+
+                    $playerStat->save();
+
+                    break;
+                case 'assist':
+                    $playerStat->assists -= 1;
+                    break;
+                case 'offensive_rebound':
+                    $playerStat->offensive_rebounds -= 1;
+                    break;
+                case 'defensive_rebound':
+                    $playerStat->defensive_rebounds -= 1;
+                    break;
+                case 'steal':
+                    $playerStat->steals -= 1;
+                    break;
+                case 'block':
+                    $playerStat->blocks -= 1;
+                    break;
+                case 'foul':
+                    $playerStat->personal_fouls -= 1;
+                    break;
+                case 'technical_foul':
+                    $playerStat->technical_fouls -= 1;
+                    break;
+                case 'unsportsmanlike_foul':
+                    $playerStat->unsportsmanlike_fouls -= 1;
+                    break;
+                case 'disqualifying_foul':
+                    $playerStat->disqualifying_fouls -= 1;
+                    break;
+
+                default:
+                    break;
+            }
+
+            $playerStat->save();
+        }
+
+        $playByPlay->delete();
+
+        $teamAScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team1->id);
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
+
+        $teamBScore = PlayerStat::whereHas('player', function ($query) use ($schedule) {
+            $query->where('team_id', $schedule->team2->id);
+        })
+        ->where('schedule_id', $schedule->id)  
+        ->sum('points');
+
+        Log::info('Schedule:', ['schedule' => $schedule]); 
+        Log::info('Team A ID:', ['team1_id' => $schedule->team1->id]);
+        Log::info('Team B ID:', ['team2_id' => $schedule->team2->id]);
+        
+
+        return response()->json([
+            'success' => true,
+            'team_a_score' => $teamAScore, 
+            'team_b_score' => $teamBScore 
+        ]);
+    }
+    
     public function getPlayByPlay($scheduleId)
     {
         // Fetch the play-by-play data from the play_by_play table
@@ -91,6 +387,7 @@ class PlayByPlayController extends Controller
             $action = $this->getActionText($stat->type_of_stat, $stat->result);
             $points = $this->getPoints($stat->type_of_stat, $stat->result); 
             return [
+                'id' => $stat->id,
                 'player_number' => $stat->player->number,
                 'game_time' => $stat->game_time,
                 'player_name' => $formattedName,

@@ -991,7 +991,7 @@
     let displayedEntries = [];
 
     function loadPlayByPlay() {
-        const scheduleId = getCurrentScheduleId(); // Retrieve the schedule ID dynamically
+        const scheduleId = getCurrentScheduleId(); 
 
         if (!scheduleId) {
             console.error('No schedule ID found.');
@@ -1015,38 +1015,45 @@
                     displayedEntries = []; // Reset displayed entries for the new load
 
                     response.play_by_play.forEach(entry => {
-                    // Destructure entry data
-                    const { player_name, player_number, game_time, action, points, team_A_score, team_B_score } = entry;
+                        // Destructure entry data
+                        const { id, player_name, player_number, game_time, action, points, team_A_score, team_B_score } = entry;
 
-                    // Determine the points text
-                    const pointsText = points && points !== 0 ? `(${points} points)` : '';
+                        // Determine the points text
+                        const pointsText = points && points !== 0 ? `(${points} points)` : '';
 
-                    // Create the HTML for the statistic entry
-                    const statisticEntry = `
-                    <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm">
-                        <!-- Player Name -->
-                        <div class="live-statistic-left flex-1 text-left truncate">
-                            <span class="text-gray-500 text-sm block">#${player_number}</span>
-                            <span class="font-semibold text-gray-800 text-base">${player_name}</span>
-                        </div>
-                        <!-- Game Time and Action -->
-                        <div class="live-statistic-center flex-1 text-center">
-                            <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
-                            <span class="block text-gray-700 text-sm mt-1">
-                                ${action} ${pointsText}
-                            </span>
-                        </div>
-                        <!-- Individual Scores -->
-                        <div class="live-statistic-right flex-1 text-right">
-                            <span class="text-lg font-bold text-gray-900">${team_A_score || '0'}</span> - 
-                            <span class="text-lg font-bold text-gray-900">${team_B_score || '0'}</span>
-                        </div>
-                    </div>
-                    `;
+                        // Create the HTML for the statistic entry
+                        const statisticEntry = `
+                        <div class="live-statistic-entry flex flex-col lg:flex-row justify-between items-start p-4 border-b border-gray-300 bg-white rounded-lg shadow-sm" data-id="${id}">
+                            <!-- Player Name -->
+                            <div class="live-statistic-left flex-1 text-left truncate">
+                                <span class="text-gray-500 text-sm block">#${player_number}</span>
+                                <span class="font-semibold text-gray-800 text-base">${player_name}</span>
+                            </div>
+                            <!-- Game Time and Action -->
+                            <div class="live-statistic-center flex-1 text-center">
+                                <span class="block font-semibold text-xl text-gray-900">${game_time}</span>
+                                <span class="block text-gray-700 text-sm mt-1">
+                                    ${action} ${pointsText}
+                                </span>
+                                <!-- Delete Button -->
+                                <div class="delete-statistic text-center mt-2">
+                                    <button id="deleteButton" class="delete-btn bg-red-500 hover:bg-red-700 text-white p-2 rounded transition-transform transform hover:scale-105 focus:outline-none" data-id="${id}">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Individual Scores -->
+                            <div class="live-statistic-right flex-1 text-right">
+                                <span class="text-lg font-bold text-gray-900">${team_A_score || '0'}</span> - 
+                                <span class="text-lg font-bold text-gray-900">${team_B_score || '0'}</span>
+                            </div>
 
-                    // Prepend the new statistic entry to the list
-                    $('#live-statistics').prepend(statisticEntry);
-                });
+                        </div>
+                        `;
+
+                        // Prepend the new statistic entry to the list
+                        $('#live-statistics').prepend(statisticEntry);
+                    });
 
                 } else {
                     console.error('Response is not in the expected format:', response);
@@ -1056,6 +1063,47 @@
                 console.error('Error loading play-by-play data:', error);
             }
         });
+    }
+
+    $(document).on('click', '.delete-btn', function() {
+            const id = $(this).data('id');
+            deletePlayerStat(id);
+        });
+
+    function deletePlayerStat(id) {
+        console.log('PlayByPlay ID:', id);
+
+        if (!id) {
+            console.error('PlayByPlay ID is undefined');
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const url = `/playbyplay/${id}/delete`;  
+        console.log("Deleting play-by-play with URL:", url);
+
+        $.ajax({
+        url: url,  
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        success: function(response) {
+            console.log('Play-by-play deleted:', response);
+            
+            if (response.success) {
+                document.getElementById('team-a-score').textContent = response.team_a_score || 0;
+                document.getElementById('team-b-score').textContent = response.team_b_score || 0;
+            } else {
+                console.error('Unexpected response format:', response);
+            }
+            loadPlayByPlay();
+        },
+        error: function(error) {
+            console.error('Error deleting play-by-play:', error);
+        }
+    });
     }
 
     $(document).ready(function () {

@@ -24,4 +24,8 @@ class PlayByPlay extends Model
         return $this->belongsTo(Players::class, 'player_id');
     }
 
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class, 'schedule_id');
+    }
 }

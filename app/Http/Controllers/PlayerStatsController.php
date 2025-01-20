@@ -37,11 +37,13 @@ class PlayerStatsController extends Controller
         $playerStatsTeam1 = PlayerStat::with('player') // Eager load player data
             ->where('schedule_id', $scheduleId)
             ->where('team_id', $schedule->team1_id)
+            ->orderBy('minutes', 'desc')
             ->get();
 
         $playerStatsTeam2 = PlayerStat::with('player') // Eager load player data
             ->where('schedule_id', $scheduleId)
             ->where('team_id', $schedule->team2_id)
+            ->orderBy('minutes', 'desc')
             ->get();
 
         // Retrieve remaining players not in the player statistics
@@ -104,7 +106,7 @@ class PlayerStatsController extends Controller
             'totalStarterPointsTeam2',
             'totalBenchPointsTeam1',
             'totalBenchPointsTeam2'));
-            }
+    }
 
     /**
      * Show the form for creating a new resource.

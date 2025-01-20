@@ -313,6 +313,9 @@ class PlayByPlayController extends Controller
                 case 'assist':
                     $playerStat->assists -= 1;
                     break;
+                case 'turnover':
+                    $playerStat->turnovers -= 1;
+                        break;
                 case 'offensive_rebound':
                     $playerStat->offensive_rebounds -= 1;
                     break;

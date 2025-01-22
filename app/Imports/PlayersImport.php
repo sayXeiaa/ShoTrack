@@ -78,7 +78,7 @@ class PlayersImport implements ToModel, WithHeadingRow, WithValidation
             'number' => $row['jersey_number'],
             'years_playing_in_bucal' => $row['years_playing_in_bucal'] ?? null,
             'position' => $row['position'] ?? null,
-            'date_of_birth' => $dateOfBirth,
+            'date_of_birth' => $dateOfBirth ?? null,
             'height' => $row['height'] ?? null,
             'weight' => $row['weight'] ?? null,
             'team_id' => $team->id,

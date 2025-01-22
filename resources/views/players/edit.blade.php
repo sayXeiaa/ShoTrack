@@ -99,6 +99,7 @@
                                 </div>
                             </div>
 
+                            <div id="school-fields" style="display: none;">
                             <label for="position" class="text-lg font-medium">Position</label>
                             <div class="my-3">
                                 <select id="position" name="position" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -112,6 +113,7 @@
                                 @error('position')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
+                            </div>
                             </div>
 
                             <label for="date_of_birth" class="text-lg font-medium">Date of Birth</label>

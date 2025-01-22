@@ -193,48 +193,81 @@ class PlayerController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    // Find the player or fail with a 404 error
-    $player = Players::findOrFail($id);
-
-    // Validate the request data
-    $validator = Validator::make($request->all(), [
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'number' => 'required|integer|min:0|max:99',
-        'years_playing_in_bucal' => 'nullable|integer|min:0|max:6',
-        'position' => 'nullable|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
-        'date_of_birth' => 'required|date',
-        'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
-        'weight' => 'required|integer|min:0',
-        'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
-        'category' => 'nullable|string', 
-    ]);
-
-    // Check if validation passes
-    if ($validator->passes()) {
-        // Update the player details
+    {
+        // Find the player or fail with a 404 error
+        $player = Players::findOrFail($id);
+    
+        // Base validation rules
+        $rules = [
+            'tournament_id' => ['required', 'integer', Rule::exists('tournaments', 'id')],
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'number' => 'required|integer|min:0|max:99',
+            'team_id' => ['required', 'integer', Rule::exists('teams', 'id')],
+        ];
+    
+        $tournamentId = $request->input('tournament_id');
+    
+        if ($tournamentId) {
+            $tournament = Tournaments::findOrFail($tournamentId);
+    
+            if ($tournament->tournament_type === 'school') {
+                // Additional rules for school tournaments
+                $rules = array_merge($rules, [
+                    'years_playing_in_bucal' => 'required|integer|min:0|max:6',
+                    'position' => 'required|string|in:Point Guard,Shooting Guard,Small Forward,Power Forward,Center',
+                    'date_of_birth' => 'required|date',
+                    'height' => ['required', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
+                    'weight' => 'required|integer|min:0',
+                ]);
+            } else {
+                // Rules for non-school tournaments
+                $rules = array_merge($rules, [
+                    'date_of_birth' => 'nullable|date',
+                    'height' => ['nullable', 'regex:/^\d{1,2}\'\d{1,2}( \d{1,2}\/\d{1,2})?$/'],
+                    'weight' => 'nullable|integer|min:0',
+                ]);
+            }
+    
+            if ($tournament->has_categories) {
+                $rules['category'] = 'required|string';
+            } else {
+                $rules['category'] = 'nullable';
+            }
+        }
+    
+        // Validate request data
+        $validator = Validator::make($request->all(), $rules);
+    
+        if ($validator->fails()) {
+            return redirect()->route('players.edit', $id)
+                            ->withInput()
+                            ->withErrors($validator);
+        }
+    
+        // Update player details
         $player->first_name = $request->input('first_name');
         $player->last_name = $request->input('last_name');
         $player->number = $request->input('number');
-        $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
-        $player->position = $request->input('position');
+        $player->team_id = $request->input('team_id');
         $player->date_of_birth = $request->input('date_of_birth');
         $player->height = $request->input('height');
         $player->weight = $request->input('weight');
-        $player->team_id = $request->input('team_id');
-        $player->category = $request->input('category');
-
-        // Save the updated player
+    
+        if ($tournament->tournament_type === 'school') {
+            $player->years_playing_in_bucal = $request->input('years_playing_in_bucal');
+            $player->position = $request->input('position');
+        }
+    
+        if (isset($tournament) && $tournament->has_categories) {
+            $player->category = $request->input('category');
+        }
+    
         $player->save();
-
-        // Redirect back with a success message
+    
         return redirect()->route('players.index')->with('success', 'Player updated successfully.');
-    } else {
-        // Redirect back with input and errors if validation fails
-        return redirect()->route('players.edit', $id)->withInput()->withErrors($validator);
     }
-}
+    
 
 
     /**

@@ -27,9 +27,7 @@
                             <div class="my-3">
                                 <textarea name="description" placeholder="Enter Tournament Description" 
                                         class="border-gray-300 shadow-sm rounded-lg"
-                                        style="width: 50ch; height: 6rem; resize: none;">
-                                    {{ old('description') }}
-                                </textarea>
+                                        style="width: 50ch; height: 6rem; resize: none;">{{ old('description') }}</textarea>
                                 @error('description')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror

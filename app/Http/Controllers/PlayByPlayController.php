@@ -101,7 +101,7 @@ class PlayByPlayController extends Controller
                         $playerStat->two_pt_fg_attempt -= 1;
                         break;
                     case 'three_point':
-                        $playerStat->three_point_fg_attempt -= 1;
+                        $playerStat->three_pt_fg_attempt -= 1;
                         break;
                     case 'free_throw':
                         $playerStat->free_throw_attempt -= 1;

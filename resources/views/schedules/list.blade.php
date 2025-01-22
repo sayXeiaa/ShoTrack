@@ -79,7 +79,7 @@ function getInitials($teamName) {
                                         <div class="font-bold">Final</div>
                         
                                         <!-- Team 1 Initials -->
-                                        <div class="team-initials">{{ getInitials($schedule->team1->name) }}</div>
+                                        <div class="team-initials">{{ $schedule->team1->team_acronym }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team1->id)->sum('score') }}</div>
@@ -87,7 +87,7 @@ function getInitials($teamName) {
                                         <div>{{ $schedule->scores->where('team_id', $schedule->team1->id)->sum('score') }}</div> <!-- Total for Team 1 -->
                         
                                         <!-- Team 2 Initials -->
-                                        <div class="team-initials">{{ getInitials($schedule->team2->name) }}</div>
+                                        <div class="team-initials">{{ $schedule->team2->team_acronym }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 1)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 2)->where('team_id', $schedule->team2->id)->sum('score') }}</div>
                                         <div>{{ $schedule->scores->where('quarter', 3)->where('team_id', $schedule->team2->id)->sum('score') }}</div>

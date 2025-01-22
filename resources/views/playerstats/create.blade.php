@@ -986,6 +986,7 @@
     // Function for the "Disqualifying Foul" button
     function madeDisqualifyingFoul() {
         recordShot('made', 'disqualifying_foul');
+        stopTimer();
     }
 
     let displayedEntries = [];

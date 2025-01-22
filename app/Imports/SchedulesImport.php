@@ -95,9 +95,9 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
             'time' => $matchTime,
             'venue' => $row['venue'],
             'team1_id' => $team1->id,
-            'team1_color' => $row['team_1_color'],
+            'team1_color' => $row['team_1_color'] ?? null,
             'team2_id' => $team2->id,
-            'team2_color' => $row['team_2_color'],
+            'team2_color' => $row['team_2_color'] ?? null,
             'category' => $tournament->has_categories ? $row['category'] : null,
         ]);
     }

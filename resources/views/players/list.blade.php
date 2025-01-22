@@ -90,7 +90,7 @@
                                     <td class="px-6 py-3 text-left">{{ $player->last_name }}</td>
                                     <td class="px-6 py-3 text-left">{{ $player->number }}</td>
                                     <td class="px-6 py-3 text-left school-field">{{ $player->position }}</td>
-                                    <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') }}</td>
+                                    <td class="px-6 py-3 text-left">{{ $player->date_of_birth ? \Carbon\Carbon::parse($player->date_of_birth)->format('d M, Y') : '' }}
                                     <td class="px-6 py-3 text-left">{{ $player->age }} </td>
                                     <td class="px-6 py-3 text-left school-field">
                                         {{ $player->height ? $player->height . ' ft' : '' }}
@@ -117,9 +117,9 @@
                         @endif
                     </tbody>
                 </table>
-                <div class="my-3">
+                {{-- <div class="my-3">
                     {{ $players->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

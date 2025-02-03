@@ -12,6 +12,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\Time12HourFormat;
+use App\Models\Players;
+use App\Models\PlayerStat;
 
 class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
 {
@@ -89,7 +91,7 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
             'category' => $tournament->has_categories ? $row['category'] : null,  
         ]);
 
-        return new Schedule([
+        $schedule = Schedule::create([
             'tournament_id' => $this->tournamentId,
             'date' => $matchDate,
             'time' => $matchTime,
@@ -100,6 +102,10 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
             'team2_color' => $row['team_2_color'] ?? null,
             'category' => $tournament->has_categories ? $row['category'] : null,
         ]);
+
+        $this->initializePlayerStats($schedule);
+
+        return $schedule;
     }
 
     /**
@@ -156,4 +162,48 @@ class SchedulesImport implements ToModel, WithHeadingRow, WithValidation
         return $dateTime->format('H:i:s'); // Return as 'H:i:s' 
     }
 
+    private function initializePlayerStats(Schedule $schedule)
+    {
+        // Get all players for Team 1
+        $team1Players = Players::where('team_id', $schedule->team1_id)->get();
+
+        // Get all players for Team 2
+        $team2Players = Players::where('team_id', $schedule->team2_id)->get();
+
+        // Initialize stats for Team 1 players
+        foreach ($team1Players as $player) {
+            PlayerStat::create([
+                'player_id' => $player->id,
+                'schedule_id' => $schedule->id,
+                'team_id' => $player->team_id,
+                'minutes' => 0,
+                'points' => 0,
+                'assists' => 0,
+                'rebounds' => 0,
+                'steals' => 0,
+                'blocks' => 0,
+                'turnovers' => 0,
+                'fouls' => 0,
+                'plus_minus' => 0,
+            ]);
+        }
+
+        // Initialize stats for Team 2 players
+        foreach ($team2Players as $player) {
+            PlayerStat::create([
+                'player_id' => $player->id,
+                'schedule_id' => $schedule->id,
+                'team_id' => $player->team_id,
+                'points' => 0,
+                'minutes' => 0,
+                'assists' => 0,
+                'rebounds' => 0,
+                'steals' => 0,
+                'blocks' => 0,
+                'turnovers' => 0,
+                'fouls' => 0,
+                'plus_minus' => 0,
+            ]);
+        }
+    }
 }

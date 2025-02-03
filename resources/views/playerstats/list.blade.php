@@ -82,9 +82,9 @@
                                         <th class="border px-4 py-2 w-12 sm:16">PF</th>
                                         <th class="border px-4 py-2 w-12 sm:16">PTS</th>
                                         <th class="border px-4 py-2 w-12 sm:16">+/–</th>
-                                        @can('edit statistics')
+                                        {{-- @can('edit statistics')
                                         <th class="px-6 py-3 text-center" width="180">Action</th>
-                                        @endcan
+                                        @endcan --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -140,12 +140,12 @@
                                         <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                         <td class="border px-4 py-2">{{ $stat->points }}</td>
                                         <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
-                                        @can ('edit statistics')
+                                        {{-- @can ('edit statistics')
                                         <td class="px-6 py-3 text-center">
                                             <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
                                             <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
                                         </td>
-                                        @endcan
+                                        @endcan --}}
                                         
                                     </tr>
                                     @endforeach
@@ -187,11 +187,11 @@
                                         <td class="border px-4 py-2">0</td> 
                                         <td class="border px-4 py-2">0</td>
                                         <td class="border px-4 py-2">0</td> 
-                                        @can ('edit statistics')
+                                        {{-- @can ('edit statistics')
                                         <td class="px-6 py-3 text-center">
                                             <a href="{{ route('playerstats.edit', ['id' => $player->id]) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600">Edit</a>
                                         </td>
-                                        @endcan
+                                        @endcan --}}
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -233,9 +233,9 @@
                                             <th class="border px-4 py-2 w-12 sm:16">PF</th>
                                             <th class="border px-4 py-2 w-12 sm:16">PTS</th>
                                             <th class="border px-4 py-2 w-12 sm:16">+/–</th>
-                                            @can ('edit statistics')
+                                            {{-- @can ('edit statistics')
                                             <th class="px-6 py-3 text-center" width="180">Action</th>
-                                            @endcan
+                                            @endcan --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -291,12 +291,12 @@
                                             <td class="border px-4 py-2">{{ $stat->personal_fouls }}</td>
                                             <td class="border px-4 py-2">{{ $stat->points }}</td>
                                             <td class="border px-4 py-2">{{ $stat->plus_minus }}</td>
-                                            @can ('edit statistics')
+                                            {{-- @can ('edit statistics')
                                             <td class="px-6 py-3 text-center">
                                                 <a href="{{ route('playerstats.edit', $stat->id) }}" class="bg-slate-700 text-xs rounded-md text-white px-2 py-1 hover:bg-slate-600 mr-4">Edit</a>
                                                 <a href="javascript:void(0)" onclick="deletePlayerStat({{ $stat->id }})" class="bg-red-600 text-xs rounded-md text-white px-2 py-1 hover:bg-red-500">Delete</a>
                                             </td>
-                                            @endcan
+                                            @endcan --}}
                                         </tr>
                                         @endforeach
                                     
@@ -361,9 +361,9 @@
                     <button class="quarter-button nav-btn bg-gray-400 text-white font-semibold py-2 px-4 rounded hover:bg-[#314795] transition duration-200" data-quarter="4">Q4</button>
                 </div>
                 <div id="play-by-play-list">
-                    @foreach($playByPlayData as $play)
+                    @foreach($playByPlayData->sortByDesc('game_time') as $play)
                         @php
-                            // Check if the player exists and format the 
+                            // Check if the player exists and format the name
                             $playerNumber = $play->player ? $play->player->number : 'N/A';
                             $playerName = $play->player ? strtoupper(substr($play->player->first_name, 0, 1)) . '. ' . $play->player->last_name : 'Unknown Player';
                         @endphp
@@ -778,7 +778,7 @@
         // Fetch actual data
         const teamStats = {
             "{{ $schedule->team1->name }}": {
-                pts: {{ $totalPointsTeam1 }},
+                // pts: {{ $totalPointsTeam1 }},
                 rebs: {{ $totalReboundsTeam1 }},
                 assists: {{ $totalAssistsTeam1 }},
                 stl: {{ $totalStealsTeam1 }},
@@ -791,7 +791,7 @@
                 fgm: {{ $totalFGMTeam1 }},
             },
             "{{ $schedule->team2->name }}": {
-                pts: {{ $totalPointsTeam2 }},
+                // pts: {{ $totalPointsTeam2 }},
                 rebs: {{ $totalReboundsTeam2 }},
                 assists: {{ $totalAssistsTeam2 }},
                 stl: {{ $totalStealsTeam2 }},
@@ -805,7 +805,7 @@
             }
         };
 
-        const statsLabels = ['pts', 'fgm', 'twoPm', 'threePm', 'rebs', 'assists', 'stl', 'blk', 'to', 'ftm', 'fouls',];
+        const statsLabels = [ 'fgm', 'twoPm', 'threePm', 'rebs', 'assists', 'stl', 'blk', 'to', 'ftm', 'fouls',];
         const teamAData = [];
         const teamBData = [];
         const teamAColors = [];
@@ -833,7 +833,7 @@
         teamComparisonChartInstance = new Chart(canvas,{
             type: 'bar',
             data: {
-                labels: ['PTS','FG MADE', '2PTS', '3PTS', 'REBS', 'ASSISTS', 'STEALS', 'BLOCKS', 'TURNOVERS', 'FREE THROWS','FOULS',], // Stats labels
+                labels: ['FG MADE', '2PTS', '3PTS', 'REBS', 'ASSISTS', 'STEALS', 'BLOCKS', 'TURNOVERS', 'FREE THROWS','FOULS',], // Stats labels
                 datasets: [
                     {
                         label: teamAName, // Use actual team name

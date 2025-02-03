@@ -911,14 +911,21 @@
                                 const filteredFouls = [];
                                 const colors = []; // Array to store custom colors for each slice
 
+                                  // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 personalFouls.forEach((foul, index) => {
                                     if (foul > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredFouls.push(foul);
 
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`; // Generates a random hex color
-                                        colors.push(randomColor); // Assign random color
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 
@@ -1037,14 +1044,20 @@
                                 const filteredRebounds = [];
                                 const colors = [];
 
+                                 // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 offensiveRebounds.forEach((rebound, index) => {
                                     if (rebound > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredRebounds.push(rebound);
-
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                                        colors.push(randomColor);
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 
@@ -1094,14 +1107,21 @@
                                 const filteredRebounds = [];
                                 const colors = [];
 
+                                // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 defensiveRebounds.forEach((rebound, index) => {
                                     if (rebound > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredRebounds.push(rebound);
 
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                                        colors.push(randomColor);
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 
@@ -2342,14 +2362,21 @@
                                 const filteredFouls = [];
                                 const colors = [];
 
+                                // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 personalFouls.forEach((foul, index) => {
                                     if (foul > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredFouls.push(foul);
 
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`; 
-                                        colors.push(randomColor);
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 
@@ -2469,14 +2496,21 @@
                                 const filteredRebounds = [];
                                 const colors = [];
 
+                                // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 offensiveRebounds.forEach((rebound, index) => {
                                     if (rebound > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredRebounds.push(rebound);
 
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                                        colors.push(randomColor);
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 
@@ -2527,14 +2561,21 @@
                                 const filteredRebounds = [];
                                 const colors = [];
 
+                                 // Predefined color palette
+                                const predefinedColors = [
+                                    "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#33FFF6"
+                                ];
+
                                 defensiveRebounds.forEach((rebound, index) => {
                                     if (rebound > 0) {
                                         filteredNames.push(playerNames[index]);
                                         filteredRebounds.push(rebound);
 
-                                        // Generate random color
-                                        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                                        colors.push(randomColor);
+                                        if (predefinedColors.length > 0) {
+                                            colors.push(predefinedColors.shift());
+                                        } else {
+                                            colors.push("#CCCCCC"); 
+                                        }
                                     }
                                 });
 

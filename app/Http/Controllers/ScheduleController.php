@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Imports\SchedulesImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ArrayExport;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -200,6 +201,8 @@ class ScheduleController extends Controller
         
         $schedule = Schedule::findOrFail($id);
 
+        $formattedTime = Carbon::parse($schedule->time)->format('g:i A');
+
         // Fetch all teams for the selected tournament and category
         $teams = Teams::where('tournament_id', $schedule->tournament_id)
                     ->where('category', $schedule->category)
@@ -208,7 +211,7 @@ class ScheduleController extends Controller
         // Categories
         $categories = ['juniors', 'seniors'];
 
-        return view('schedules.edit', compact('schedule', 'tournaments', 'categories', 'teams'));
+        return view('schedules.edit', compact('schedule', 'tournaments', 'categories', 'teams', 'formattedTime'));
     }
 
     /**

@@ -24,6 +24,7 @@
                                     <option value="">Select a Tournament</option>
                                     @foreach($tournaments as $tournament)
                                         <option value="{{ $tournament->id }}"
+                                                data-tournament-type="{{ $tournament->tournament_type }}"
                                                 data-has-categories="{{ $tournament->has_categories ? 'true' : 'false' }}"
                                                 {{ $player->team && $player->team->tournament_id == $tournament->id ? 'selected' : '' }}>
                                             {{ $tournament->name }}
@@ -97,9 +98,7 @@
                                         <p class="text-red-400 font-medium">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
 
-                            <div id="school-fields" style="display: none;">
                             <label for="position" class="text-lg font-medium">Position</label>
                             <div class="my-3">
                                 <select id="position" name="position" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -155,12 +154,13 @@
                 const categorySelect = document.getElementById('category');
                 const categorySelectionDiv = document.getElementById('category-selection');
                 const teamSelect = document.getElementById('team_id');
-    
+                const schoolFieldsDiv = document.getElementById('school-fields');
+        
                 // Function to update the visibility of the category dropdown
                 function updateCategoryVisibility() {
                     const selectedOption = tournamentSelect.selectedOptions[0];
                     const hasCategories = selectedOption ? selectedOption.getAttribute('data-has-categories') === 'true' : false;
-    
+        
                     if (hasCategories) {
                         categorySelectionDiv.style.display = 'block';
                     } else {
@@ -168,15 +168,15 @@
                         categorySelect.selectedIndex = 0; // Reset category selection
                     }
                 }
-    
+        
                 // Function to fetch and populate teams based on tournament and category
                 function updateTeams() {
                     const tournamentId = tournamentSelect.value;
                     const category = categorySelect.value;
-    
+        
                     // Reset teams dropdown
                     teamSelect.innerHTML = '<option value="">Select a Team</option>';
-    
+        
                     if (tournamentId) {
                         $.ajax({
                             url: '{{ route('teams.by_tournament') }}',
@@ -188,18 +188,18 @@
                             dataType: 'json',
                             success: function(data) {
                                 console.log('Teams data:', data);
-    
+        
                                 if (data.teams && data.teams.length > 0) {
                                     data.teams.forEach(team => {
                                         const option = document.createElement('option');
                                         option.value = team.id;
                                         option.textContent = team.name;
-    
+        
                                         // Preserve the previously selected team
                                         if (team.id == {{ $player->team_id }}) {
                                             option.selected = true;
                                         }
-    
+        
                                         teamSelect.appendChild(option);
                                     });
                                 } else {
@@ -213,22 +213,33 @@
                         });
                     }
                 }
-    
+        
+                // Function to update the visibility of school fields
+                function updateSchoolFields() {
+                    var schoolFields = document.getElementById('school-fields');
+                    const selectedOption = tournamentSelect.selectedOptions[0];
+                    var tournamentType = selectedOption ? selectedOption.getAttribute('data-tournament-type') : '';
+        
+                    schoolFields.style.display = (tournamentType === 'school') ? 'block' : 'none';
+                }
+        
                 // Event listeners for tournament and category dropdowns
                 tournamentSelect.addEventListener('change', function() {
                     updateCategoryVisibility();
                     updateTeams();
+                    updateSchoolFields();
                 });
-    
+        
                 categorySelect.addEventListener('change', function() {
                     updateTeams(); // Update teams when category changes
                 });
-    
+        
                 // Initialize visibility and populate teams on page load
                 updateCategoryVisibility();
                 updateTeams();
+                updateSchoolFields();
             });
-        </script>
+        </script>        
     </x-slot>
     
 </x-app-layout>

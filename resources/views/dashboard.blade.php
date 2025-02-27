@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start space-y-12 md:space-y-0 md:space-x-8">
             <div class="w-full md:w-1/2 p-8 text-left bg-white rounded-lg shadow-lg mt-10">
                 <h1 class="text-5xl font-extrabold text-gray-800 mb-6 leading-tight">
-                    Welcome to<br> Shot Track
+                    Welcome to<br> Shot Track!
                 </h1>
                 <p class="mb-8 text-gray-600 text-lg leading-relaxed">
                     Shot Track is a web-application for basketball enthusiasts. This web-application will allow users to 

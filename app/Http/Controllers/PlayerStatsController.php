@@ -744,6 +744,11 @@ class PlayerStatsController extends Controller
                 )
                 ->selectRaw("AVG(player_stats.$stat) as average_$stat")
                 ->havingRaw("COUNT(DISTINCT player_stats.schedule_id) > 0");
+
+            // uncomment if players having 0 plus_minus must not be displayed
+                // if ($stat !== 'plus_minus') {
+            //     $query->havingRaw("AVG(player_stats.$stat) > 0");
+            // }
     
             // Apply optional filters for tournament and category
             if ($tournamentId) {

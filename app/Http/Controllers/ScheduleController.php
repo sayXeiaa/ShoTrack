@@ -558,8 +558,8 @@ class ScheduleController extends Controller
         } catch (\Exception $e) {
             // Log the exception
             Log::error('Error during file import.', ['error' => $e->getMessage()]);
-            
-            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled.');
+
+            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled. Error: ' . $e->getMessage());
         
             return redirect()->route('schedules.bulkUploadForm')->withInput();
         }

@@ -123,8 +123,8 @@
                     </x-dropdown>
                 @else
                     <div class="space-x-4">
-                        <a href="{{ route('login') }}" class="text-sm text-white hover:text-blue-500">{{ __('Log In') }}</a>
-                        <a href="{{ route('register') }}" class="text-sm text-white hover:text-blue-300">{{ __('Register') }}</a>
+                        <a href="{{ route('login') }}" id="login-button" class="text-sm text-white hover:text-blue-500">{{ __('Log In') }}</a>
+                        <a href="{{ route('register') }}" id="register-button" class="text-sm text-white hover:text-blue-300">{{ __('Register') }}</a>
                     </div>
                 @endif
             </div>

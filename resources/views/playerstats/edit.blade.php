@@ -17,7 +17,7 @@
                         @csrf
                         @method('PUT')
 
-                        <label for="2ptfgm" class="text-lg font-medium">2 Point Field Goal Made</label>
+                        {{-- <label for="2ptfgm" class="text-lg font-medium">2 Point Field Goal Made</label>
                         <div class="my-3">
                             <input id="2ptfgm" value="{{ old('2ptfgm', $player_stats->two_pt_fg_made) }}" name="f2ptfgm" placeholder="Enter 2 Point Field Goal Made" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
                             @error('f2ptfgm')
@@ -50,7 +50,7 @@
                             @error('f3ptfga')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <!-- Defensive Rebounds -->
                         <label for="def_rebounds" class="text-lg font-medium">Defensive Rebounds</label>
@@ -79,7 +79,7 @@
                             @enderror
                         </div>
 
-                        <!-- Free Throw Made -->
+                        {{-- <!-- Free Throw Made -->
                         <label for="ft_made" class="text-lg font-medium">Free Throw Made</label>
                         <div class="my-3">
                             <input id="ft_made" value="{{ old('ft_made', $player_stats->free_throw_made) }}" name="free_throw_made" placeholder="Enter Free Throw Made" type="text" class="border-gray-300 shadow-sm rounded-lg" style="width: 50ch;">
@@ -95,7 +95,7 @@
                             @error('free_throw_attempt')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <!-- Steals -->
                         <label for="steals" class="text-lg font-medium">Steals</label>

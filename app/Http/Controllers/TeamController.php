@@ -63,7 +63,7 @@ class TeamController extends Controller
 
     $rules = [
         'name' => 'required|min:5',
-        'head_coach_name' => 'required|string|max:255',
+        'head_coach_name' => 'nullable|string|max:255',
         'address' => 'required|min:5',
         'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         'tournament_id' => 'required|exists:tournaments,id',
@@ -85,6 +85,7 @@ class TeamController extends Controller
             $rules['team_acronym'] = 'required|max:7';
             $rules['sports_director'] = 'required|string|max:255';
             $rules['years_playing_in_bucal'] = 'required|integer';
+            $rules['head_coach_name'] = 'required|string|max:255';
         }
     }
 
@@ -159,7 +160,7 @@ class TeamController extends Controller
         // Define base validation rules
         $rules = [
             'name' => 'required|min:5',
-            'head_coach_name' => 'required|string|max:255',
+            'head_coach_name' => 'nullable|string|max:255',
             'address' => 'required|min:5',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'tournament_id' => 'required|exists:tournaments,id',
@@ -173,10 +174,10 @@ class TeamController extends Controller
     
             if ($tournament->tournament_type === 'school') {
                 // Add school-specific validation if tournament type is 'school'
-                $rules['school_president'] = 'required|string|max:255';
-                $rules['team_acronym'] = 'required|max:7';
-                $rules['sports_director'] = 'required|string|max:255';
-                $rules['years_playing_in_bucal'] = 'required|integer';
+                $rules['school_president'] = 'nullable|string|max:255';
+                $rules['team_acronym'] = 'nullable|max:7';
+                $rules['sports_director'] = 'nullable|string|max:255';
+                $rules['years_playing_in_bucal'] = 'nullable|integer';
             }
         }
     
@@ -296,10 +297,10 @@ class TeamController extends Controller
     
             return redirect()->route('teams.index')->with('success', 'Teams imported successfully.');
         } catch (\Exception $e) {
-            // Log the exception
-            Log::error('Error during file import.', ['error' => $e->getMessage()]);
             
-            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled.');
+            Log::error('Error during file import.', ['error' => $e->getMessage()]);
+
+            session()->flash('error', 'Check the uploaded file. Ensure that all required fields are filled. Error: ' . $e->getMessage());
         
             return redirect()->route('teams.bulkUploadForm')->withInput();
         }

@@ -74,7 +74,7 @@
                                     <th class="border px-4 py-2">DREB%</th>
                                     <th class="border px-4 py-2">TO RATIO</th>
                                     <th class="border px-4 py-2">FTA RATE</th>
-                                    <th class="border px-4 py-2">+/–</th>
+                                    {{-- <th class="border px-4 py-2">+/–</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,7 +136,7 @@
                                             <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('defensive_rebound_percentage'), 1) }}%</td>
                                             <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('turnover_ratio'), 2) }}</td>
                                             <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('free_throw_attempt_rate'), 2) }}</td>
-                                            <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('plus_minus'), 2) }}</td>
+                                            {{-- <td class="border px-4 py-2">{{ number_format($team->teamStats->sum('plus_minus'), 2) }}</td> --}}
                                         </tr>
                                     @endif
                                 @empty

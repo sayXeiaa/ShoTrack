@@ -229,7 +229,7 @@
                             <div class="mb-4 grid grid-cols-4 gap-4">
                                 <div class="col-span-3"></div> 
                                 <button type="button" class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-1 mt-20" onclick="markGameAsCompleted()">
-                                    Save Stats
+                                    Game Finished
                                 </button>
                             </div>                            
                         </form>
@@ -293,6 +293,8 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
 

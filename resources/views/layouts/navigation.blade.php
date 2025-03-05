@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="text-white text-lg font-bold hover:text-gray-500">
+                    <a href="{{ route('dashboard') }}" class="text-white text-lg font-bold hover:text-blue-300">
                         Shot Track
                     </a>
                 </div>
@@ -13,47 +13,47 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:!text-blue-300">
                         {{ __('Home') }}
                     </x-nav-link>
-
+                    
                     @can('view permissions')
-                    <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.index')" class="text-white hover:!text-blue-300">
                         {{ __('Permissions') }}
                     </x-nav-link>
                     @endcan
 
                     @can('view roles')
-                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')" class="text-white hover:!text-blue-300">
                         {{ __('Roles') }}
                     </x-nav-link>
                     @endcan
 
                     @can('view users')
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:!text-blue-300">
                         {{ __('Users') }}
                     </x-nav-link>
                     @endcan
 
-                    <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('tournaments.index')" :active="request()->routeIs('tournaments.index')" class="text-white hover:!text-blue-300">
                         {{ __('Tournaments') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')" class="text-white hover:!text-blue-300">
                         {{ __('Teams') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('players.index')" :active="request()->routeIs('players.index')" class="text-white hover:!text-blue-300">
                         {{ __('Players') }}
                     </x-nav-link>
                     
-                    <x-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('schedules.index')" :active="request()->routeIs('schedules.index')" class="text-white hover:!text-blue-300">
                         {{ __('Schedules') }}
                     </x-nav-link>
 
                     <div x-data="{ open: false }" class="relative inline-block">
                         {{-- Leaderboards Link --}}
-                        <x-nav-link class="text-white hover:text-blue-300 mt-5"
+                        <x-nav-link class="text-white hover:!text-blue-300 mt-5"
                                     @click="open = !open" 
                                     @mouseover="open = true" 
                                     @mouseleave="open = false"> 
@@ -70,20 +70,20 @@
                             
                             {{-- Player Leaderboards --}}
                             <a href="{{ route('leaderboards.players') }}" 
-                            class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 hover:!text-blue-300">
                                 {{ __('Player Leaderboards') }}
                             </a>
                             
                             {{-- Team Leaderboards --}}
                             <a href="{{ route('leaderboards.index') }}" 
-                            class="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 hover:!text-blue-300">
                                 {{ __('Team Leaderboards') }}
                             </a>
                         </div>
                     </div>
                     
                     @can ('view analytics')
-                    <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white hover:text-blue-300">
+                    <x-nav-link :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" class="text-white hover:!text-blue-300">
                         {{ __('Analytics') }}
                     </x-nav-link>     
                     @endcan
@@ -132,7 +132,7 @@
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" 
-                    class="inline-flex items-center justify-center p-2 rounded-md text-white sm:text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-200 transition duration-150 ease-in-out">
+                    class="inline-flex items-center justify-center p-2 rounded-md text-white sm:text-gray-400 hover:text-blue-300 focus:outline-none focus:text-gray-200 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

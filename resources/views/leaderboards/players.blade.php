@@ -70,9 +70,9 @@
                         <li class="flex justify-between items-center mb-4 
                                 hover:bg-gray-500 transition-colors duration-200">
                             <!-- Name and School on the left -->
-                            <span class="text-left text-lg font-medium">
+                            <span class="team-initials text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <!-- Points on the right -->
                             <span class="ml-6 text-lg font-semibold text-right">
@@ -91,7 +91,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['rebounds']->where('id', $player->id)->first()->average_rebounds ?? 0, 2) }}
@@ -109,7 +109,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['assists']->where('id', $player->id)->first()->average_assists ?? 0, 2) }}
@@ -127,7 +127,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['blocks']->where('id', $player->id)->first()->average_blocks ?? 0, 2) }}
@@ -145,7 +145,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['steals']->where('id', $player->id)->first()->average_steals ?? 0, 2) }}
@@ -163,7 +163,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['turnovers']->where('id', $player->id)->first()->average_turnovers ?? 0, 2) }}
@@ -190,7 +190,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($fgPercentage, 2) }}%
@@ -208,7 +208,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($topPlayersByStats['two_pt_fg_made']->where('id', $player->id)->first()->average_two_pt_fg_made ?? 0, 2) }}
@@ -226,7 +226,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_two_pt_percentage ?? 0, 2) }}%
@@ -244,7 +244,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_three_pt_fg_made ?? 0, 2) }}
@@ -262,7 +262,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_three_pt_percentage ?? 0, 2) }}%
@@ -280,7 +280,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_personal_fouls ?? 0, 2) }}
@@ -298,7 +298,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_free_throw_made ?? 0, 2) }}
@@ -316,7 +316,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_free_throw_percentage ?? 0, 2) }}%
@@ -334,7 +334,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_free_throw_attempt_rate ?? 0, 2) }}
@@ -352,7 +352,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_effective_field_goal_percentage ?? 0, 2) }}%
@@ -370,7 +370,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_turnover_ratio ?? 0, 2) }}
@@ -388,7 +388,7 @@
                         <li class="flex justify-between items-center mb-2 hover:bg-gray-500 transition-colors duration-200">
                             <span class="text-left text-lg font-medium">
                                 {{ $loop->iteration }}. {{ $player->first_name }} {{ $player->last_name }} 
-                                ({{ $player->team_acronym ?? 'Unknown Team' }})
+                                ({{ $player->team_acronym ?? $player->team->name }})
                             </span>
                             <span class="ml-4 text-lg font-semibold text-right">
                                 {{ number_format($player->average_plus_minus ?? 0, 2) }}
